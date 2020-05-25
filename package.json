@@ -18,9 +18,16 @@
     "devDependencies": {
         "@nestjs/common": "^7.1.0",
         "@nestjs/core": "^7.1.0",
+        "@nestjs/platform-express": "^7.1.0",
+        "@types/jest": "^25.2.3",
+        "dotenv": "^8.2.0",
         "intuit-oauth": "^3.0.1",
+        "jest": "^26.0.1",
         "reflect-metadata": "^0.1.13",
         "rxjs": "^6.5.5",
+        "ts-jest": "^26.0.0",
+        "ts-loader": "^7.0.5",
+        "ts-node": "^8.10.1",
         "tslint": "^6.1.2",
         "typescript": "^3.9.3"
     },
@@ -36,5 +43,19 @@
     "bugs": {
         "url": "https://github.com/Recursyve/nestjs-quickbooks/issues"
     },
-    "homepage": "https://github.com/Recursyve/nestjs-quickbooks#readme"
+    "homepage": "https://github.com/Recursyve/nestjs-quickbooks#readme",
+    "jest": {
+        "moduleFileExtensions": [
+            "js",
+            "json",
+            "ts"
+        ],
+        "rootDir": "lib",
+        "testRegex": ".spec.ts$",
+        "transform": {
+            "^.+\\.(t|j)s$": "ts-jest"
+        },
+        "coverageDirectory": "./coverage",
+        "testEnvironment": "node"
+    }
 }

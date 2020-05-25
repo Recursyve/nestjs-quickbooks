@@ -3,9 +3,11 @@ import { AuthService } from "../auth/services/auth.service";
 import { Observable } from "rxjs";
 import { map, mergeMap } from "rxjs/operators";
 import * as os from "os";
+import { WhereOptions } from "./models/query.model";
+import { QueryUtils } from "../../utils/query.utils";
 
 @Injectable()
-export class BaseService {
+export class BaseService<T, Query, QueryResponse> {
     private readonly sandboxUrl = "https://sandbox-quickbooks.api.intuit.com";
     private readonly liveUrl = "https://quickbooks.api.intuit.com";
 
@@ -16,7 +18,17 @@ export class BaseService {
         private readonly http: HttpService
     ) {}
 
-    public get<T>(path?: string): Observable<T> {
+    public query(condition: WhereOptions<Query>): Observable<QueryResponse> {
+        return this.getHttpHeaders().pipe(
+            mergeMap((headers) => this.http.get<QueryResponse>(this.queryUrl(condition), {
+                headers,
+            }))
+        ).pipe(
+            map(x => x.data)
+        );
+    }
+
+    protected get<T>(path?: string): Observable<T> {
         return this.getHttpHeaders().pipe(
             mergeMap((headers) => this.http.get<T>(this.url(path), {
                 headers,
@@ -26,18 +38,8 @@ export class BaseService {
         );
     }
 
-    public query<T>(condition: string): Observable<T> {
-        return this.getHttpHeaders().pipe(
-            mergeMap((headers) => this.http.get<T>(this.queryUrl(condition), {
-                headers,
-            }))
-        ).pipe(
-            map(x => x.data)
-        );
-    }
-
-    protected queryUrl(condition: string): string {
-        return `${this.sandboxUrl}/v3/company/${this.realm}/query?query=${condition}`;
+    protected queryUrl(condition: WhereOptions<any>): string {
+        return `${this.sandboxUrl}/v3/company/${this.realm}/query?${QueryUtils.generateQuery(this.resource, condition)}`;
     }
 
     protected url(path: string): string {

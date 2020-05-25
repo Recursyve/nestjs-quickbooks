@@ -1,8 +1,18 @@
 import { HttpService, Injectable } from "@nestjs/common";
 import { BaseService } from "../../common/base.service";
-import { Observable } from "rxjs";
 import { AuthService } from "../../auth/services/auth.service";
 import { Store } from "../../store/store";
+import { QuickBooksCustomers } from "../models/customers.model";
+import { CustomerQuery } from "../models/customer.query";
+
+export interface CustomerQueryResponse {
+    QueryResponse: {
+        Customer: QuickBooksCustomers[];
+        startPosition: number;
+        maxResults: number;
+    },
+    time: string;
+}
 
 @Injectable()
 export class CustomersService {
@@ -21,12 +31,8 @@ export class CustomersService {
     }
 }
 
-export class CompanyCustomersService extends BaseService {
+export class CompanyCustomersService extends BaseService<QuickBooksCustomers, CustomerQuery, CustomerQueryResponse> {
     constructor(realm: string, authService: AuthService, http: HttpService) {
         super(realm, "customer", authService, http);
-    }
-
-    public getAll(): Observable<any> {
-        return this.query<any>("select * from Customer Where Metadata.LastUpdatedTime > '2015-03-01'");
     }
 }
