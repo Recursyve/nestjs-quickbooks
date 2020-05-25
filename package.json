@@ -1,0 +1,40 @@
+{
+    "name": "@recursyve/nestjs-quickbooks",
+    "version": "7.0.0-beta.1",
+    "description": "",
+    "main": "index.js",
+    "directories": {
+        "lib": "lib"
+    },
+    "dependencies": {
+        "intuit-oauth": "^3.0.1"
+    },
+    "peerDependencies": {
+        "@nestjs/common": "^7.1.0",
+        "@nestjs/core": "^7.1.0",
+        "reflect-metadata": "^0.1.13",
+        "rxjs": "^6.5.5"
+    },
+    "devDependencies": {
+        "@nestjs/common": "^7.1.0",
+        "@nestjs/core": "^7.1.0",
+        "intuit-oauth": "^3.0.1",
+        "reflect-metadata": "^0.1.13",
+        "rxjs": "^6.5.5",
+        "tslint": "^6.1.2",
+        "typescript": "^3.9.3"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Recursyve/nestjs-quickbooks.git"
+    },
+    "author": "Recursyve Solutions",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/Recursyve/nestjs-quickbooks/issues"
+    },
+    "homepage": "https://github.com/Recursyve/nestjs-quickbooks#readme"
+}
