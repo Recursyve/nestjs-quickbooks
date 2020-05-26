@@ -1,4 +1,4 @@
-import { Controller, Get } from "@nestjs/common";
+import { Controller, Get, Post } from "@nestjs/common";
 import { CustomersService } from "../../../lib/modules/customers/services/customers.service";
 import { Op } from "../../../lib/modules/common/models/query.model";
 
@@ -16,5 +16,15 @@ export class CustomersController {
                 }
             }
         }).toPromise().then(x => x.QueryResponse.Customer);
+    }
+
+    @Post()
+    public async create() {
+        return this.customersService.withDefaultCompany().create({
+            DisplayName: "My new customer",
+            PrimaryEmailAddr: {
+                Address: "julien@recursyve.io"
+            }
+        }).toPromise();
     }
 }

@@ -38,6 +38,16 @@ export class BaseService<T, Query, QueryResponse> {
         );
     }
 
+    protected post<T>(body: any, path?: string): Observable<T> {
+        return this.getHttpHeaders().pipe(
+            mergeMap((headers) => this.http.post<T>(this.url(path), body, {
+                headers,
+            }))
+        ).pipe(
+            map(x => x.data)
+        );
+    }
+
     protected queryUrl(condition: WhereOptions<any>): string {
         return `${this.sandboxUrl}/v3/company/${this.realm}/query?${QueryUtils.generateQuery(this.resource, condition)}`;
     }
