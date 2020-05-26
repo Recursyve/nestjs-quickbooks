@@ -3,16 +3,27 @@ import { Observable } from "rxjs";
 import { AuthService } from "../../auth/services/auth.service";
 import { BaseService } from "../../common/base.service";
 import { Store } from "../../store/store";
-import { QuickBooksInvoicesModel } from "../models/invoices.model";
+import { QuickBooksInvoices } from "../models/invoices.model";
+import { InvoicesQuery } from "../models/invoices.query";
+import { CreateInvoicesDto, FullUpdateInvoicesDto, SparseUpdateInvoicesDto } from "../dto/invoices.dto";
 
-/*export interface CustomerQueryResponse {
+export interface InvoicesQueryResponse {
     QueryResponse: {
-        Customer: QuickBooksCustomers[];
+        Invoice: QuickBooksInvoices[];
         startPosition: number;
         maxResults: number;
     },
     time: string;
-}*/
+}
+
+export interface InvoicesDeleteResponse {
+    Invoice: {
+        Id: string;
+        status: string;
+        domain: number;
+    },
+    time: string;
+}
 
 @Injectable()
 export class InvoicesService {
@@ -31,43 +42,87 @@ export class InvoicesService {
     }
 }
 
-export class CompanyInvoicesService extends BaseService<QuickBooksInvoicesModel, any, any> {
+export class CompanyInvoicesService extends BaseService<QuickBooksInvoices, InvoicesQuery, InvoicesQueryResponse> {
     constructor(realm: string, authService: AuthService, http: HttpService) {
         super(realm, "invoice", authService, http);
     }
 
-    /*public create(dto: CreateCustomerDto): Observable<QuickBooksCustomers> {
+    public create(dto: CreateInvoicesDto): Observable<QuickBooksInvoices> {
         return this.post(dto);
     }
 
-    public readById(id: string): Observable<QuickBooksCustomers> {
+    public readById(id: string): Observable<QuickBooksInvoices> {
         return this.get(id);
     }
 
-    public fullUpdate(id: string, token: string, dto: FullUpdateCustomerDto): Observable<QuickBooksCustomers>;
-    public fullUpdate(customer: QuickBooksCustomers, dto: FullUpdateCustomerDto): Observable<QuickBooksCustomers>;
-    public fullUpdate(...args: [string | QuickBooksCustomers, string | FullUpdateCustomerDto, FullUpdateCustomerDto?]): Observable<QuickBooksCustomers> {
-        const [idOrCustomer, tokenOrDto, dto] = args;
-        const id = dto ? idOrCustomer as string : (idOrCustomer as QuickBooksCustomers)?.Id;
-        const token = dto ? tokenOrDto as string : (idOrCustomer as QuickBooksCustomers)?.SyncToken;
+    public getPdf(id: string): Observable<Buffer> {
+        return this.get(`${id}/pdf`);
+    }
+
+    public fullUpdate(id: string, token: string, dto: FullUpdateInvoicesDto): Observable<QuickBooksInvoices>;
+    public fullUpdate(invoice: QuickBooksInvoices, dto: FullUpdateInvoicesDto): Observable<QuickBooksInvoices>;
+    public fullUpdate(...args: [string | QuickBooksInvoices, string | FullUpdateInvoicesDto, FullUpdateInvoicesDto?]): Observable<QuickBooksInvoices> {
+        const [id, token, dto] = CompanyInvoicesService.getUpdateArguments(args);
         return this.post({
-            ...(dto ?? tokenOrDto as FullUpdateCustomerDto),
+            ...dto,
             Id: id,
             SyncToken: token
         });
     }
 
-    public sparseUpdate(id: string, token: string, dto: SparseUpdateCustomerDto): Observable<QuickBooksCustomers>;
-    public sparseUpdate(customer: QuickBooksCustomers, dto: SparseUpdateCustomerDto): Observable<QuickBooksCustomers>;
-    public sparseUpdate(...args: [string | QuickBooksCustomers, string | SparseUpdateCustomerDto, SparseUpdateCustomerDto?]): Observable<QuickBooksCustomers> {
-        const [idOrCustomer, tokenOrDto, dto] = args;
-        const id = dto ? idOrCustomer as string : (idOrCustomer as QuickBooksCustomers)?.Id;
-        const token = dto ? tokenOrDto as string : (idOrCustomer as QuickBooksCustomers)?.SyncToken;
+    public sparseUpdate(id: string, token: string, dto: SparseUpdateInvoicesDto): Observable<QuickBooksInvoices>;
+    public sparseUpdate(invoice: QuickBooksInvoices, dto: SparseUpdateInvoicesDto): Observable<QuickBooksInvoices>;
+    public sparseUpdate(...args: [string | QuickBooksInvoices, string | SparseUpdateInvoicesDto, SparseUpdateInvoicesDto?]): Observable<QuickBooksInvoices> {
+        const [id, token, dto] = CompanyInvoicesService.getUpdateArguments(args);
         return this.post({
-            ...(dto ?? tokenOrDto as SparseUpdateCustomerDto),
+            ...dto,
             Id: id,
             SyncToken: token,
             sparse: true
         });
-    }*/
+    }
+
+    public delete(id: string, token: string): Observable<InvoicesDeleteResponse>;
+    public delete(invoice: QuickBooksInvoices): Observable<InvoicesDeleteResponse>;
+    public delete(...args: [string | QuickBooksInvoices, string?]): Observable<InvoicesDeleteResponse> {
+        const [id, token] = CompanyInvoicesService.getOperationArguments(args);
+        return this.post({
+            Id: id,
+            SyncToken: token
+        }, "", {
+            operation: "delete"
+        });
+    }
+
+    public void(id: string, token: string): Observable<InvoicesDeleteResponse>;
+    public void(invoice: QuickBooksInvoices): Observable<InvoicesDeleteResponse>;
+    public void(...args: [string | QuickBooksInvoices, string?]): Observable<InvoicesDeleteResponse> {
+        const [id, token] = CompanyInvoicesService.getOperationArguments(args);
+        return this.post({
+            Id: id,
+            SyncToken: token
+        }, "", {
+            operation: "void"
+        });
+    }
+
+    private static getUpdateArguments(args: [string | QuickBooksInvoices, string | SparseUpdateInvoicesDto, SparseUpdateInvoicesDto?]): [string, string, SparseUpdateInvoicesDto] {
+        const [idOrInvoice, tokenOrDto, dto] = args;
+        if (dto) {
+            return [idOrInvoice as string, tokenOrDto as string, dto];
+        }
+
+        const invoice = idOrInvoice as QuickBooksInvoices;
+        return [invoice.Id, invoice.SyncToken, tokenOrDto as SparseUpdateInvoicesDto];
+    }
+
+    private static getOperationArguments(args: [string | QuickBooksInvoices, string?]): [string, string] {
+        const [idOrInvoice, token] = args;
+        if (token) {
+            return [idOrInvoice as string, token];
+        }
+
+        const invoice = idOrInvoice as QuickBooksInvoices;
+        return [invoice.Id, invoice.SyncToken];
+    }
 }

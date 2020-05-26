@@ -14,7 +14,8 @@ export class InvoicesController {
                 LastUpdatedTime: {
                     [Op.gt]: "2015-03-01"
                 }
-            }
+            },
+            CustomerRef: "5"
         }).toPromise().then(x => x.QueryResponse.Invoice);
     }
 }

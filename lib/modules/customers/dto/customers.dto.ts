@@ -56,6 +56,18 @@ export class CustomerWithGivenName {
     GivenName: string;
 }
 
+export class CustomersAddressDto {
+    PostalCode?: string;
+    City?: string;
+    Country?: string;
+    Line5?: string;
+    Line4?: string;
+    Line3?: string;
+    Line2?: string;
+    Line1?: string;
+    CountrySubDivisionCode?: string;
+}
+
 export class CustomerDto {
     PrimaryEmailAddr?: QuickBooksCustomersEmail;
     BillWithParent?: boolean;
@@ -65,7 +77,7 @@ export class CustomerDto {
     Active?: boolean;
     Job?: boolean;
     BalanceWithJobs?: number;
-    BillAddr?: QuickBooksCustomersAddress;
+    BillAddr?: CustomersAddressDto;
     PreferredDeliveryMethod?: string;
     Taxable?: number;
     PrintOnCheckName?: string;

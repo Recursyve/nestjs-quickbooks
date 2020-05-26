@@ -5,6 +5,7 @@ import { map, mergeMap } from "rxjs/operators";
 import * as os from "os";
 import { WhereOptions } from "./models/query.model";
 import { QueryUtils } from "../../utils/query.utils";
+import * as querystring from "querystring";
 
 @Injectable()
 export class BaseService<T, Query, QueryResponse> {
@@ -28,7 +29,7 @@ export class BaseService<T, Query, QueryResponse> {
         );
     }
 
-    protected get<T>(path?: string): Observable<T> {
+    protected get<T>(path?: string, queryParams?: object): Observable<T> {
         return this.getHttpHeaders().pipe(
             mergeMap((headers) => this.http.get<T>(this.url(path), {
                 headers,
@@ -38,7 +39,7 @@ export class BaseService<T, Query, QueryResponse> {
         );
     }
 
-    protected post<T>(body: any, path?: string): Observable<T> {
+    protected post<T>(body: any, path?: string, queryParams?: object): Observable<T> {
         return this.getHttpHeaders().pipe(
             mergeMap((headers) => this.http.post<T>(this.url(path), body, {
                 headers,
@@ -52,11 +53,12 @@ export class BaseService<T, Query, QueryResponse> {
         return `${this.sandboxUrl}/v3/company/${this.realm}/query?${QueryUtils.generateQuery(this.resource, condition)}`;
     }
 
-    protected url(path: string): string {
+    protected url(path: string, queryParams?: object): string {
+        const query = queryParams ? `?${querystring.stringify(queryParams as querystring.ParsedUrlQueryInput)}` : "";
         if (!path) {
-            return `${this.sandboxUrl}/v3/company/${this.realm}/${this.resource}`;
+            return `${this.sandboxUrl}/v3/company/${this.realm}/${this.resource}${query}`;
         }
-        return `${this.sandboxUrl}/v3/company/${this.realm}/${this.resource}/${path}`;
+        return `${this.sandboxUrl}/v3/company/${this.realm}/${this.resource}/${path}${query}`;
     }
 
     private getHttpHeaders(): Observable<any> {

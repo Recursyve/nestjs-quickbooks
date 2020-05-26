@@ -116,4 +116,20 @@ describe("QueryUtils test", () => {
             })
         );
     })
+
+    it("[8] generateQuery with conditions should return a valid query", () => {
+        const query = QueryUtils.generateQuery("customer", {
+            Metadata: {
+                LastUpdatedAt: "2015-01-01"
+            },
+            CustomerRef: {
+                value: "5"
+            }
+        });
+        expect(querystring.decode(query)).toEqual(
+            expect.objectContaining({
+                query: "select * from customer where Metadata.LastUpdatedAt = '2015-01-01' and CustomerRef.value = '5'"
+            })
+        );
+    })
 });
