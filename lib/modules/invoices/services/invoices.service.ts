@@ -12,7 +12,7 @@ export interface InvoicesQueryResponse {
         Invoice: QuickBooksInvoices[];
         startPosition: number;
         maxResults: number;
-    },
+    };
     time: string;
 }
 
@@ -21,7 +21,7 @@ export interface InvoicesDeleteResponse {
         Id: string;
         status: string;
         domain: number;
-    },
+    };
     time: string;
 }
 
