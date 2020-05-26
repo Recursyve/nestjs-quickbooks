@@ -2,7 +2,7 @@ import {
     QuickBooksCustomersAddress, QuickBooksCustomersEmail, QuickBooksCustomersPhone
 } from "../models/customers.model";
 
-export class CustomerWithDisplayName {
+export interface CustomerWithDisplayName {
     DisplayName: string;
     Suffix?: string;
     Title?: string;
@@ -11,7 +11,7 @@ export class CustomerWithDisplayName {
     GivenName?: string;
 }
 
-export class CustomerWithSuffix {
+export interface CustomerWithSuffix {
     DisplayName?: string;
     Suffix: string;
     Title?: string;
@@ -20,7 +20,7 @@ export class CustomerWithSuffix {
     GivenName?: string;
 }
 
-export class CustomerWithTitle {
+export interface CustomerWithTitle {
     DisplayName?: string;
     Suffix?: string;
     Title: string;
@@ -29,7 +29,7 @@ export class CustomerWithTitle {
     GivenName?: string;
 }
 
-export class CustomerWithMiddleName {
+export interface CustomerWithMiddleName {
     DisplayName?: string;
     Suffix?: string;
     Title?: string;
@@ -38,7 +38,7 @@ export class CustomerWithMiddleName {
     GivenName?: string;
 }
 
-export class CustomerWithFamilyName {
+export interface CustomerWithFamilyName {
     DisplayName?: string;
     Suffix?: string;
     Title?: string;
@@ -47,7 +47,7 @@ export class CustomerWithFamilyName {
     GivenName?: string;
 }
 
-export class CustomerWithGivenName {
+export interface CustomerWithGivenName {
     DisplayName?: string;
     Suffix?: string;
     Title?: string;
@@ -56,7 +56,7 @@ export class CustomerWithGivenName {
     GivenName: string;
 }
 
-export class CustomersAddressDto {
+export interface CustomersAddressDto {
     PostalCode?: string;
     City?: string;
     Country?: string;
@@ -68,7 +68,7 @@ export class CustomersAddressDto {
     CountrySubDivisionCode?: string;
 }
 
-export class CustomerDto {
+export interface CustomerDto {
     PrimaryEmailAddr?: QuickBooksCustomersEmail;
     BillWithParent?: boolean;
     FullyQualifiedName?: string;

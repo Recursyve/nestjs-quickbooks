@@ -129,7 +129,7 @@ export interface QuickBooksInvoices extends QuickbooksModel {
     CurrencyRef: RefModel;
     PrivateNote: string;
     LinkedTxn: QuickBooksInvoiceLinkedTxn[];
-    Line: QuickBooksInvoiceLines[],
+    Line: QuickBooksInvoiceLines[];
     TxnTaxDetail: QuickBooksInvoiceTxnTaxDetail;
     CustomerRef: RefModel;
     DueDate: string;

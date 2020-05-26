@@ -2,7 +2,7 @@ import { RefDto } from "../../common/dto/ref.dto";
 import { PhoneNumberDto } from "../../common/dto/phone-number.dto";
 import { EmailDto } from "../../common/dto/email.dto";
 
-export class VendorWithDisplayName {
+export interface VendorWithDisplayName {
     DisplayName: string;
     Suffix?: string;
     Title?: string;
@@ -11,7 +11,7 @@ export class VendorWithDisplayName {
     GivenName?: string;
 }
 
-export class VendorWithSuffix {
+export interface VendorWithSuffix {
     DisplayName?: string;
     Suffix: string;
     Title?: string;
@@ -20,7 +20,7 @@ export class VendorWithSuffix {
     GivenName?: string;
 }
 
-export class VendorWithTitle {
+export interface VendorWithTitle {
     DisplayName?: string;
     Suffix?: string;
     Title: string;
@@ -29,7 +29,7 @@ export class VendorWithTitle {
     GivenName?: string;
 }
 
-export class VendorWithMiddleName {
+export interface VendorWithMiddleName {
     DisplayName?: string;
     Suffix?: string;
     Title?: string;
@@ -38,7 +38,7 @@ export class VendorWithMiddleName {
     GivenName?: string;
 }
 
-export class VendorWithFamilyName {
+export interface VendorWithFamilyName {
     DisplayName?: string;
     Suffix?: string;
     Title?: string;
@@ -47,7 +47,7 @@ export class VendorWithFamilyName {
     GivenName?: string;
 }
 
-export class VendorWithGivenName {
+export interface VendorWithGivenName {
     DisplayName?: string;
     Suffix?: string;
     Title?: string;
@@ -56,7 +56,7 @@ export class VendorWithGivenName {
     GivenName: string;
 }
 
-export class VendorsAddressDto {
+export interface VendorsAddressDto {
     PostalCode?: string;
     City?: string;
     Country?: string;
@@ -68,7 +68,7 @@ export class VendorsAddressDto {
     CountrySubDivisionCode?: string;
 }
 
-export class VendorDto {
+export interface VendorDto {
     PrimaryEmailAddr?: EmailDto;
     OtherContactInfo?: string;
     SecondaryTaxIdentifier?: string;

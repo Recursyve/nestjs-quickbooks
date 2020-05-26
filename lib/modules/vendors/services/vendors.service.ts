@@ -12,7 +12,7 @@ export interface CustomerQueryResponse {
         Vendor: QuickBooksVendors[];
         startPosition: number;
         maxResults: number;
-    },
+    };
     time: string;
 }
 
@@ -48,7 +48,9 @@ export class CompanyVendorsService extends BaseService<QuickBooksVendors, Vendor
 
     public fullUpdate(id: string, token: string, dto: FullUpdateVendorDto): Observable<QuickBooksVendors>;
     public fullUpdate(customer: QuickBooksVendors, dto: FullUpdateVendorDto): Observable<QuickBooksVendors>;
-    public fullUpdate(...args: [string | QuickBooksVendors, string | FullUpdateVendorDto, FullUpdateVendorDto?]): Observable<QuickBooksVendors> {
+    public fullUpdate(
+        ...args: [string | QuickBooksVendors, string | FullUpdateVendorDto, FullUpdateVendorDto?]
+    ): Observable<QuickBooksVendors> {
         const [id, token, dto] = CompanyVendorsService.getUpdateArguments(args);
         return this.post({
             ...dto,
@@ -59,7 +61,9 @@ export class CompanyVendorsService extends BaseService<QuickBooksVendors, Vendor
 
     public sparseUpdate(id: string, token: string, dto: SparseUpdateVendorDto): Observable<QuickBooksVendors>;
     public sparseUpdate(customer: QuickBooksVendors, dto: SparseUpdateVendorDto): Observable<QuickBooksVendors>;
-    public sparseUpdate(...args: [string | QuickBooksVendors, string | SparseUpdateVendorDto, SparseUpdateVendorDto?]): Observable<QuickBooksVendors> {
+    public sparseUpdate(
+        ...args: [string | QuickBooksVendors, string | SparseUpdateVendorDto, SparseUpdateVendorDto?]
+    ): Observable<QuickBooksVendors> {
         const [id, token, dto] = CompanyVendorsService.getUpdateArguments(args);
         return this.post({
             ...dto,
