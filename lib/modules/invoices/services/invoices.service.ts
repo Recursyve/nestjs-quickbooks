@@ -108,14 +108,14 @@ export class CompanyInvoicesService extends BaseService<QuickBooksInvoices, Invo
         });
     }
 
-    private static getUpdateArguments(args: [string | QuickBooksInvoices, string | SparseUpdateInvoicesDto, SparseUpdateInvoicesDto?]): [string, string, SparseUpdateInvoicesDto] {
+    private static getUpdateArguments<DTO>(args: [string | QuickBooksInvoices, string | DTO, DTO?]): [string, string, DTO] {
         const [idOrInvoice, tokenOrDto, dto] = args;
         if (dto) {
             return [idOrInvoice as string, tokenOrDto as string, dto];
         }
 
         const invoice = idOrInvoice as QuickBooksInvoices;
-        return [invoice.Id, invoice.SyncToken, tokenOrDto as SparseUpdateInvoicesDto];
+        return [invoice.Id, invoice.SyncToken, tokenOrDto as DTO];
     }
 
     private static getOperationArguments(args: [string | QuickBooksInvoices, string?]): [string, string] {
