@@ -1,6 +1,6 @@
-import { QuickbooksModel } from "../../common/models/quickbooks.model";
+import { QuickBooksQueryModel } from "../../common/models/quickbooks.model";
 
-export interface PaymentsQuery extends QuickbooksModel {
+export interface QuickBooksPaymentsQuery extends QuickBooksQueryModel {
     TotalAmt: number;
     CustomerRef: string;
     TxnDate: string;

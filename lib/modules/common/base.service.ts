@@ -1,11 +1,10 @@
-import { HttpService, Inject, Injectable } from "@nestjs/common";
-import { AuthService } from "../auth/services/auth.service";
+import { HttpService, Injectable } from "@nestjs/common";
+import { QuickBooksAuthService } from "../auth/services/auth.service";
+import * as querystring from "querystring";
 import { Observable } from "rxjs";
 import { map, mergeMap } from "rxjs/operators";
-import * as os from "os";
 import { WhereOptions } from "./models/query.model";
 import { QueryUtils } from "../../utils/query.utils";
-import * as querystring from "querystring";
 
 @Injectable()
 export class BaseService<T, Query, QueryResponse> {
@@ -15,9 +14,13 @@ export class BaseService<T, Query, QueryResponse> {
     constructor(
         private readonly realm: string,
         private readonly resource: string,
-        private readonly authService: AuthService,
+        private readonly authService: QuickBooksAuthService,
         private readonly http: HttpService
     ) {}
+
+    protected get apiUrl(): string {
+        return this.authService.mode === "production" ? this.liveUrl : this.sandboxUrl;
+    }
 
     public query(condition: WhereOptions<Query>): Observable<QueryResponse> {
         return this.getHttpHeaders().pipe(
@@ -29,9 +32,9 @@ export class BaseService<T, Query, QueryResponse> {
         );
     }
 
-    protected get<T>(path?: string, queryParams?: object, headers?: object): Observable<T> {
+    protected get<R = T>(path?: string, queryParams?: object, headers?: object): Observable<R> {
         return this.getHttpHeaders().pipe(
-            mergeMap((authHeaders) => this.http.get<T>(this.url(path, queryParams), {
+            mergeMap((authHeaders) => this.http.get<R>(this.url(path, queryParams), {
                 headers: {
                     ...authHeaders,
                     ...headers
@@ -42,9 +45,9 @@ export class BaseService<T, Query, QueryResponse> {
         );
     }
 
-    protected post<T>(body: any, path?: string, queryParams?: object, headers?: object): Observable<T> {
+    protected post<R = T>(body: any, path?: string, queryParams?: object, headers?: object): Observable<R> {
         return this.getHttpHeaders().pipe(
-            mergeMap((authHeaders) => this.http.post<T>(this.url(path, queryParams), body, {
+            mergeMap((authHeaders) => this.http.post<R>(this.url(path, queryParams), body, {
                 headers: {
                     ...authHeaders,
                     ...headers
@@ -56,23 +59,22 @@ export class BaseService<T, Query, QueryResponse> {
     }
 
     protected queryUrl(condition: WhereOptions<any>): string {
-        return `${this.sandboxUrl}/v3/company/${this.realm}/query?${QueryUtils.generateQuery(this.resource, condition)}`;
+        return `${this.apiUrl}/v3/company/${this.realm}/query?${QueryUtils.generateQuery(this.resource, condition)}`;
     }
 
     protected url(path: string, queryParams?: object): string {
         const query = queryParams ? `?${querystring.stringify(queryParams as querystring.ParsedUrlQueryInput)}` : "";
         if (!path) {
-            return `${this.sandboxUrl}/v3/company/${this.realm}/${this.resource}${query}`;
+            return `${this.apiUrl}/v3/company/${this.realm}/${this.resource}${query}`;
         }
-        return `${this.sandboxUrl}/v3/company/${this.realm}/${this.resource}/${path}${query}`;
+        return `${this.apiUrl}/v3/company/${this.realm}/${this.resource}/${path}${query}`;
     }
 
     private getHttpHeaders(): Observable<any> {
         return this.authService.getToken(this.realm).pipe(
             map((token) => ({
                 "Authorization": `Bearer ${token}`,
-                "Accept": "application/json",
-                "User-Agent": `Intuit-OAuthClient-JS/3.0.1/${os.release()}/${os.platform()}`
+                "Accept": "application/json"
             }))
         );
     }

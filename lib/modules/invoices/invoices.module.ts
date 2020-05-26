@@ -1,10 +1,10 @@
 import { HttpModule, Module } from "@nestjs/common";
 import { QuickBooksAuthModule } from "../auth/auth.module";
-import { InvoicesService } from "./services/invoices.service";
+import { QuickBooksInvoicesService } from "./services/invoices.service";
 
 @Module({
     imports: [QuickBooksAuthModule, HttpModule],
-    providers: [InvoicesService],
-    exports: [InvoicesService]
+    providers: [QuickBooksInvoicesService],
+    exports: [QuickBooksInvoicesService]
 })
 export class QuickBooksInvoicesModule {}

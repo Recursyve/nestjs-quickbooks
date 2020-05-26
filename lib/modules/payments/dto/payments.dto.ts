@@ -1,11 +1,11 @@
-import { DateTimeModel } from "../../common/models/date-time.model";
-import { RefDto } from "../../common/dto/ref.dto";
+import { QuickBooksDateTimeModel } from "../../common/models/date-time.model";
+import { QuickBooksRefDto } from "../../common/dto/ref.dto";
 
-export interface CreditCardPaymentDto {
+export interface QuickBooksCreditCardPaymentDto {
     CreditChargeResponse?: {
         Status?: string;
         AuthCode?: string;
-        TxnAuthorizationTime?: DateTimeModel;
+        TxnAuthorizationTime?: QuickBooksDateTimeModel;
         CCTransId?: string;
     };
     CreditChargeInfo?: {
@@ -20,47 +20,47 @@ export interface CreditCardPaymentDto {
     };
 }
 
-export interface PaymentLinkedTxnDto {
+export interface QuickBooksPaymentLinkedTxnDto {
     TxnId: string;
     TxnType: "Expense" | "Check" | "CreditCardCredit" | "JournalEntry" | "CreditMemo" | "Invoice";
     TxnLineId?: string;
 }
 
-export interface PaymentLinesDto {
+export interface QuickBooksPaymentLinesDto {
     Amount: number;
-    LinkedTxn: PaymentLinkedTxnDto[];
+    LinkedTxn: QuickBooksPaymentLinkedTxnDto[];
 }
 
-export interface CreatePaymentsDto {
+export interface CreateQuickBooksPaymentsDto {
     TotalAmt: number;
-    CustomerRef: RefDto;
-    CurrencyRef?: RefDto;
+    CustomerRef: QuickBooksRefDto;
+    CurrencyRef?: QuickBooksRefDto;
     PrivateNote?: string;
-    PaymentMethodRef?: RefDto;
-    DepositToAccountRef?: RefDto;
+    PaymentMethodRef?: QuickBooksRefDto;
+    DepositToAccountRef?: QuickBooksRefDto;
     ExchangeRate?: number;
-    Line?: PaymentLinesDto[];
+    Line?: QuickBooksPaymentLinesDto[];
     TxnSource?: string;
-    ARAccountRef?: RefDto;
+    ARAccountRef?: QuickBooksRefDto;
     TxnDate?: string;
-    CreditCardPayment?: CreditCardPaymentDto;
+    CreditCardPayment?: QuickBooksCreditCardPaymentDto;
     TransactionLocationType?: string;
     PaymentRefNum?: string;
 }
 
-export interface FullUpdatePaymentsDto {
+export interface FullUpdateQuickBooksPaymentsDto {
     TotalAmt: number;
-    CustomerRef: RefDto;
-    CurrencyRef?: RefDto;
+    CustomerRef: QuickBooksRefDto;
+    CurrencyRef?: QuickBooksRefDto;
     PrivateNote?: string;
-    PaymentMethodRef?: RefDto;
-    DepositToAccountRef?: RefDto;
+    PaymentMethodRef?: QuickBooksRefDto;
+    DepositToAccountRef?: QuickBooksRefDto;
     ExchangeRate?: number;
-    Line?: PaymentLinesDto[];
+    Line?: QuickBooksPaymentLinesDto[];
     TxnSource?: string;
-    ARAccountRef?: RefDto;
+    ARAccountRef?: QuickBooksRefDto;
     TxnDate?: string;
-    CreditCardPayment?: CreditCardPaymentDto;
+    CreditCardPayment?: QuickBooksCreditCardPaymentDto;
     TransactionLocationType?: string;
     PaymentRefNum?: string;
 }

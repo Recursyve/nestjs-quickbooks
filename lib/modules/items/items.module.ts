@@ -1,10 +1,10 @@
 import { HttpModule, Module } from "@nestjs/common";
 import { QuickBooksAuthModule } from "../auth/auth.module";
-import { ItemsService } from "./services/items.service";
+import { QuickBooksItemsService } from "./services/items.service";
 
 @Module({
     imports: [QuickBooksAuthModule, HttpModule],
-    providers: [ItemsService],
-    exports: [ItemsService]
+    providers: [QuickBooksItemsService],
+    exports: [QuickBooksItemsService]
 })
 export class QuickBooksItemsModule {}

@@ -1,6 +1,6 @@
-import { QuickbooksModel } from "../../common/models/quickbooks.model";
+import { QuickBooksQueryModel } from "../../common/models/quickbooks.model";
 
-export interface InvoicesQuery extends QuickbooksModel {
+export interface QuickBooksInvoicesQuery extends QuickBooksQueryModel {
     CustomerRef: string;
     DocNumber: string;
     TxnDate: string;

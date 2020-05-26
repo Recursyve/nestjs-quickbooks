@@ -1,10 +1,9 @@
 import { Controller, Get, Post } from "@nestjs/common";
-import { CustomersService } from "../../../lib/modules/customers/services/customers.service";
-import { Op } from "../../../lib/modules/common/models/query.model";
+import { Op, QuickBooksCustomersService } from "../../../lib";
 
 @Controller("customer")
 export class CustomersController {
-    constructor(private readonly customersService: CustomersService) {
+    constructor(private readonly customersService: QuickBooksCustomersService) {
     }
 
     @Get()

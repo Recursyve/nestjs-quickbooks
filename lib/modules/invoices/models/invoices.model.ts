@@ -1,6 +1,6 @@
-import { QuickbooksModel } from "../../common/models/quickbooks.model";
+import { QuickBooksModel } from "../../common/models/quickbooks.model";
 import { QuickBooksCustomersAddress } from "../../customers/models/customers.model";
-import { RefModel } from "../../common/models/ref.model";
+import { QuickBooksRefModel } from "../../common/models/ref.model";
 
 export interface QuickBooksInvoiceCustomField {
     DefinitionId: string;
@@ -16,13 +16,13 @@ export interface QuickBooksInvoiceLinkedTxn {
 }
 
 export interface QuickBooksInvoiceTxnTaxDetail {
-    TxnTaxCodeRef: RefModel;
+    TxnTaxCodeRef: QuickBooksRefModel;
     TotalTax: number;
     TaxLine: {
         DetailType: string;
         Amount: number;
         TaxLineDetail: {
-            TaxRateRef: RefModel;
+            TaxRateRef: QuickBooksRefModel;
             NetAmountTaxable: number;
             PercentBased: boolean;
             TaxInclusiveAmount: number;
@@ -41,20 +41,20 @@ export interface QuickBooksInvoiceSalesItemLine {
     SalesItemLineDetail: {
         TaxInclusiveAmt: number;
         DiscountAmt: number;
-        ItemRef: RefModel;
-        ClassRef: RefModel;
-        TaxCodeRef: RefModel;
+        ItemRef: QuickBooksRefModel;
+        ClassRef: QuickBooksRefModel;
+        TaxCodeRef: QuickBooksRefModel;
         MarkupInfo: {
-            PriceLevelRef: RefModel;
+            PriceLevelRef: QuickBooksRefModel;
             Percent: number;
-            MarkUpIncomeAccountRef: RefModel;
+            MarkUpIncomeAccountRef: QuickBooksRefModel;
         };
-        ItemAccountRef: RefModel;
+        ItemAccountRef: QuickBooksRefModel;
         ServiceDate: string;
         DiscountRate: number;
         Qty: number;
         UnitPrice: number;
-        TaxClassificationRef: RefModel;
+        TaxClassificationRef: QuickBooksRefModel;
     };
 }
 
@@ -65,7 +65,7 @@ export interface QuickBooksInvoiceGroupLine {
     LineNum: number;
     GroupLineDetail: {
         Quantity: number;
-        GroupItemRef: RefModel;
+        GroupItemRef: QuickBooksRefModel;
         Line: QuickBooksInvoiceSalesItemLine[];
     };
 }
@@ -77,7 +77,7 @@ export interface QuickBooksInvoiceDescriptionOnlyLine {
     Description: string;
     LineNum: number;
     DescriptionLineDetail: {
-        TaxCodeRef: RefModel;
+        TaxCodeRef: QuickBooksRefModel;
         ServiceDate: {
             date: string;
         };
@@ -91,9 +91,9 @@ export interface QuickBooksInvoiceDiscountLine {
     Description: string;
     LineNum: number;
     DiscountLineDetail: {
-        ClassRef: RefModel;
-        TaxCodeRef: RefModel;
-        DiscountAccountRef: RefModel;
+        ClassRef: QuickBooksRefModel;
+        TaxCodeRef: QuickBooksRefModel;
+        DiscountAccountRef: QuickBooksRefModel;
         PercentBased: boolean;
         DiscountPercent: number;
     };
@@ -106,7 +106,7 @@ export interface QuickBooksInvoiceSubTotalLine {
     Description: string;
     LineNum: number;
     SubtotalLineDetail: {
-        ItemRef: RefModel;
+        ItemRef: QuickBooksRefModel;
     };
 }
 
@@ -117,7 +117,7 @@ export type QuickBooksInvoiceLines =
     QuickBooksInvoiceDiscountLine |
     QuickBooksInvoiceSubTotalLine;
 
-export interface QuickBooksInvoices extends QuickbooksModel {
+export interface QuickBooksInvoices extends QuickBooksModel {
     AllowIPNPayment: boolean;
     AllowOnlinePayment: boolean;
     AllowOnlineCreditCardPayment: boolean;
@@ -126,12 +126,12 @@ export interface QuickBooksInvoices extends QuickbooksModel {
     ShipAddr: QuickBooksCustomersAddress;
     DocNumber: string;
     TxnDate: string;
-    CurrencyRef: RefModel;
+    CurrencyRef: QuickBooksRefModel;
     PrivateNote: string;
     LinkedTxn: QuickBooksInvoiceLinkedTxn[];
     Line: QuickBooksInvoiceLines[];
     TxnTaxDetail: QuickBooksInvoiceTxnTaxDetail;
-    CustomerRef: RefModel;
+    CustomerRef: QuickBooksRefModel;
     DueDate: string;
     TotalAmt: number;
     ApplyTaxAfterDiscount: boolean;

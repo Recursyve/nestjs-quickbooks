@@ -1,8 +1,8 @@
-import { Tokens, Store } from "./store";
+import { Tokens, QuickBooksStore } from "./store.service";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
-export class LocalStore extends Store {
+export class LocalStore extends QuickBooksStore {
     private companies: string[] = [];
     private tokens: { [realm: string]: Tokens } = {};
 

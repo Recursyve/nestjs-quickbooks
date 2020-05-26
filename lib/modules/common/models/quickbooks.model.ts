@@ -1,10 +1,15 @@
-export interface QuickbooksMetadata {
+export interface QuickBooksMetadata {
     CreateTime: string;
     LastUpdatedTime: string;
 }
 
-export interface QuickbooksModel {
+export interface QuickBooksModel {
     Id: string;
     SyncToken: string;
-    MetaData: QuickbooksMetadata;
+    MetaData: QuickBooksMetadata;
+}
+
+export interface QuickBooksQueryModel {
+    Id: string;
+    MetaData: QuickBooksMetadata;
 }

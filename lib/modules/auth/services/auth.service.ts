@@ -3,24 +3,29 @@ import * as OAuthClient from "intuit-oauth";
 import { Observable, of } from "rxjs";
 import { fromPromise } from "rxjs/internal-compatibility";
 import { map } from "rxjs/operators";
-import { QuickbooksConfigService } from "../../config/services/quickbooks-config.service";
-import { Tokens, Store } from "../../store/store";
+import { QuickBooksConfigService } from "../../config/services/quickbooks-config.service";
+import { Tokens, QuickBooksStore } from "../../store/store.service";
+import { QuickbooksModes } from "../../config/models/quickbooks-config.model";
 
 @Injectable()
-export class AuthService {
+export class QuickBooksAuthService {
     private readonly client;
 
     constructor(
         private readonly httpClient: HttpService,
-        private readonly configService: QuickbooksConfigService,
-        private readonly tokenStore: Store
+        private readonly configService: QuickBooksConfigService,
+        private readonly tokenStore: QuickBooksStore
     ) {
         this.client = new OAuthClient({
             clientId: this.configService.global.clientId,
             clientSecret: this.configService.global.clientSecret,
-            environment: "sandbox",
-            redirectUri: "http://localhost:3000/quickbooks/auth/return"
+            environment: this.configService.global.mode,
+            redirectUri: `${this.configService.global.serverUri}/quickbooks/auth/return`
         });
+    }
+
+    public get mode(): QuickbooksModes {
+        return this.configService.global.mode;
     }
 
     public getAuthorizeUri(): string {
@@ -60,9 +65,9 @@ export class AuthService {
     private refreshAccessToken(realm: string, token: Tokens): Observable<string> {
         return fromPromise(this.client.refreshUsingToken(token)).pipe(
             map((res: any) => {
-                const token = res.toJson() as Tokens;
-                this.tokenStore.setToken(realm, token);
-                return token.access_token;
+                const t = res.toJson() as Tokens;
+                this.tokenStore.setToken(realm, t);
+                return t.access_token;
             })
         );
     }

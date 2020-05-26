@@ -1,10 +1,9 @@
 import { Controller, Get, Header, Param, Res } from "@nestjs/common";
-import { Op } from "../../../lib/modules/common/models/query.model";
-import { InvoicesService } from "../../../lib/modules/invoices/services/invoices.service";
+import { Op, QuickBooksInvoicesService } from "../../../lib";
 
 @Controller("invoice")
 export class InvoicesController {
-    constructor(private readonly invoicesService: InvoicesService) {
+    constructor(private readonly invoicesService: QuickBooksInvoicesService) {
     }
 
     @Get()

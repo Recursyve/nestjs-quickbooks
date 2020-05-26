@@ -9,7 +9,7 @@ export interface Tokens {
 }
 
 @Injectable()
-export abstract class Store {
+export abstract class QuickBooksStore {
     public abstract registerCompany(realm: string): void;
     public abstract getDefaultCompany(): string;
     public abstract setToken(realm: string, token: Tokens): void;

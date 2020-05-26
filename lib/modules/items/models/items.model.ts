@@ -1,5 +1,5 @@
-import { QuickbooksModel } from "../../common/models/quickbooks.model";
-import { RefModel } from "../../common/models/ref.model";
+import { QuickBooksModel } from "../../common/models/quickbooks.model";
+import { QuickBooksRefModel } from "../../common/models/ref.model";
 
 export enum QuickBookItemTypes {
     Inventory = "Inventory",
@@ -7,18 +7,18 @@ export enum QuickBookItemTypes {
     NonInventory = "NonInventory"
 }
 
-export interface QuickBooksItems extends QuickbooksModel {
+export interface QuickBooksItems extends QuickBooksModel {
     ItemCategoryType: "Product" | "Service";
     Name: string;
     InvStartDate: string;
     Type: QuickBookItemTypes;
     QtyOnHand: number;
-    AssetAccountRef: RefModel;
+    AssetAccountRef: QuickBooksRefModel;
     Sku: string;
     SalesTaxIncluded: boolean;
     TrackQtyOnHand: boolean;
-    SalesTaxCodeRef: RefModel;
-    ClassRef: RefModel;
+    SalesTaxCodeRef: QuickBooksRefModel;
+    ClassRef: QuickBooksRefModel;
     PurchaseTaxIncluded: boolean;
     Description: string;
     AbatementRate: number;
@@ -28,17 +28,17 @@ export interface QuickBooksItems extends QuickbooksModel {
     UQCDisplayText: string;
     ReorderPoint: number;
     PurchaseDesc: string;
-    PrefVendorRef: RefModel;
+    PrefVendorRef: QuickBooksRefModel;
     Active: boolean;
     UQCId: string;
-    PurchaseTaxCodeRef: RefModel;
+    PurchaseTaxCodeRef: QuickBooksRefModel;
     ServiceType: string;
     PurchaseCost: number;
-    ParentRef: RefModel;
+    ParentRef: QuickBooksRefModel;
     UnitPrice: number;
     FullyQualifiedName: string;
     Level: number;
-    IncomeAccountRef: RefModel;
-    ExpenseAccountRef: RefModel;
-    TaxClassificationRef: RefModel;
+    IncomeAccountRef: QuickBooksRefModel;
+    ExpenseAccountRef: QuickBooksRefModel;
+    TaxClassificationRef: QuickBooksRefModel;
 }

@@ -1,8 +1,8 @@
-import { QuickbooksModel } from "../../common/models/quickbooks.model";
-import { RefModel } from "../../common/models/ref.model";
-import { PhoneNumberModel } from "../../common/models/phone-number.model";
-import { EmailModel } from "../../common/models/email.model";
-import { WebsiteModel } from "../../common/models/website.model";
+import { QuickBooksModel } from "../../common/models/quickbooks.model";
+import { QuickBooksRefModel } from "../../common/models/ref.model";
+import { QuickBooksPhoneNumberModel } from "../../common/models/phone-number.model";
+import { QuickBooksEmailModel } from "../../common/models/email.model";
+import { QuickBooksWebsiteModel } from "../../common/models/website.model";
 
 export interface QuickBooksVendorsContactInfo {
     Type: "TelephoneNumber";
@@ -19,30 +19,30 @@ export interface QuickBooksVendorsAddress {
     CountrySubDivisionCode: string;
 }
 
-export interface QuickBooksVendors extends QuickbooksModel {
+export interface QuickBooksVendors extends QuickBooksModel {
     Title: string;
     GivenName: string;
     MiddleName: string;
     Suffix: string;
     FamilyName: string;
-    PrimaryEmailAddr: EmailModel;
+    PrimaryEmailAddr: QuickBooksEmailModel;
     DisplayName: string;
     OtherContactInfo: QuickBooksVendorsContactInfo;
-    APAccountRef: RefModel;
-    TermRef: RefModel;
+    APAccountRef: QuickBooksRefModel;
+    TermRef: QuickBooksRefModel;
     GSTIN: string;
-    Fax: PhoneNumberModel;
+    Fax: QuickBooksPhoneNumberModel;
     BusinessNumber: string;
-    CurrencyRef: RefModel;
+    CurrencyRef: QuickBooksRefModel;
     HasTPAR: boolean;
     TaxReportingBasis: "Cash" | "Accrual";
-    Mobile: PhoneNumberModel;
-    PrimaryPhone: PhoneNumberModel;
+    Mobile: QuickBooksPhoneNumberModel;
+    PrimaryPhone: QuickBooksPhoneNumberModel;
     Active: boolean;
-    AlternatePhone: PhoneNumberModel;
+    AlternatePhone: QuickBooksPhoneNumberModel;
     Vendor1099: boolean;
     BillRate: number;
-    WebAddr: WebsiteModel;
+    WebAddr: QuickBooksWebsiteModel;
     CompanyName: string;
     TaxIdentifier: string;
     AcctNum: string;

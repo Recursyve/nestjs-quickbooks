@@ -1,13 +1,13 @@
 import { HttpService, Injectable } from "@nestjs/common";
 import { Observable } from "rxjs";
-import { AuthService } from "../../auth/services/auth.service";
+import { QuickBooksAuthService } from "../../auth/services/auth.service";
 import { BaseService } from "../../common/base.service";
-import { Store } from "../../store/store";
+import { QuickBooksStore } from "../../store/store.service";
 import { QuickBooksItems } from "../models/items.model";
-import { ItemsQuery } from "../models/items.query";
-import { CreateItemDto, FullUpdateItemDto } from "../dto/items.dto";
+import { QuickBooksItemsQuery } from "../models/items.query";
+import { CreateQuickBooksItemDto, FullUpdateQuickBooksItemDto } from "../dto/items.dto";
 
-export interface ItemQueryResponse {
+export interface QuickBooksItemQueryResponse {
     QueryResponse: {
         Item: QuickBooksItems[];
         startPosition: number;
@@ -17,28 +17,28 @@ export interface ItemQueryResponse {
 }
 
 @Injectable()
-export class ItemsService {
+export class QuickBooksItemsService {
     constructor(
-        private readonly authService: AuthService,
+        private readonly authService: QuickBooksAuthService,
         private readonly http: HttpService,
-        private readonly store: Store
+        private readonly store: QuickBooksStore
     ) {}
 
-    public withDefaultCompany(): CompanyCustomersService {
+    public withDefaultCompany(): CompanyItemsService {
         return this.forCompany(this.store.getDefaultCompany());
     }
 
-    public forCompany(realm: string): CompanyCustomersService {
-        return new CompanyCustomersService(realm, this.authService, this.http);
+    public forCompany(realm: string): CompanyItemsService {
+        return new CompanyItemsService(realm, this.authService, this.http);
     }
 }
 
-export class CompanyCustomersService extends BaseService<QuickBooksItems, ItemsQuery, ItemQueryResponse> {
-    constructor(realm: string, authService: AuthService, http: HttpService) {
+class CompanyItemsService extends BaseService<QuickBooksItems, QuickBooksItemsQuery, QuickBooksItemQueryResponse> {
+    constructor(realm: string, authService: QuickBooksAuthService, http: HttpService) {
         super(realm, "item", authService, http);
     }
 
-    public create(dto: CreateItemDto): Observable<QuickBooksItems> {
+    public create(dto: CreateQuickBooksItemDto): Observable<QuickBooksItems> {
         return this.post(dto);
     }
 
@@ -46,12 +46,12 @@ export class CompanyCustomersService extends BaseService<QuickBooksItems, ItemsQ
         return this.get(id);
     }
 
-    public fullUpdate(id: string, token: string, dto: FullUpdateItemDto): Observable<QuickBooksItems>;
-    public fullUpdate(customer: QuickBooksItems, dto: FullUpdateItemDto): Observable<QuickBooksItems>;
+    public fullUpdate(id: string, token: string, dto: FullUpdateQuickBooksItemDto): Observable<QuickBooksItems>;
+    public fullUpdate(customer: QuickBooksItems, dto: FullUpdateQuickBooksItemDto): Observable<QuickBooksItems>;
     public fullUpdate(
-        ...args: [string | QuickBooksItems, string | FullUpdateItemDto, FullUpdateItemDto?]
+        ...args: [string | QuickBooksItems, string | FullUpdateQuickBooksItemDto, FullUpdateQuickBooksItemDto?]
     ): Observable<QuickBooksItems> {
-        const [id, token, dto] = CompanyCustomersService.getUpdateArguments(args);
+        const [id, token, dto] = CompanyItemsService.getUpdateArguments(args);
         return this.post({
             ...dto,
             Id: id,

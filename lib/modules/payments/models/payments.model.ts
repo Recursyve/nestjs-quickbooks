@@ -1,12 +1,12 @@
-import { QuickbooksModel } from "../../common/models/quickbooks.model";
-import { RefModel } from "../../common/models/ref.model";
-import { DateTimeModel } from "../../common/models/date-time.model";
+import { QuickBooksModel } from "../../common/models/quickbooks.model";
+import { QuickBooksRefModel } from "../../common/models/ref.model";
+import { QuickBooksDateTimeModel } from "../../common/models/date-time.model";
 
-export interface CreditCardPayment {
+export interface QuickBooksCreditCardPayment {
     CreditChargeResponse: {
         Status: string;
         AuthCode: string;
-        TxnAuthorizationTime: DateTimeModel;
+        TxnAuthorizationTime: QuickBooksDateTimeModel;
         CCTransId: string;
     };
     CreditChargeInfo: {
@@ -32,21 +32,21 @@ export interface QuickBooksPaymentLines {
     LinkedTxn: QuickBooksPaymentLinkedTxn[];
 }
 
-export interface QuickBooksPayments extends QuickbooksModel {
+export interface QuickBooksPayments extends QuickBooksModel {
     TotalAmt: number;
-    CustomerRef: RefModel;
-    CurrencyRef: RefModel;
+    CustomerRef: QuickBooksRefModel;
+    CurrencyRef: QuickBooksRefModel;
     PrivateNote: string;
-    PaymentMethodRef: RefModel;
+    PaymentMethodRef: QuickBooksRefModel;
     UnappliedAmt: number;
-    DepositToAccountRef: RefModel;
+    DepositToAccountRef: QuickBooksRefModel;
     ExchangeRate: number;
     Line: QuickBooksPaymentLines[];
     TxnSource: string;
-    ARAccountRef: RefModel;
+    ARAccountRef: QuickBooksRefModel;
     TxnDate: string;
-    CreditCardPayment: CreditCardPayment;
+    CreditCardPayment: QuickBooksCreditCardPayment;
     TransactionLocationType: string;
     PaymentRefNum: string;
-    TaxExemptionRef: RefModel;
+    TaxExemptionRef: QuickBooksRefModel;
 }

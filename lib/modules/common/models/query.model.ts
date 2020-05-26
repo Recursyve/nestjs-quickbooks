@@ -79,6 +79,6 @@ export type WhereValue =
 
 export type WhereAttributeHash<T> = {
     [P in keyof T]?: T[P] extends object ? WhereAttributeHash<Partial<T[P]>> : WhereValue;
-}
+};
 
 export type WhereOptions<T> = WhereAttributeHash<T> | AndOperator<T> | OrOperator<T>;

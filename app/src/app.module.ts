@@ -1,15 +1,20 @@
 import { Module } from "@nestjs/common";
-import { QuickbooksModule } from "../../lib";
-import { QuickBooksScopes } from "../../lib/modules/config/models/quickbooks-config.model";
-import { QuickBooksCustomersModule } from "../../lib/modules/customers/customers.module";
-import { QuickBooksInvoicesModule } from "../../lib/modules/invoices/invoices.module";
+import { QuickBooksCustomersModule, QuickBooksInvoicesModule, QuickBooksModule, QuickBooksScopes } from "../../lib";
 import { CustomersController } from "./customers/customers.controller";
 import { InvoicesController } from "./invoices/invoices.controller";
 
 @Module({
     imports: [
-        QuickbooksModule.forRoot({
-            scopes: [QuickBooksScopes.Accounting]
+        QuickBooksModule.forRoot({
+            config: {
+                mode: "sandbox",
+                serverUri: "http://localhost:3000",
+                scopes: [QuickBooksScopes.Accounting],
+                redirection: {
+                    successUrl: "http://localhost:3000/customer",
+                    errorUrl: "http://localhost:3000/customer"
+                }
+            }
         }),
         QuickBooksCustomersModule,
         QuickBooksInvoicesModule

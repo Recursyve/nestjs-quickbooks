@@ -1,3 +1,3 @@
-export interface WebsiteModel {
+export interface QuickBooksWebsiteModel {
     URI: string;
 }

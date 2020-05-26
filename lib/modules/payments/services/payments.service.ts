@@ -1,13 +1,13 @@
 import { HttpService, Injectable } from "@nestjs/common";
 import { Observable } from "rxjs";
-import { AuthService } from "../../auth/services/auth.service";
+import { QuickBooksAuthService } from "../../auth/services/auth.service";
 import { BaseService } from "../../common/base.service";
-import { Store } from "../../store/store";
+import { QuickBooksStore } from "../../store/store.service";
 import { QuickBooksPayments } from "../models/payments.model";
-import { PaymentsQuery } from "../models/payments.query";
-import { CreatePaymentsDto, FullUpdatePaymentsDto } from "../dto/payments.dto";
+import { QuickBooksPaymentsQuery } from "../models/payments.query";
+import { CreateQuickBooksPaymentsDto, FullUpdateQuickBooksPaymentsDto } from "../dto/payments.dto";
 
-export interface PaymentsQueryResponse {
+export interface QuickBooksPaymentsQueryResponse {
     QueryResponse: {
         Invoice: QuickBooksPayments[];
         startPosition: number;
@@ -16,7 +16,7 @@ export interface PaymentsQueryResponse {
     time: string;
 }
 
-export interface PaymentsDeleteResponse {
+export interface QuickBooksPaymentsDeleteResponse {
     Payment: {
         Id: string;
         status: string;
@@ -26,11 +26,11 @@ export interface PaymentsDeleteResponse {
 }
 
 @Injectable()
-export class PaymentsService {
+export class QuickBooksPaymentsService {
     constructor(
-        private readonly authService: AuthService,
+        private readonly authService: QuickBooksAuthService,
         private readonly http: HttpService,
-        private readonly store: Store
+        private readonly store: QuickBooksStore
     ) {}
 
     public withDefaultCompany(): PaymentsInvoicesService {
@@ -42,12 +42,12 @@ export class PaymentsService {
     }
 }
 
-export class PaymentsInvoicesService extends BaseService<QuickBooksPayments, PaymentsQuery, PaymentsQueryResponse> {
-    constructor(realm: string, authService: AuthService, http: HttpService) {
+class PaymentsInvoicesService extends BaseService<QuickBooksPayments, QuickBooksPaymentsQuery, QuickBooksPaymentsQueryResponse> {
+    constructor(realm: string, authService: QuickBooksAuthService, http: HttpService) {
         super(realm, "payment", authService, http);
     }
 
-    public create(dto: CreatePaymentsDto): Observable<QuickBooksPayments> {
+    public create(dto: CreateQuickBooksPaymentsDto): Observable<QuickBooksPayments> {
         return this.post(dto);
     }
 
@@ -61,10 +61,10 @@ export class PaymentsInvoicesService extends BaseService<QuickBooksPayments, Pay
         });
     }
 
-    public fullUpdate(id: string, token: string, dto: FullUpdatePaymentsDto): Observable<QuickBooksPayments>;
-    public fullUpdate(invoice: QuickBooksPayments, dto: FullUpdatePaymentsDto): Observable<QuickBooksPayments>;
+    public fullUpdate(id: string, token: string, dto: FullUpdateQuickBooksPaymentsDto): Observable<QuickBooksPayments>;
+    public fullUpdate(invoice: QuickBooksPayments, dto: FullUpdateQuickBooksPaymentsDto): Observable<QuickBooksPayments>;
     public fullUpdate(
-        ...args: [string | QuickBooksPayments, string | FullUpdatePaymentsDto, FullUpdatePaymentsDto?]
+        ...args: [string | QuickBooksPayments, string | FullUpdateQuickBooksPaymentsDto, FullUpdateQuickBooksPaymentsDto?]
     ): Observable<QuickBooksPayments> {
         const [id, token, dto] = PaymentsInvoicesService.getUpdateArguments(args);
         return this.post({
@@ -74,9 +74,9 @@ export class PaymentsInvoicesService extends BaseService<QuickBooksPayments, Pay
         });
     }
 
-    public delete(id: string, token: string): Observable<PaymentsDeleteResponse>;
-    public delete(invoice: QuickBooksPayments): Observable<PaymentsDeleteResponse>;
-    public delete(...args: [string | QuickBooksPayments, string?]): Observable<PaymentsDeleteResponse> {
+    public delete(id: string, token: string): Observable<QuickBooksPaymentsDeleteResponse>;
+    public delete(invoice: QuickBooksPayments): Observable<QuickBooksPaymentsDeleteResponse>;
+    public delete(...args: [string | QuickBooksPayments, string?]): Observable<QuickBooksPaymentsDeleteResponse> {
         const [id, token] = PaymentsInvoicesService.getOperationArguments(args);
         return this.post({
             Id: id,
@@ -86,9 +86,9 @@ export class PaymentsInvoicesService extends BaseService<QuickBooksPayments, Pay
         });
     }
 
-    public void(id: string, token: string): Observable<PaymentsDeleteResponse>;
-    public void(invoice: QuickBooksPayments): Observable<PaymentsDeleteResponse>;
-    public void(...args: [string | QuickBooksPayments, string?]): Observable<PaymentsDeleteResponse> {
+    public void(id: string, token: string): Observable<QuickBooksPaymentsDeleteResponse>;
+    public void(invoice: QuickBooksPayments): Observable<QuickBooksPaymentsDeleteResponse>;
+    public void(...args: [string | QuickBooksPayments, string?]): Observable<QuickBooksPaymentsDeleteResponse> {
         const [id, token] = PaymentsInvoicesService.getOperationArguments(args);
         return this.post({
             Id: id,

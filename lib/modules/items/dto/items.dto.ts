@@ -1,33 +1,33 @@
 import { QuickBookItemTypes } from "../models/items.model";
-import { RefDto } from "../../common/dto/ref.dto";
+import { QuickBooksRefDto } from "../../common/dto/ref.dto";
 
-export interface InventoryItem {
+export interface QuickBooksInventoryItem {
     Type: QuickBookItemTypes.Inventory;
-    IncomeAccountRef: RefDto;
-    AssetAccountRef: RefDto;
+    IncomeAccountRef: QuickBooksRefDto;
+    AssetAccountRef: QuickBooksRefDto;
     InvStartDate: string;
-    ExpenseAccountRef: RefDto;
+    ExpenseAccountRef: QuickBooksRefDto;
     QtyOnHand: number;
 }
 
-export interface NonInventoryItem {
+export interface QuickBooksNonInventoryItem {
     Type: QuickBookItemTypes.NonInventory;
-    ExpenseAccountRef: RefDto;
+    ExpenseAccountRef: QuickBooksRefDto;
 }
 
-export interface ServiceItem {
+export interface QuickBooksServiceItem {
     Type: QuickBookItemTypes.Service;
-    IncomeAccountRef: RefDto;
-    ExpenseAccountRef: RefDto;
+    IncomeAccountRef: QuickBooksRefDto;
+    ExpenseAccountRef: QuickBooksRefDto;
 }
 
-export interface ItemsDto {
+export interface QuickBooksItemsDto {
     Name: string;
     Sku?: string;
     SalesTaxIncluded?: boolean;
     TrackQtyOnHand?: boolean;
-    SalesTaxCodeRef?: RefDto;
-    ClassRef?: RefDto;
+    SalesTaxCodeRef?: QuickBooksRefDto;
+    ClassRef?: QuickBooksRefDto;
     PurchaseTaxIncluded?: boolean;
     Description?: string;
     AbatementRate?: number;
@@ -37,25 +37,25 @@ export interface ItemsDto {
     UQCDisplayText?: string;
     ReorderPoint?: number;
     PurchaseDesc?: string;
-    PrefVendorRef?: RefDto;
+    PrefVendorRef?: QuickBooksRefDto;
     Active?: boolean;
     UQCId?: string;
-    PurchaseTaxCodeRef?: RefDto;
+    PurchaseTaxCodeRef?: QuickBooksRefDto;
     ServiceType?: string;
     PurchaseCost?: number;
-    ParentRef?: RefDto;
+    ParentRef?: QuickBooksRefDto;
     UnitPrice?: number;
-    TaxClassificationRef?: RefDto;
+    TaxClassificationRef?: QuickBooksRefDto;
 }
 
-export type CreateItemDto = (
-    InventoryItem |
-    NonInventoryItem |
-    ServiceItem
-) & ItemsDto;
+export type CreateQuickBooksItemDto = (
+    QuickBooksInventoryItem |
+    QuickBooksNonInventoryItem |
+    QuickBooksServiceItem
+) & QuickBooksItemsDto;
 
-export type FullUpdateItemDto = (
-    InventoryItem |
-    NonInventoryItem |
-    ServiceItem
-) & ItemsDto;
+export type FullUpdateQuickBooksItemDto = (
+    QuickBooksInventoryItem |
+    QuickBooksNonInventoryItem |
+    QuickBooksServiceItem
+) & QuickBooksItemsDto;

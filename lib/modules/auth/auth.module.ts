@@ -1,12 +1,12 @@
 import { HttpModule, Module } from "@nestjs/common";
-import { AuthService } from "./services/auth.service";
+import { QuickBooksAuthService } from "./services/auth.service";
 import { ConfigModule } from "../config/config.module";
-import { QuickbooksAuthController } from "./controllers/auth.controller";
+import { QuickBooksAuthController } from "./controllers/auth.controller";
 
 @Module({
     imports: [ConfigModule, HttpModule],
-    controllers: [QuickbooksAuthController],
-    providers: [AuthService],
-    exports: [AuthService]
+    controllers: [QuickBooksAuthController],
+    providers: [QuickBooksAuthService],
+    exports: [QuickBooksAuthService]
 })
 export class QuickBooksAuthModule {}

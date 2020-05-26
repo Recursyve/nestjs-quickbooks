@@ -1,26 +1,26 @@
-import { RefDto } from "../../common/dto/ref.dto";
-import { RefModel } from "../../common/models/ref.model";
-import { CustomersAddressDto } from "../../customers/dto/customers.dto";
+import { QuickBooksRefDto } from "../../common/dto/ref.dto";
+import { QuickBooksRefModel } from "../../common/models/ref.model";
+import { QuickBooksCustomersAddressDto } from "../../customers/dto/customers.dto";
 
-export interface InvoiceCustomFieldDto {
+export interface QuickBooksInvoiceCustomFieldDto {
     DefinitionId: string;
     StringValue?: string;
     Name?: string;
 }
 
-export interface InvoiceLinkedTxnDto {
+export interface QuickBooksInvoiceLinkedTxnDto {
     TxnId?: string;
     TxnType?: string;
     TxnLineId: string;
 }
 
-export interface InvoiceTxnTaxDetailDto {
-    TxnTaxCodeRef?: RefDto;
+export interface QuickBooksInvoiceTxnTaxDetailDto {
+    TxnTaxCodeRef?: QuickBooksRefDto;
     TotalTax?: number;
     TaxLine?: {
         DetailType: "TxnTaxCodeRef";
         TaxLineDetail: {
-            TaxRateRef?: RefDto;
+            TaxRateRef?: QuickBooksRefDto;
             NetAmountTaxable?: number;
             PercentBased?: boolean;
             TaxInclusiveAmount?: number;
@@ -31,62 +31,62 @@ export interface InvoiceTxnTaxDetailDto {
     }[];
 }
 
-export interface InvoicesDto {
+export interface QuickBooksInvoicesDto {
     AllowOnlineCreditCardPayment?: boolean;
     AllowOnlineACHPayment?: boolean;
-    CustomField?: InvoiceCustomFieldDto[];
-    ShipAddr?: CustomersAddressDto;
+    CustomField?: QuickBooksInvoiceCustomFieldDto[];
+    ShipAddr?: QuickBooksCustomersAddressDto;
     DocNumber?: string;
     TxnDate?: string;
     PrivateNote?: string;
-    LinkedTxn?: InvoiceLinkedTxnDto[];
-    TxnTaxDetail?: InvoiceTxnTaxDetailDto;
+    LinkedTxn?: QuickBooksInvoiceLinkedTxnDto[];
+    TxnTaxDetail?: QuickBooksInvoiceTxnTaxDetailDto;
     DueDate?: string;
     ApplyTaxAfterDiscount?: boolean;
     PrintStatus?: "NotSet" | "NeedToPrint" | "PrintComplete";
     EmailStatus?: "NotSet" | "NeedToSend" | "EmailSent";
 }
 
-export interface CreateSalesItemLineDto {
+export interface CreateQuickBooksSalesItemLineDto {
     DetailType: "SalesItemLineDetail";
     SalesItemLineDetail: {
         TaxInclusiveAmt?: number;
         DiscountAmt?: number;
-        ItemRef?: RefDto;
-        ClassRef?: RefDto;
-        TaxCodeRef?: RefDto;
+        ItemRef?: QuickBooksRefDto;
+        ClassRef?: QuickBooksRefDto;
+        TaxCodeRef?: QuickBooksRefDto;
         MarkupInfo?: {
-            PriceLevelRef?: RefDto;
+            PriceLevelRef?: QuickBooksRefDto;
             Percent?: number;
-            MarkUpIncomeAccountRef?: RefDto;
+            MarkUpIncomeAccountRef?: QuickBooksRefDto;
         };
-        ItemAccountRef?: RefDto;
+        ItemAccountRef?: QuickBooksRefDto;
         ServiceDate?: string;
         DiscountRate?: number;
         Qty?: number;
         UnitPrice?: number;
-        TaxClassificationRef?: RefDto;
+        TaxClassificationRef?: QuickBooksRefDto;
     };
     Amount: number;
     Description?: string;
     LineNum?: number;
 }
 
-export interface CreateInvoiceGroupLineDto {
+export interface CreateQuickBooksInvoiceGroupLineDto {
     DetailType: "GroupLineDetail";
     GroupLineDetail: {
         Quantity?: number;
-        GroupItemRef?: RefDto;
-        Line?: CreateSalesItemLineDto[];
+        GroupItemRef?: QuickBooksRefDto;
+        Line?: CreateQuickBooksSalesItemLineDto[];
     };
     Description?: string;
     LineNum?: number;
 }
 
-export interface CreateInvoiceDescriptionOnlyLineDto {
+export interface CreateQuickBooksInvoiceDescriptionOnlyLineDto {
     DetailType: "DescriptionOnly";
     DescriptionLineDetail: {
-        TaxCodeRef?: RefModel;
+        TaxCodeRef?: QuickBooksRefModel;
         ServiceDate?: {
             date: string;
         };
@@ -96,42 +96,42 @@ export interface CreateInvoiceDescriptionOnlyLineDto {
     LineNum?: number;
 }
 
-export type CreateInvoiceLines =
-    CreateSalesItemLineDto |
-    CreateInvoiceGroupLineDto |
-    CreateInvoiceDescriptionOnlyLineDto;
+export type CreateQuickBooksInvoiceLines =
+    CreateQuickBooksSalesItemLineDto |
+    CreateQuickBooksInvoiceGroupLineDto |
+    CreateQuickBooksInvoiceDescriptionOnlyLineDto;
 
-export interface CreateInvoicesDto extends InvoicesDto {
-    CustomerRef: RefDto;
-    Line: CreateInvoiceLines[];
-    CurrencyRef?: RefDto;
+export interface CreateQuickBooksInvoicesDto extends QuickBooksInvoicesDto {
+    CustomerRef: QuickBooksRefDto;
+    Line: CreateQuickBooksInvoiceLines[];
+    CurrencyRef?: QuickBooksRefDto;
 }
 
-export interface UpdateSalesItemLineDto extends CreateSalesItemLineDto {
+export interface UpdateQuickBooksSalesItemLineDto extends CreateQuickBooksSalesItemLineDto {
     Id: string;
 }
 
-export interface UpdateInvoiceGroupLineDto extends CreateInvoiceGroupLineDto {
+export interface UpdateQuickBooksInvoiceGroupLineDto extends CreateQuickBooksInvoiceGroupLineDto {
     Id: string;
 }
 
-export interface UpdateInvoiceDescriptionOnlyLineDto extends CreateInvoiceDescriptionOnlyLineDto {
+export interface UpdateQuickBooksInvoiceDescriptionOnlyLineDto extends CreateQuickBooksInvoiceDescriptionOnlyLineDto {
     Id: string;
 }
 
-export type UpdateInvoiceLines =
-    UpdateSalesItemLineDto |
-    UpdateInvoiceGroupLineDto |
-    UpdateInvoiceDescriptionOnlyLineDto;
+export type UpdateQuickBooksInvoiceLines =
+    UpdateQuickBooksSalesItemLineDto |
+    UpdateQuickBooksInvoiceGroupLineDto |
+    UpdateQuickBooksInvoiceDescriptionOnlyLineDto;
 
-export interface FullUpdateInvoicesDto extends InvoicesDto {
-    CustomerRef: RefDto;
-    Line: UpdateInvoiceLines[];
-    CurrencyRef?: RefDto;
+export interface FullQuickBooksUpdateInvoicesDto extends QuickBooksInvoicesDto {
+    CustomerRef: QuickBooksRefDto;
+    Line: UpdateQuickBooksInvoiceLines[];
+    CurrencyRef?: QuickBooksRefDto;
 }
 
-export interface SparseUpdateInvoicesDto extends InvoicesDto {
-    CustomerRef?: RefDto;
-    Line?: UpdateInvoiceLines[];
-    CurrencyRef?: RefDto;
+export interface SparseQuickBooksUpdateInvoicesDto extends QuickBooksInvoicesDto {
+    CustomerRef?: QuickBooksRefDto;
+    Line?: UpdateQuickBooksInvoiceLines[];
+    CurrencyRef?: QuickBooksRefDto;
 }

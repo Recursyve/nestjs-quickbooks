@@ -1,3 +1,3 @@
-export interface EmailDto {
+export interface QuickBooksEmailDto {
     Address?: string;
 }

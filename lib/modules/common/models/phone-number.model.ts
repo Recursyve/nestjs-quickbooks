@@ -1,3 +1,3 @@
-export interface PhoneNumberModel {
+export interface QuickBooksPhoneNumberModel {
     FreeFormNumber: string;
 }

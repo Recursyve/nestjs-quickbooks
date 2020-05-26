@@ -1,3 +1,3 @@
-export interface DateTimeModel {
+export interface QuickBooksDateTimeModel {
     dateTime: string;
 }

@@ -1,3 +1,3 @@
-export interface EmailModel {
+export interface QuickBooksEmailModel {
     Address: string;
 }

@@ -1,8 +1,7 @@
-import {
-    QuickBooksCustomersAddress, QuickBooksCustomersEmail, QuickBooksCustomersPhone
-} from "../models/customers.model";
+import { QuickBooksEmailDto } from "../../common/dto/email.dto";
+import { QuickBooksPhoneNumberDto } from "../../common/dto/phone-number.dto";
 
-export interface CustomerWithDisplayName {
+export interface QuickBooksCustomerWithDisplayName {
     DisplayName: string;
     Suffix?: string;
     Title?: string;
@@ -11,7 +10,7 @@ export interface CustomerWithDisplayName {
     GivenName?: string;
 }
 
-export interface CustomerWithSuffix {
+export interface QuickBooksCustomerWithSuffix {
     DisplayName?: string;
     Suffix: string;
     Title?: string;
@@ -20,7 +19,7 @@ export interface CustomerWithSuffix {
     GivenName?: string;
 }
 
-export interface CustomerWithTitle {
+export interface QuickBooksCustomerWithTitle {
     DisplayName?: string;
     Suffix?: string;
     Title: string;
@@ -29,7 +28,7 @@ export interface CustomerWithTitle {
     GivenName?: string;
 }
 
-export interface CustomerWithMiddleName {
+export interface QuickBooksCustomerWithMiddleName {
     DisplayName?: string;
     Suffix?: string;
     Title?: string;
@@ -38,7 +37,7 @@ export interface CustomerWithMiddleName {
     GivenName?: string;
 }
 
-export interface CustomerWithFamilyName {
+export interface QuickBooksCustomerWithFamilyName {
     DisplayName?: string;
     Suffix?: string;
     Title?: string;
@@ -47,7 +46,7 @@ export interface CustomerWithFamilyName {
     GivenName?: string;
 }
 
-export interface CustomerWithGivenName {
+export interface QuickBooksCustomerWithGivenName {
     DisplayName?: string;
     Suffix?: string;
     Title?: string;
@@ -56,7 +55,7 @@ export interface CustomerWithGivenName {
     GivenName: string;
 }
 
-export interface CustomersAddressDto {
+export interface QuickBooksCustomersAddressDto {
     PostalCode?: string;
     City?: string;
     Country?: string;
@@ -68,45 +67,45 @@ export interface CustomersAddressDto {
     CountrySubDivisionCode?: string;
 }
 
-export interface CustomerDto {
-    PrimaryEmailAddr?: QuickBooksCustomersEmail;
+export interface QuickBooksCustomersDto {
+    PrimaryEmailAddr?: QuickBooksEmailDto;
     BillWithParent?: boolean;
     FullyQualifiedName?: string;
     CompanyName?: string;
-    PrimaryPhone?: QuickBooksCustomersPhone;
+    PrimaryPhone?: QuickBooksPhoneNumberDto;
     Active?: boolean;
     Job?: boolean;
     BalanceWithJobs?: number;
-    BillAddr?: CustomersAddressDto;
+    BillAddr?: QuickBooksCustomersAddressDto;
     PreferredDeliveryMethod?: string;
     Taxable?: number;
     PrintOnCheckName?: string;
     Balance?: number;
 }
 
-export type CreateCustomerDto = (
-    CustomerWithDisplayName |
-    CustomerWithSuffix |
-    CustomerWithTitle |
-    CustomerWithMiddleName |
-    CustomerWithFamilyName |
-    CustomerWithGivenName
-) & CustomerDto;
+export type CreateQuickBooksCustomersDto = (
+    QuickBooksCustomerWithDisplayName |
+    QuickBooksCustomerWithSuffix |
+    QuickBooksCustomerWithTitle |
+    QuickBooksCustomerWithMiddleName |
+    QuickBooksCustomerWithFamilyName |
+    QuickBooksCustomerWithGivenName
+) & QuickBooksCustomersDto;
 
-export type FullUpdateCustomerDto = (
-    CustomerWithDisplayName |
-    CustomerWithSuffix |
-    CustomerWithTitle |
-    CustomerWithMiddleName |
-    CustomerWithFamilyName |
-    CustomerWithGivenName
-) & CustomerDto;
+export type FullQuickBooksUpdateCustomersDto = (
+    QuickBooksCustomerWithDisplayName |
+    QuickBooksCustomerWithSuffix |
+    QuickBooksCustomerWithTitle |
+    QuickBooksCustomerWithMiddleName |
+    QuickBooksCustomerWithFamilyName |
+    QuickBooksCustomerWithGivenName
+) & QuickBooksCustomersDto;
 
-export type SparseUpdateCustomerDto = (
-    CustomerWithDisplayName |
-    CustomerWithSuffix |
-    CustomerWithTitle |
-    CustomerWithMiddleName |
-    CustomerWithFamilyName |
-    CustomerWithGivenName
-) & CustomerDto;
+export type SparseQuickBooksUpdateCustomersDto = (
+    QuickBooksCustomerWithDisplayName |
+    QuickBooksCustomerWithSuffix |
+    QuickBooksCustomerWithTitle |
+    QuickBooksCustomerWithMiddleName |
+    QuickBooksCustomerWithFamilyName |
+    QuickBooksCustomerWithGivenName
+) & QuickBooksCustomersDto;

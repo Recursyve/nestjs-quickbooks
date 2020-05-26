@@ -1,3 +1,3 @@
-export interface PhoneNumberDto {
+export interface QuickBooksPhoneNumberDto {
     FreeFormNumber: string;
 }
