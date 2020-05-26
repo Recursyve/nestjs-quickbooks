@@ -56,7 +56,9 @@ export class CompanyInvoicesService extends BaseService<QuickBooksInvoices, Invo
     }
 
     public getPdf(id: string): Observable<Buffer> {
-        return this.get(`${id}/pdf`);
+        return this.get(`${id}/pdf`, null, {
+            Accept: "application/pdf"
+        });
     }
 
     public fullUpdate(id: string, token: string, dto: FullUpdateInvoicesDto): Observable<QuickBooksInvoices>;

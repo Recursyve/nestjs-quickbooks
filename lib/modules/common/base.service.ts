@@ -29,20 +29,26 @@ export class BaseService<T, Query, QueryResponse> {
         );
     }
 
-    protected get<T>(path?: string, queryParams?: object): Observable<T> {
+    protected get<T>(path?: string, queryParams?: object, headers?: object): Observable<T> {
         return this.getHttpHeaders().pipe(
-            mergeMap((headers) => this.http.get<T>(this.url(path), {
-                headers,
+            mergeMap((authHeaders) => this.http.get<T>(this.url(path, queryParams), {
+                headers: {
+                    ...authHeaders,
+                    ...headers
+                }
             }))
         ).pipe(
             map(x => x.data)
         );
     }
 
-    protected post<T>(body: any, path?: string, queryParams?: object): Observable<T> {
+    protected post<T>(body: any, path?: string, queryParams?: object, headers?: object): Observable<T> {
         return this.getHttpHeaders().pipe(
-            mergeMap((headers) => this.http.post<T>(this.url(path), body, {
-                headers,
+            mergeMap((authHeaders) => this.http.post<T>(this.url(path, queryParams), body, {
+                headers: {
+                    ...authHeaders,
+                    ...headers
+                }
             }))
         ).pipe(
             map(x => x.data)
