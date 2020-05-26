@@ -5,5 +5,6 @@ export interface QuickbooksMetadata {
 
 export interface QuickbooksModel {
     Id: string;
+    SyncToken: string;
     MetaData: QuickbooksMetadata;
 }

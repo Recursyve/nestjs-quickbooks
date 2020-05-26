@@ -20,7 +20,6 @@ export interface QuickBooksCustomersAddress {
 
 export interface QuickBooksCustomers extends QuickbooksModel {
     PrimaryEmailAddr: QuickBooksCustomersEmail;
-    SyncToken: string;
     GivenName: string;
     DisplayName: string;
     BillWithParent: boolean;
