@@ -33,16 +33,16 @@ export class QuickBooksPaymentsService {
         private readonly store: QuickBooksStore
     ) {}
 
-    public withDefaultCompany(): PaymentsInvoicesService {
-        return this.forCompany(this.store.getDefaultCompany());
+    public async withDefaultCompany(): Promise<CompanyPaymentsService> {
+        return this.forCompany(await this.store.getDefaultCompany());
     }
 
-    public forCompany(realm: string): PaymentsInvoicesService {
-        return new PaymentsInvoicesService(realm, this.authService, this.http);
+    public forCompany(realm: string): CompanyPaymentsService {
+        return new CompanyPaymentsService(realm, this.authService, this.http);
     }
 }
 
-class PaymentsInvoicesService extends BaseService<QuickBooksPayments, QuickBooksPaymentsQuery, QuickBooksPaymentsQueryResponse> {
+class CompanyPaymentsService extends BaseService<QuickBooksPayments, QuickBooksPaymentsQuery, QuickBooksPaymentsQueryResponse> {
     constructor(realm: string, authService: QuickBooksAuthService, http: HttpService) {
         super(realm, "payment", authService, http);
     }
@@ -66,7 +66,7 @@ class PaymentsInvoicesService extends BaseService<QuickBooksPayments, QuickBooks
     public fullUpdate(
         ...args: [string | QuickBooksPayments, string | FullUpdateQuickBooksPaymentsDto, FullUpdateQuickBooksPaymentsDto?]
     ): Observable<QuickBooksPayments> {
-        const [id, token, dto] = PaymentsInvoicesService.getUpdateArguments(args);
+        const [id, token, dto] = CompanyPaymentsService.getUpdateArguments(args);
         return this.post({
             ...dto,
             Id: id,
@@ -77,7 +77,7 @@ class PaymentsInvoicesService extends BaseService<QuickBooksPayments, QuickBooks
     public delete(id: string, token: string): Observable<QuickBooksPaymentsDeleteResponse>;
     public delete(invoice: QuickBooksPayments): Observable<QuickBooksPaymentsDeleteResponse>;
     public delete(...args: [string | QuickBooksPayments, string?]): Observable<QuickBooksPaymentsDeleteResponse> {
-        const [id, token] = PaymentsInvoicesService.getOperationArguments(args);
+        const [id, token] = CompanyPaymentsService.getOperationArguments(args);
         return this.post({
             Id: id,
             SyncToken: token
@@ -89,7 +89,7 @@ class PaymentsInvoicesService extends BaseService<QuickBooksPayments, QuickBooks
     public void(id: string, token: string): Observable<QuickBooksPaymentsDeleteResponse>;
     public void(invoice: QuickBooksPayments): Observable<QuickBooksPaymentsDeleteResponse>;
     public void(...args: [string | QuickBooksPayments, string?]): Observable<QuickBooksPaymentsDeleteResponse> {
-        const [id, token] = PaymentsInvoicesService.getOperationArguments(args);
+        const [id, token] = CompanyPaymentsService.getOperationArguments(args);
         return this.post({
             Id: id,
             SyncToken: token,

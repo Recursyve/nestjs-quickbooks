@@ -33,8 +33,8 @@ export class QuickBooksInvoicesService {
         private readonly store: QuickBooksStore
     ) {}
 
-    public withDefaultCompany(): CompanyInvoicesService {
-        return this.forCompany(this.store.getDefaultCompany());
+    public async withDefaultCompany(): Promise<CompanyInvoicesService> {
+        return this.forCompany(await this.store.getDefaultCompany());
     }
 
     public forCompany(realm: string): CompanyInvoicesService {

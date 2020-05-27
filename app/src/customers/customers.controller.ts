@@ -8,7 +8,7 @@ export class CustomersController {
 
     @Get()
     public async getAll() {
-        return this.customersService.withDefaultCompany().query({
+        return (await this.customersService.withDefaultCompany()).query({
             MetaData: {
                 LastUpdatedTime: {
                     [Op.gt]: "2015-03-01"
@@ -19,7 +19,7 @@ export class CustomersController {
 
     @Post()
     public async create() {
-        return this.customersService.withDefaultCompany().create({
+        return (await this.customersService.withDefaultCompany()).create({
             DisplayName: "My new customer",
             PrimaryEmailAddr: {
                 Address: "julien@recursyve.io"

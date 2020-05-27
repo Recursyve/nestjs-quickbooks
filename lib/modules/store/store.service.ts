@@ -10,8 +10,8 @@ export interface Tokens {
 
 @Injectable()
 export abstract class QuickBooksStore {
-    public abstract registerCompany(realm: string): void;
-    public abstract getDefaultCompany(): string;
-    public abstract setToken(realm: string, token: Tokens): void;
-    public abstract getToken(realm: string): Tokens;
+    public abstract async registerCompany(realm: string): Promise<void>;
+    public abstract async getDefaultCompany(): Promise<string>;
+    public abstract async setToken(realm: string, token: Tokens): Promise<void>;
+    public abstract async getToken(realm: string): Promise<Tokens>;
 }

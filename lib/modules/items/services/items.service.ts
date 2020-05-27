@@ -24,8 +24,8 @@ export class QuickBooksItemsService {
         private readonly store: QuickBooksStore
     ) {}
 
-    public withDefaultCompany(): CompanyItemsService {
-        return this.forCompany(this.store.getDefaultCompany());
+    public async withDefaultCompany(): Promise<CompanyItemsService> {
+        return this.forCompany(await this.store.getDefaultCompany());
     }
 
     public forCompany(realm: string): CompanyItemsService {

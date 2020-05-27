@@ -2,7 +2,7 @@ import { HttpService, Injectable } from "@nestjs/common";
 import * as OAuthClient from "intuit-oauth";
 import { Observable, of } from "rxjs";
 import { fromPromise } from "rxjs/internal-compatibility";
-import { map } from "rxjs/operators";
+import { map, mergeMap } from "rxjs/operators";
 import { QuickBooksConfigService } from "../../config/services/quickbooks-config.service";
 import { Tokens, QuickBooksStore } from "../../store/store.service";
 import { QuickbooksModes } from "../../config/models/quickbooks-config.model";
@@ -37,20 +37,23 @@ export class QuickBooksAuthService {
 
     public async authorizeCode(url: string): Promise<void> {
         const res = await this.client.createToken(url);
-        this.tokenStore.registerCompany(res.token.realmId);
-        this.tokenStore.setToken(res.token.realmId, res.json);
+        await this.tokenStore.registerCompany(res.token.realmId);
+        await this.tokenStore.setToken(res.token.realmId, res.json);
     }
 
     public getToken(realm: string): Observable<string> {
-        const token = this.tokenStore.getToken(realm);
-        if (!token) {
-            return of(null);
-        }
-        if (this.validateToken(token)) {
-            return of(token.access_token);
-        }
+        return fromPromise(this.tokenStore.getToken(realm)).pipe(
+            mergeMap((token) => {
+                if (!token) {
+                    return of(null);
+                }
+                if (this.validateToken(token)) {
+                    return of(token.access_token);
+                }
 
-        return this.refreshAccessToken(realm, token);
+                return this.refreshAccessToken(realm, token);
+            })
+        );
     }
 
     private validateToken(token: Tokens): boolean {

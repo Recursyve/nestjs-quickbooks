@@ -8,7 +8,7 @@ export class InvoicesController {
 
     @Get()
     public async getAll() {
-        return this.invoicesService.withDefaultCompany().query({
+        return (await this.invoicesService.withDefaultCompany()).query({
             MetaData: {
                 LastUpdatedTime: {
                     [Op.gt]: "2015-03-01"
@@ -20,6 +20,6 @@ export class InvoicesController {
     @Get("pdf/:id")
     @Header("Content-Type", "application/pdf")
     public async getPdf(@Param("id") id: string, @Res() res): Promise<Buffer> {
-        return this.invoicesService.withDefaultCompany().getPdf(id).toPromise();
+        return (await this.invoicesService.withDefaultCompany()).getPdf(id).toPromise();
     }
 }

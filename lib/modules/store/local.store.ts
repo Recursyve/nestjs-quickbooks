@@ -6,7 +6,7 @@ export class LocalStore extends QuickBooksStore {
     private companies: string[] = [];
     private tokens: { [realm: string]: Tokens } = {};
 
-    public registerCompany(realm: string): void {
+    public async registerCompany(realm: string): Promise<void> {
         if (this.companies.findIndex(x => x === realm) >= 0) {
             return;
         }
@@ -14,15 +14,15 @@ export class LocalStore extends QuickBooksStore {
         this.companies.push(realm);
     }
 
-    public getDefaultCompany(): string {
+    public async getDefaultCompany(): Promise<string> {
         return this.companies[0];
     }
 
-    public getToken(realm: string): Tokens {
+    public async getToken(realm: string): Promise<Tokens> {
         return this.tokens[realm];
     }
 
-    public setToken(realm: string, token: Tokens): void {
+    public async setToken(realm: string, token: Tokens): Promise<void> {
         this.tokens[realm] = token;
     }
 }
