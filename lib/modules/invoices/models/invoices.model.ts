@@ -1,6 +1,6 @@
 import { QuickBooksModel } from "../../common/models/quickbooks.model";
-import { QuickBooksCustomersAddress } from "../../customers/models/customers.model";
 import { QuickBooksRefModel } from "../../common/models/ref.model";
+import { QuickBooksPhysicalAddressModel } from "../../common/models";
 
 export interface QuickBooksInvoiceCustomField {
     DefinitionId: string;
@@ -123,7 +123,7 @@ export interface QuickBooksInvoices extends QuickBooksModel {
     AllowOnlineCreditCardPayment: boolean;
     AllowOnlineACHPayment: boolean;
     CustomField: QuickBooksInvoiceCustomField[];
-    ShipAddr: QuickBooksCustomersAddress;
+    ShipAddr: QuickBooksPhysicalAddressModel;
     DocNumber: string;
     TxnDate: string;
     CurrencyRef: QuickBooksRefModel;

@@ -1,16 +1,9 @@
-import { QuickBooksModel } from "../../common/models/quickbooks.model";
-import { QuickBooksEmailModel } from "../../common/models/email.model";
-import { QuickBooksPhoneNumberModel } from "../../common/models/phone-number.model";
-
-export interface QuickBooksCustomersAddress {
-    Id: string;
-    City: string;
-    Line1: string;
-    PostalCode: string;
-    Lat: string;
-    Long: string;
-    CountrySubDivisionCode: string;
-}
+import {
+    QuickBooksEmailModel,
+    QuickBooksModel,
+    QuickBooksPhoneNumberModel,
+    QuickBooksPhysicalAddressModel
+} from "../../common/models";
 
 export interface QuickBooksCustomers extends QuickBooksModel {
     PrimaryEmailAddr: QuickBooksEmailModel;
@@ -24,7 +17,7 @@ export interface QuickBooksCustomers extends QuickBooksModel {
     Active: boolean;
     Job: boolean;
     BalanceWithJobs: number;
-    BillAddr: QuickBooksCustomersAddress;
+    BillAddr: QuickBooksPhysicalAddressModel;
     PreferredDeliveryMethod: string;
     Taxable: number;
     PrintOnCheckName: string;

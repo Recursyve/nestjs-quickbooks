@@ -6,14 +6,14 @@ import { QuickBooksStore } from "../../store/store.service";
 import { QuickBooksItems } from "../models/items.model";
 import { QuickBooksItemsQuery } from "../models/items.query";
 import { CreateQuickBooksItemDto, FullUpdateQuickBooksItemDto } from "../dto/items.dto";
+import { QuickBooksResponseModel } from "../../common/models";
 
-export interface QuickBooksItemQueryResponse {
+export interface QuickBooksItemQueryResponse extends QuickBooksResponseModel {
     QueryResponse: {
         Item: QuickBooksItems[];
         startPosition: number;
         maxResults: number;
     };
-    time: string;
 }
 
 @Injectable()
@@ -65,7 +65,7 @@ class CompanyItemsService extends BaseService<QuickBooksItems, QuickBooksItemsQu
             return [idOrItem as string, tokenOrDto as string, dto];
         }
 
-        const invoice = idOrItem as QuickBooksItems;
-        return [invoice.Id, invoice.SyncToken, tokenOrDto as DTO];
+        const item = idOrItem as QuickBooksItems;
+        return [item.Id, item.SyncToken, tokenOrDto as DTO];
     }
 }

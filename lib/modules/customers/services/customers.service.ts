@@ -3,17 +3,17 @@ import { Observable } from "rxjs";
 import { QuickBooksAuthService } from "../../auth/services/auth.service";
 import { BaseService } from "../../common/base.service";
 import { QuickBooksStore } from "../../store/store.service";
-import { CreateQuickBooksCustomersDto, FullQuickBooksUpdateCustomersDto, SparseQuickBooksUpdateCustomersDto } from "../dto/customers.dto";
+import { CreateQuickBooksCustomersDto, FullUpdateQuickBooksCustomersDto, SparseUpdateQuickBooksCustomersDto } from "../dto/customers.dto";
 import { QuickBooksCustomersQuery } from "../models/customers.query";
 import { QuickBooksCustomers } from "../models/customers.model";
+import { QuickBooksResponseModel } from "../../common/models";
 
-export interface QuickBooksCustomerQueryResponse {
+export interface QuickBooksCustomerQueryResponse extends QuickBooksResponseModel {
     QueryResponse: {
         Customer: QuickBooksCustomers[];
         startPosition: number;
         maxResults: number;
     };
-    time: string;
 }
 
 @Injectable()
@@ -46,10 +46,10 @@ class CompanyCustomersService extends BaseService<QuickBooksCustomers, QuickBook
         return this.get(id);
     }
 
-    public fullUpdate(id: string, token: string, dto: FullQuickBooksUpdateCustomersDto): Observable<QuickBooksCustomers>;
-    public fullUpdate(customer: QuickBooksCustomers, dto: FullQuickBooksUpdateCustomersDto): Observable<QuickBooksCustomers>;
+    public fullUpdate(id: string, token: string, dto: FullUpdateQuickBooksCustomersDto): Observable<QuickBooksCustomers>;
+    public fullUpdate(customer: QuickBooksCustomers, dto: FullUpdateQuickBooksCustomersDto): Observable<QuickBooksCustomers>;
     public fullUpdate(
-        ...args: [string | QuickBooksCustomers, string | FullQuickBooksUpdateCustomersDto, FullQuickBooksUpdateCustomersDto?]
+        ...args: [string | QuickBooksCustomers, string | FullUpdateQuickBooksCustomersDto, FullUpdateQuickBooksCustomersDto?]
     ): Observable<QuickBooksCustomers> {
         const [id, token, dto] = CompanyCustomersService.getUpdateArguments(args);
         return this.post({
@@ -59,10 +59,10 @@ class CompanyCustomersService extends BaseService<QuickBooksCustomers, QuickBook
         });
     }
 
-    public sparseUpdate(id: string, token: string, dto: SparseQuickBooksUpdateCustomersDto): Observable<QuickBooksCustomers>;
-    public sparseUpdate(customer: QuickBooksCustomers, dto: SparseQuickBooksUpdateCustomersDto): Observable<QuickBooksCustomers>;
+    public sparseUpdate(id: string, token: string, dto: SparseUpdateQuickBooksCustomersDto): Observable<QuickBooksCustomers>;
+    public sparseUpdate(customer: QuickBooksCustomers, dto: SparseUpdateQuickBooksCustomersDto): Observable<QuickBooksCustomers>;
     public sparseUpdate(
-        ...args: [string | QuickBooksCustomers, string | SparseQuickBooksUpdateCustomersDto, SparseQuickBooksUpdateCustomersDto?]
+        ...args: [string | QuickBooksCustomers, string | SparseUpdateQuickBooksCustomersDto, SparseUpdateQuickBooksCustomersDto?]
     ): Observable<QuickBooksCustomers> {
         const [id, token, dto] = CompanyCustomersService.getUpdateArguments(args);
         return this.post({
@@ -79,7 +79,7 @@ class CompanyCustomersService extends BaseService<QuickBooksCustomers, QuickBook
             return [idOrCustomer as string, tokenOrDto as string, dto];
         }
 
-        const invoice = idOrCustomer as QuickBooksCustomers;
-        return [invoice.Id, invoice.SyncToken, tokenOrDto as DTO];
+        const customer = idOrCustomer as QuickBooksCustomers;
+        return [customer.Id, customer.SyncToken, tokenOrDto as DTO];
     }
 }

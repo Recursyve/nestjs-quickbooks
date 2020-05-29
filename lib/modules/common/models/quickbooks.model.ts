@@ -1,6 +1,8 @@
+import { QuickBooksDateTimeModel } from "./date-time.model";
+
 export interface QuickBooksMetadata {
-    CreateTime: string;
-    LastUpdatedTime: string;
+    CreateTime: QuickBooksDateTimeModel;
+    LastUpdatedTime: QuickBooksDateTimeModel;
 }
 
 export interface QuickBooksModel {

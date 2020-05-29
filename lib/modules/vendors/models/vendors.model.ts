@@ -1,23 +1,12 @@
-import { QuickBooksModel } from "../../common/models/quickbooks.model";
-import { QuickBooksRefModel } from "../../common/models/ref.model";
-import { QuickBooksPhoneNumberModel } from "../../common/models/phone-number.model";
-import { QuickBooksEmailModel } from "../../common/models/email.model";
-import { QuickBooksWebsiteModel } from "../../common/models/website.model";
-
-export interface QuickBooksVendorsContactInfo {
-    Type: "TelephoneNumber";
-    Telephone: string;
-}
-
-export interface QuickBooksVendorsAddress {
-    Id: string;
-    City: string;
-    Line1: string;
-    PostalCode: string;
-    Lat: string;
-    Long: string;
-    CountrySubDivisionCode: string;
-}
+import {
+    QuickBooksContactInfoModel,
+    QuickBooksEmailModel,
+    QuickBooksModel,
+    QuickBooksPhoneNumberModel,
+    QuickBooksPhysicalAddressModel,
+    QuickBooksRefModel,
+    QuickBooksWebsiteModel
+} from "../../common/models";
 
 export interface QuickBooksVendors extends QuickBooksModel {
     Title: string;
@@ -27,7 +16,7 @@ export interface QuickBooksVendors extends QuickBooksModel {
     FamilyName: string;
     PrimaryEmailAddr: QuickBooksEmailModel;
     DisplayName: string;
-    OtherContactInfo: QuickBooksVendorsContactInfo;
+    OtherContactInfo: QuickBooksContactInfoModel;
     APAccountRef: QuickBooksRefModel;
     TermRef: QuickBooksRefModel;
     GSTIN: string;
@@ -48,6 +37,6 @@ export interface QuickBooksVendors extends QuickBooksModel {
     AcctNum: string;
     GSTRegistrationType: string;
     PrintOnCheckName: string;
-    BillAddr: QuickBooksVendorsAddress;
+    BillAddr: QuickBooksPhysicalAddressModel;
     Balance: number;
 }
