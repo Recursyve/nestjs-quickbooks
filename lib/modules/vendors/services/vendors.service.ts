@@ -3,18 +3,9 @@ import { Observable } from "rxjs";
 import { QuickBooksAuthService } from "../../auth/services/auth.service";
 import { BaseService } from "../../common/base.service";
 import { QuickBooksStore } from "../../store/store.service";
-import { CreateQuickBooksVendorDto, FullUpdateQuickBooksVendorDto, SparseUpdateQuickBooksVendorDto } from "../dto/vendors.dto";
-import { QuickBooksVendorsQuery } from "../models/vendors.query";
+import { CreateQuickBooksVendorDto, FullUpdateQuickBooksVendorDto } from "../dto/vendors.dto";
+import { QuickBooksVendorsQuery, QuickBooksVendorsQueryResponse } from "../models/vendors.query";
 import { QuickBooksVendors } from "../models/vendors.model";
-
-export interface CustomerQueryResponse {
-    QueryResponse: {
-        Vendor: QuickBooksVendors[];
-        startPosition: number;
-        maxResults: number;
-    };
-    time: string;
-}
 
 @Injectable()
 export class QuickBooksVendorsService {
@@ -33,7 +24,7 @@ export class QuickBooksVendorsService {
     }
 }
 
-class CompanyVendorsService extends BaseService<QuickBooksVendors, QuickBooksVendorsQuery, CustomerQueryResponse> {
+class CompanyVendorsService extends BaseService<QuickBooksVendors, QuickBooksVendorsQuery, QuickBooksVendorsQueryResponse> {
     constructor(realm: string, authService: QuickBooksAuthService, http: HttpService) {
         super(realm, "vendor", authService, http);
     }
@@ -47,7 +38,7 @@ class CompanyVendorsService extends BaseService<QuickBooksVendors, QuickBooksVen
     }
 
     public fullUpdate(id: string, token: string, dto: FullUpdateQuickBooksVendorDto): Observable<QuickBooksVendors>;
-    public fullUpdate(customer: QuickBooksVendors, dto: FullUpdateQuickBooksVendorDto): Observable<QuickBooksVendors>;
+    public fullUpdate(vendor: QuickBooksVendors, dto: FullUpdateQuickBooksVendorDto): Observable<QuickBooksVendors>;
     public fullUpdate(
         ...args: [string | QuickBooksVendors, string | FullUpdateQuickBooksVendorDto, FullUpdateQuickBooksVendorDto?]
     ): Observable<QuickBooksVendors> {
@@ -59,27 +50,13 @@ class CompanyVendorsService extends BaseService<QuickBooksVendors, QuickBooksVen
         });
     }
 
-    public sparseUpdate(id: string, token: string, dto: SparseUpdateQuickBooksVendorDto): Observable<QuickBooksVendors>;
-    public sparseUpdate(customer: QuickBooksVendors, dto: SparseUpdateQuickBooksVendorDto): Observable<QuickBooksVendors>;
-    public sparseUpdate(
-        ...args: [string | QuickBooksVendors, string | SparseUpdateQuickBooksVendorDto, SparseUpdateQuickBooksVendorDto?]
-    ): Observable<QuickBooksVendors> {
-        const [id, token, dto] = CompanyVendorsService.getUpdateArguments(args);
-        return this.post({
-            ...dto,
-            Id: id,
-            SyncToken: token,
-            sparse: true
-        });
-    }
-
     private static getUpdateArguments<DTO>(args: [string | QuickBooksVendors, string | DTO, DTO?]): [string, string, DTO] {
         const [idOrVendor, tokenOrDto, dto] = args;
         if (dto) {
             return [idOrVendor as string, tokenOrDto as string, dto];
         }
 
-        const invoice = idOrVendor as QuickBooksVendors;
-        return [invoice.Id, invoice.SyncToken, tokenOrDto as DTO];
+        const vendor = idOrVendor as QuickBooksVendors;
+        return [vendor.Id, vendor.SyncToken, tokenOrDto as DTO];
     }
 }

@@ -6,23 +6,22 @@ import { QuickBooksStore } from "../../store/store.service";
 import { QuickBooksPayments } from "../models/payments.model";
 import { QuickBooksPaymentsQuery } from "../models/payments.query";
 import { CreateQuickBooksPaymentsDto, FullUpdateQuickBooksPaymentsDto } from "../dto/payments.dto";
+import { QuickBooksResponseModel } from "../../common/models";
 
-export interface QuickBooksPaymentsQueryResponse {
+export interface QuickBooksPaymentsQueryResponse extends QuickBooksResponseModel {
     QueryResponse: {
         Invoice: QuickBooksPayments[];
         startPosition: number;
         maxResults: number;
     };
-    time: string;
 }
 
-export interface QuickBooksPaymentsDeleteResponse {
+export interface QuickBooksPaymentsDeleteResponse extends QuickBooksResponseModel {
     Payment: {
         Id: string;
         status: string;
         domain: number;
     };
-    time: string;
 }
 
 @Injectable()
@@ -101,22 +100,22 @@ class CompanyPaymentsService extends BaseService<QuickBooksPayments, QuickBooksP
     }
 
     private static getUpdateArguments<DTO>(args: [string | QuickBooksPayments, string | DTO, DTO?]): [string, string, DTO] {
-        const [idOrInvoice, tokenOrDto, dto] = args;
+        const [idOrPayment, tokenOrDto, dto] = args;
         if (dto) {
-            return [idOrInvoice as string, tokenOrDto as string, dto];
+            return [idOrPayment as string, tokenOrDto as string, dto];
         }
 
-        const invoice = idOrInvoice as QuickBooksPayments;
-        return [invoice.Id, invoice.SyncToken, tokenOrDto as DTO];
+        const payment = idOrPayment as QuickBooksPayments;
+        return [payment.Id, payment.SyncToken, tokenOrDto as DTO];
     }
 
     private static getOperationArguments(args: [string | QuickBooksPayments, string?]): [string, string] {
-        const [idOrInvoice, token] = args;
+        const [idOrPayment, token] = args;
         if (token) {
-            return [idOrInvoice as string, token];
+            return [idOrPayment as string, token];
         }
 
-        const invoice = idOrInvoice as QuickBooksPayments;
-        return [invoice.Id, invoice.SyncToken];
+        const payment = idOrPayment as QuickBooksPayments;
+        return [payment.Id, payment.SyncToken];
     }
 }

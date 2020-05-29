@@ -1,6 +1,4 @@
-import { QuickBooksModel } from "../../common/models/quickbooks.model";
-import { QuickBooksRefModel } from "../../common/models/ref.model";
-import { QuickBooksDateTimeModel } from "../../common/models/date-time.model";
+import { QuickBooksDateTimeModel, QuickBooksModel, QuickBooksRefModel } from "../../common/models";
 
 export interface QuickBooksCreditCardPayment {
     CreditChargeResponse: {

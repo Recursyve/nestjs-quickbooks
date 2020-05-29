@@ -5,24 +5,23 @@ import { BaseService } from "../../common/base.service";
 import { QuickBooksStore } from "../../store/store.service";
 import { QuickBooksInvoices } from "../models/invoices.model";
 import { QuickBooksInvoicesQuery } from "../models/invoices.query";
-import { CreateQuickBooksInvoicesDto, FullQuickBooksUpdateInvoicesDto, SparseQuickBooksUpdateInvoicesDto } from "../dto/invoices.dto";
+import { CreateQuickBooksInvoicesDto, FullUpdateQuickBooksInvoicesDto, SparseUpdateQuickBooksInvoicesDto } from "../dto/invoices.dto";
+import { QuickBooksResponseModel } from "../../common/models";
 
-export interface QuickBooksInvoicesQueryResponse {
+export interface QuickBooksInvoicesQueryResponse extends QuickBooksResponseModel {
     QueryResponse: {
         Invoice: QuickBooksInvoices[];
         startPosition: number;
         maxResults: number;
     };
-    time: string;
 }
 
-export interface QuickBooksInvoicesDeleteResponse {
+export interface QuickBooksInvoicesDeleteResponse extends QuickBooksResponseModel {
     Invoice: {
         Id: string;
         status: string;
         domain: number;
     };
-    time: string;
 }
 
 @Injectable()
@@ -61,10 +60,10 @@ class CompanyInvoicesService extends BaseService<QuickBooksInvoices, QuickBooksI
         });
     }
 
-    public fullUpdate(id: string, token: string, dto: FullQuickBooksUpdateInvoicesDto): Observable<QuickBooksInvoices>;
-    public fullUpdate(invoice: QuickBooksInvoices, dto: FullQuickBooksUpdateInvoicesDto): Observable<QuickBooksInvoices>;
+    public fullUpdate(id: string, token: string, dto: FullUpdateQuickBooksInvoicesDto): Observable<QuickBooksInvoices>;
+    public fullUpdate(invoice: QuickBooksInvoices, dto: FullUpdateQuickBooksInvoicesDto): Observable<QuickBooksInvoices>;
     public fullUpdate(
-        ...args: [string | QuickBooksInvoices, string | FullQuickBooksUpdateInvoicesDto, FullQuickBooksUpdateInvoicesDto?]
+        ...args: [string | QuickBooksInvoices, string | FullUpdateQuickBooksInvoicesDto, FullUpdateQuickBooksInvoicesDto?]
     ): Observable<QuickBooksInvoices> {
         const [id, token, dto] = CompanyInvoicesService.getUpdateArguments(args);
         return this.post({
@@ -74,10 +73,10 @@ class CompanyInvoicesService extends BaseService<QuickBooksInvoices, QuickBooksI
         });
     }
 
-    public sparseUpdate(id: string, token: string, dto: SparseQuickBooksUpdateInvoicesDto): Observable<QuickBooksInvoices>;
-    public sparseUpdate(invoice: QuickBooksInvoices, dto: SparseQuickBooksUpdateInvoicesDto): Observable<QuickBooksInvoices>;
+    public sparseUpdate(id: string, token: string, dto: SparseUpdateQuickBooksInvoicesDto): Observable<QuickBooksInvoices>;
+    public sparseUpdate(invoice: QuickBooksInvoices, dto: SparseUpdateQuickBooksInvoicesDto): Observable<QuickBooksInvoices>;
     public sparseUpdate(
-        ...args: [string | QuickBooksInvoices, string | SparseQuickBooksUpdateInvoicesDto, SparseQuickBooksUpdateInvoicesDto?]
+        ...args: [string | QuickBooksInvoices, string | SparseUpdateQuickBooksInvoicesDto, SparseUpdateQuickBooksInvoicesDto?]
     ): Observable<QuickBooksInvoices> {
         const [id, token, dto] = CompanyInvoicesService.getUpdateArguments(args);
         return this.post({

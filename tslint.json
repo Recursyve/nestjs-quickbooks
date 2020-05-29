@@ -30,6 +30,7 @@
         "interface-name": [
             false
         ],
+        "no-empty-interface": false,
         "arrow-parens": false,
         "object-literal-sort-keys": false
     }

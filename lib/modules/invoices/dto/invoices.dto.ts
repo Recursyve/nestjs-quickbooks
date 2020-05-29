@@ -1,6 +1,5 @@
-import { QuickBooksRefDto } from "../../common/dto/ref.dto";
-import { QuickBooksRefModel } from "../../common/models/ref.model";
-import { QuickBooksCustomersAddressDto } from "../../customers/dto/customers.dto";
+import { QuickBooksPhysicalAddressDto, QuickBooksRefDto } from "../../common/dto";
+import { QuickBooksRefModel } from "../../common/models";
 
 export interface QuickBooksInvoiceCustomFieldDto {
     DefinitionId: string;
@@ -35,7 +34,7 @@ export interface QuickBooksInvoicesDto {
     AllowOnlineCreditCardPayment?: boolean;
     AllowOnlineACHPayment?: boolean;
     CustomField?: QuickBooksInvoiceCustomFieldDto[];
-    ShipAddr?: QuickBooksCustomersAddressDto;
+    ShipAddr?: QuickBooksPhysicalAddressDto;
     DocNumber?: string;
     TxnDate?: string;
     PrivateNote?: string;
@@ -124,13 +123,13 @@ export type UpdateQuickBooksInvoiceLines =
     UpdateQuickBooksInvoiceGroupLineDto |
     UpdateQuickBooksInvoiceDescriptionOnlyLineDto;
 
-export interface FullQuickBooksUpdateInvoicesDto extends QuickBooksInvoicesDto {
+export interface FullUpdateQuickBooksInvoicesDto extends QuickBooksInvoicesDto {
     CustomerRef: QuickBooksRefDto;
     Line: UpdateQuickBooksInvoiceLines[];
     CurrencyRef?: QuickBooksRefDto;
 }
 
-export interface SparseQuickBooksUpdateInvoicesDto extends QuickBooksInvoicesDto {
+export interface SparseUpdateQuickBooksInvoicesDto extends QuickBooksInvoicesDto {
     CustomerRef?: QuickBooksRefDto;
     Line?: UpdateQuickBooksInvoiceLines[];
     CurrencyRef?: QuickBooksRefDto;

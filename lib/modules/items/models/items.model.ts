@@ -1,5 +1,4 @@
-import { QuickBooksModel } from "../../common/models/quickbooks.model";
-import { QuickBooksRefModel } from "../../common/models/ref.model";
+import { QuickBooksModel, QuickBooksRefModel } from "../../common/models";
 
 export enum QuickBookItemTypes {
     Inventory = "Inventory",

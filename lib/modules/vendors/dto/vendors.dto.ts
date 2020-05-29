@@ -1,6 +1,10 @@
-import { QuickBooksRefDto } from "../../common/dto/ref.dto";
-import { QuickBooksPhoneNumberDto } from "../../common/dto/phone-number.dto";
-import { QuickBooksEmailDto } from "../../common/dto/email.dto";
+import {
+    QuickBooksEmailDto,
+    QuickBooksPhoneNumberDto,
+    QuickBooksPhysicalAddressDto,
+    QuickBooksRefDto,
+    QuickBooksWebsiteDto
+} from "../../common/dto";
 
 export interface QuickBooksVendorWithDisplayName {
     DisplayName: string;
@@ -56,18 +60,6 @@ export interface QuickBooksVendorWithGivenName {
     GivenName: string;
 }
 
-export interface QuickBooksVendorsAddressDto {
-    PostalCode?: string;
-    City?: string;
-    Country?: string;
-    Line5?: string;
-    Line4?: string;
-    Line3?: string;
-    Line2?: string;
-    Line1?: string;
-    CountrySubDivisionCode?: string;
-}
-
 export interface QuickBooksVendorDto {
     PrimaryEmailAddr?: QuickBooksEmailDto;
     OtherContactInfo?: string;
@@ -85,13 +77,13 @@ export interface QuickBooksVendorDto {
     AlternatePhone?: QuickBooksPhoneNumberDto;
     Vendor1099?: boolean;
     BillRate?: number;
-    WebAddr?: number;
+    WebAddr?: QuickBooksWebsiteDto;
     CompanyName?: string;
     TaxIdentifier?: string;
     AcctNum?: string;
     GSTRegistrationType?: string;
     PrintOnCheckName?: string;
-    BillAddr?: QuickBooksVendorsAddressDto;
+    BillAddr?: QuickBooksPhysicalAddressDto;
 }
 
 export type CreateQuickBooksVendorDto = (
@@ -104,15 +96,6 @@ export type CreateQuickBooksVendorDto = (
 ) & QuickBooksVendorDto;
 
 export type FullUpdateQuickBooksVendorDto = (
-    QuickBooksVendorWithDisplayName |
-    QuickBooksVendorWithSuffix |
-    QuickBooksVendorWithTitle |
-    QuickBooksVendorWithMiddleName |
-    QuickBooksVendorWithFamilyName |
-    QuickBooksVendorWithGivenName
-) & QuickBooksVendorDto;
-
-export type SparseUpdateQuickBooksVendorDto = (
     QuickBooksVendorWithDisplayName |
     QuickBooksVendorWithSuffix |
     QuickBooksVendorWithTitle |

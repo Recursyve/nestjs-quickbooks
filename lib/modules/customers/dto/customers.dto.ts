@@ -1,5 +1,6 @@
 import { QuickBooksEmailDto } from "../../common/dto/email.dto";
 import { QuickBooksPhoneNumberDto } from "../../common/dto/phone-number.dto";
+import { QuickBooksPhysicalAddressDto } from "../../common/dto";
 
 export interface QuickBooksCustomerWithDisplayName {
     DisplayName: string;
@@ -55,18 +56,6 @@ export interface QuickBooksCustomerWithGivenName {
     GivenName: string;
 }
 
-export interface QuickBooksCustomersAddressDto {
-    PostalCode?: string;
-    City?: string;
-    Country?: string;
-    Line5?: string;
-    Line4?: string;
-    Line3?: string;
-    Line2?: string;
-    Line1?: string;
-    CountrySubDivisionCode?: string;
-}
-
 export interface QuickBooksCustomersDto {
     PrimaryEmailAddr?: QuickBooksEmailDto;
     BillWithParent?: boolean;
@@ -76,7 +65,7 @@ export interface QuickBooksCustomersDto {
     Active?: boolean;
     Job?: boolean;
     BalanceWithJobs?: number;
-    BillAddr?: QuickBooksCustomersAddressDto;
+    BillAddr?: QuickBooksPhysicalAddressDto;
     PreferredDeliveryMethod?: string;
     Taxable?: number;
     PrintOnCheckName?: string;
@@ -92,7 +81,7 @@ export type CreateQuickBooksCustomersDto = (
     QuickBooksCustomerWithGivenName
 ) & QuickBooksCustomersDto;
 
-export type FullQuickBooksUpdateCustomersDto = (
+export type FullUpdateQuickBooksCustomersDto = (
     QuickBooksCustomerWithDisplayName |
     QuickBooksCustomerWithSuffix |
     QuickBooksCustomerWithTitle |
@@ -101,7 +90,7 @@ export type FullQuickBooksUpdateCustomersDto = (
     QuickBooksCustomerWithGivenName
 ) & QuickBooksCustomersDto;
 
-export type SparseQuickBooksUpdateCustomersDto = (
+export type SparseUpdateQuickBooksCustomersDto = (
     QuickBooksCustomerWithDisplayName |
     QuickBooksCustomerWithSuffix |
     QuickBooksCustomerWithTitle |
