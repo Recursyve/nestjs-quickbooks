@@ -1,5 +1,6 @@
 export * from "./modules/quickbooks.module";
 export * from "./modules/common";
+export * from "./modules/company-info";
 export * from "./modules/config";
 export * from "./modules/customers";
 export * from "./modules/invoices";

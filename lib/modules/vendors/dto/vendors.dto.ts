@@ -60,7 +60,7 @@ export interface QuickBooksVendorWithGivenName {
     GivenName: string;
 }
 
-export interface QuickBooksVendorDto {
+export interface QuickBooksVendorsDto {
     PrimaryEmailAddr?: QuickBooksEmailDto;
     OtherContactInfo?: string;
     SecondaryTaxIdentifier?: string;
@@ -86,20 +86,20 @@ export interface QuickBooksVendorDto {
     BillAddr?: QuickBooksPhysicalAddressDto;
 }
 
-export type CreateQuickBooksVendorDto = (
+export type CreateQuickBooksVendorsDto = (
     QuickBooksVendorWithDisplayName |
     QuickBooksVendorWithSuffix |
     QuickBooksVendorWithTitle |
     QuickBooksVendorWithMiddleName |
     QuickBooksVendorWithFamilyName |
     QuickBooksVendorWithGivenName
-) & QuickBooksVendorDto;
+) & QuickBooksVendorsDto;
 
-export type FullUpdateQuickBooksVendorDto = (
+export type FullUpdateQuickBooksVendorsDto = (
     QuickBooksVendorWithDisplayName |
     QuickBooksVendorWithSuffix |
     QuickBooksVendorWithTitle |
     QuickBooksVendorWithMiddleName |
     QuickBooksVendorWithFamilyName |
     QuickBooksVendorWithGivenName
-) & QuickBooksVendorDto;
+) & QuickBooksVendorsDto;

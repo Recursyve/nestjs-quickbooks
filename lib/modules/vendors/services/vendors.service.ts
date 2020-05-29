@@ -3,7 +3,7 @@ import { Observable } from "rxjs";
 import { QuickBooksAuthService } from "../../auth/services/auth.service";
 import { BaseService } from "../../common/base.service";
 import { QuickBooksStore } from "../../store/store.service";
-import { CreateQuickBooksVendorDto, FullUpdateQuickBooksVendorDto } from "../dto/vendors.dto";
+import { CreateQuickBooksVendorsDto, FullUpdateQuickBooksVendorsDto } from "../dto/vendors.dto";
 import { QuickBooksVendorsQuery, QuickBooksVendorsQueryResponse } from "../models/vendors.query";
 import { QuickBooksVendors } from "../models/vendors.model";
 
@@ -29,7 +29,7 @@ class CompanyVendorsService extends BaseService<QuickBooksVendors, QuickBooksVen
         super(realm, "vendor", authService, http);
     }
 
-    public create(dto: CreateQuickBooksVendorDto): Observable<QuickBooksVendors> {
+    public create(dto: CreateQuickBooksVendorsDto): Observable<QuickBooksVendors> {
         return this.post(dto);
     }
 
@@ -37,10 +37,10 @@ class CompanyVendorsService extends BaseService<QuickBooksVendors, QuickBooksVen
         return this.get(id);
     }
 
-    public fullUpdate(id: string, token: string, dto: FullUpdateQuickBooksVendorDto): Observable<QuickBooksVendors>;
-    public fullUpdate(vendor: QuickBooksVendors, dto: FullUpdateQuickBooksVendorDto): Observable<QuickBooksVendors>;
+    public fullUpdate(id: string, token: string, dto: FullUpdateQuickBooksVendorsDto): Observable<QuickBooksVendors>;
+    public fullUpdate(vendor: QuickBooksVendors, dto: FullUpdateQuickBooksVendorsDto): Observable<QuickBooksVendors>;
     public fullUpdate(
-        ...args: [string | QuickBooksVendors, string | FullUpdateQuickBooksVendorDto, FullUpdateQuickBooksVendorDto?]
+        ...args: [string | QuickBooksVendors, string | FullUpdateQuickBooksVendorsDto, FullUpdateQuickBooksVendorsDto?]
     ): Observable<QuickBooksVendors> {
         const [id, token, dto] = CompanyVendorsService.getUpdateArguments(args);
         return this.post({
