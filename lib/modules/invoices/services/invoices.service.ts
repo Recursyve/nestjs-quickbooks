@@ -2,27 +2,15 @@ import { HttpService, Injectable } from "@nestjs/common";
 import { Observable } from "rxjs";
 import { QuickBooksAuthService } from "../../auth/services/auth.service";
 import { BaseService } from "../../common/base.service";
-import { QuickBooksStore } from "../../store/store.service";
-import { QuickBooksInvoices } from "../models/invoices.model";
-import { QuickBooksInvoicesQuery } from "../models/invoices.query";
-import { CreateQuickBooksInvoicesDto, FullUpdateQuickBooksInvoicesDto, SparseUpdateQuickBooksInvoicesDto } from "../dto/invoices.dto";
-import { QuickBooksResponseModel } from "../../common/models";
-
-export interface QuickBooksInvoicesQueryResponse extends QuickBooksResponseModel {
-    QueryResponse: {
-        Invoice: QuickBooksInvoices[];
-        startPosition: number;
-        maxResults: number;
-    };
-}
-
-export interface QuickBooksInvoicesDeleteResponse extends QuickBooksResponseModel {
-    Invoice: {
-        Id: string;
-        status: string;
-        domain: number;
-    };
-}
+import { QuickBooksStore } from "../../store";
+import { QuickBooksInvoices } from "..";
+import { QuickBooksInvoicesQueryModel } from "..";
+import { CreateQuickBooksInvoicesDto, FullUpdateQuickBooksInvoicesDto, SparseUpdateQuickBooksInvoicesDto } from "..";
+import {
+    QuickBooksInvoicesDeleteResponse,
+    QuickBooksInvoicesQueryResponseModel,
+    QuickBooksInvoicesResponseModel
+} from "../models/invoices-response.model";
 
 @Injectable()
 export class QuickBooksInvoicesService {
@@ -32,25 +20,27 @@ export class QuickBooksInvoicesService {
         private readonly store: QuickBooksStore
     ) {}
 
-    public async withDefaultCompany(): Promise<CompanyInvoicesService> {
+    public async withDefaultCompany(): Promise<QuickBooksCompanyInvoicesService> {
         return this.forCompany(await this.store.getDefaultCompany());
     }
 
-    public forCompany(realm: string): CompanyInvoicesService {
-        return new CompanyInvoicesService(realm, this.authService, this.http);
+    public forCompany(realm: string): QuickBooksCompanyInvoicesService {
+        return new QuickBooksCompanyInvoicesService(realm, this.authService, this.http);
     }
 }
 
-class CompanyInvoicesService extends BaseService<QuickBooksInvoices, QuickBooksInvoicesQuery, QuickBooksInvoicesQueryResponse> {
+export class QuickBooksCompanyInvoicesService extends BaseService<
+    QuickBooksInvoicesResponseModel, QuickBooksInvoicesQueryModel, QuickBooksInvoicesQueryResponseModel
+> {
     constructor(realm: string, authService: QuickBooksAuthService, http: HttpService) {
         super(realm, "invoice", authService, http);
     }
 
-    public create(dto: CreateQuickBooksInvoicesDto): Observable<QuickBooksInvoices> {
+    public create(dto: CreateQuickBooksInvoicesDto): Observable<QuickBooksInvoicesResponseModel> {
         return this.post(dto);
     }
 
-    public readById(id: string): Observable<QuickBooksInvoices> {
+    public readById(id: string): Observable<QuickBooksInvoicesResponseModel> {
         return this.get(id);
     }
 
@@ -60,12 +50,12 @@ class CompanyInvoicesService extends BaseService<QuickBooksInvoices, QuickBooksI
         });
     }
 
-    public fullUpdate(id: string, token: string, dto: FullUpdateQuickBooksInvoicesDto): Observable<QuickBooksInvoices>;
-    public fullUpdate(invoice: QuickBooksInvoices, dto: FullUpdateQuickBooksInvoicesDto): Observable<QuickBooksInvoices>;
+    public fullUpdate(id: string, token: string, dto: FullUpdateQuickBooksInvoicesDto): Observable<QuickBooksInvoicesResponseModel>;
+    public fullUpdate(invoice: QuickBooksInvoices, dto: FullUpdateQuickBooksInvoicesDto): Observable<QuickBooksInvoicesResponseModel>;
     public fullUpdate(
         ...args: [string | QuickBooksInvoices, string | FullUpdateQuickBooksInvoicesDto, FullUpdateQuickBooksInvoicesDto?]
-    ): Observable<QuickBooksInvoices> {
-        const [id, token, dto] = CompanyInvoicesService.getUpdateArguments(args);
+    ): Observable<QuickBooksInvoicesResponseModel> {
+        const [id, token, dto] = QuickBooksCompanyInvoicesService.getUpdateArguments(args);
         return this.post({
             ...dto,
             Id: id,
@@ -73,12 +63,12 @@ class CompanyInvoicesService extends BaseService<QuickBooksInvoices, QuickBooksI
         });
     }
 
-    public sparseUpdate(id: string, token: string, dto: SparseUpdateQuickBooksInvoicesDto): Observable<QuickBooksInvoices>;
-    public sparseUpdate(invoice: QuickBooksInvoices, dto: SparseUpdateQuickBooksInvoicesDto): Observable<QuickBooksInvoices>;
+    public sparseUpdate(id: string, token: string, dto: SparseUpdateQuickBooksInvoicesDto): Observable<QuickBooksInvoicesResponseModel>;
+    public sparseUpdate(invoice: QuickBooksInvoices, dto: SparseUpdateQuickBooksInvoicesDto): Observable<QuickBooksInvoicesResponseModel>;
     public sparseUpdate(
         ...args: [string | QuickBooksInvoices, string | SparseUpdateQuickBooksInvoicesDto, SparseUpdateQuickBooksInvoicesDto?]
-    ): Observable<QuickBooksInvoices> {
-        const [id, token, dto] = CompanyInvoicesService.getUpdateArguments(args);
+    ): Observable<QuickBooksInvoicesResponseModel> {
+        const [id, token, dto] = QuickBooksCompanyInvoicesService.getUpdateArguments(args);
         return this.post({
             ...dto,
             Id: id,
@@ -90,7 +80,7 @@ class CompanyInvoicesService extends BaseService<QuickBooksInvoices, QuickBooksI
     public delete(id: string, token: string): Observable<QuickBooksInvoicesDeleteResponse>;
     public delete(invoice: QuickBooksInvoices): Observable<QuickBooksInvoicesDeleteResponse>;
     public delete(...args: [string | QuickBooksInvoices, string?]): Observable<QuickBooksInvoicesDeleteResponse> {
-        const [id, token] = CompanyInvoicesService.getOperationArguments(args);
+        const [id, token] = QuickBooksCompanyInvoicesService.getOperationArguments(args);
         return this.post({
             Id: id,
             SyncToken: token
@@ -99,10 +89,10 @@ class CompanyInvoicesService extends BaseService<QuickBooksInvoices, QuickBooksI
         });
     }
 
-    public void(id: string, token: string): Observable<QuickBooksInvoicesDeleteResponse>;
-    public void(invoice: QuickBooksInvoices): Observable<QuickBooksInvoicesDeleteResponse>;
-    public void(...args: [string | QuickBooksInvoices, string?]): Observable<QuickBooksInvoicesDeleteResponse> {
-        const [id, token] = CompanyInvoicesService.getOperationArguments(args);
+    public void(id: string, token: string): Observable<QuickBooksInvoicesResponseModel>;
+    public void(invoice: QuickBooksInvoices): Observable<QuickBooksInvoicesResponseModel>;
+    public void(...args: [string | QuickBooksInvoices, string?]): Observable<QuickBooksInvoicesResponseModel> {
+        const [id, token] = QuickBooksCompanyInvoicesService.getOperationArguments(args);
         return this.post({
             Id: id,
             SyncToken: token

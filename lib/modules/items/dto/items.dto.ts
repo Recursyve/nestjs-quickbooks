@@ -48,13 +48,13 @@ export interface QuickBooksItemsDto {
     TaxClassificationRef?: QuickBooksRefDto;
 }
 
-export type CreateQuickBooksItemDto = (
+export type CreateQuickBooksItemsDto = (
     QuickBooksInventoryItem |
     QuickBooksNonInventoryItem |
     QuickBooksServiceItem
 ) & QuickBooksItemsDto;
 
-export type FullUpdateQuickBooksItemDto = (
+export type FullUpdateQuickBooksItemsDto = (
     QuickBooksInventoryItem |
     QuickBooksNonInventoryItem |
     QuickBooksServiceItem

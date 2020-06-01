@@ -2,10 +2,15 @@ import { HttpService, Injectable } from "@nestjs/common";
 import { Observable } from "rxjs";
 import { QuickBooksAuthService } from "../../auth/services/auth.service";
 import { BaseService } from "../../common/base.service";
-import { QuickBooksStore } from "../../store/store.service";
-import { QuickBooksCompanyInfoQuery, QuickBooksCompanyInfoQueryResponse } from "../models/company-info.query";
-import { QuickBooksCompanyInfo } from "../models/company-info.model";
-import { FullUpdateQuickBooksCompanyInfoDto, SparseUpdateQuickBooksCompanyInfoDto } from "../dto/company-info.dto";
+import { QuickBooksStore } from "../../store";
+import {
+    FullUpdateQuickBooksCompanyInfoDto,
+    QuickBooksCompanyInfo,
+    QuickBooksCompanyInfoQueryModel,
+    QuickBooksCompanyInfoQueryResponseModel,
+    QuickBooksCompanyInfoResponseModel,
+    SparseUpdateQuickBooksCompanyInfoDto
+} from "..";
 
 @Injectable()
 export class QuickBooksCompanyInfoService {
@@ -13,32 +18,35 @@ export class QuickBooksCompanyInfoService {
         private readonly authService: QuickBooksAuthService,
         private readonly http: HttpService,
         private readonly store: QuickBooksStore
-    ) {}
+    ) {
+    }
 
-    public async withDefaultCompany(): Promise<CompanyInfoService> {
+    public async withDefaultCompany(): Promise<QuickBooksCompanyCompanyInfoService> {
         return this.forCompany(await this.store.getDefaultCompany());
     }
 
-    public forCompany(realm: string): CompanyInfoService {
-        return new CompanyInfoService(realm, this.authService, this.http);
+    public forCompany(realm: string): QuickBooksCompanyCompanyInfoService {
+        return new QuickBooksCompanyCompanyInfoService(realm, this.authService, this.http);
     }
 }
 
-class CompanyInfoService extends BaseService<QuickBooksCompanyInfo, QuickBooksCompanyInfoQuery, QuickBooksCompanyInfoQueryResponse> {
-    constructor(realm: string, authService: QuickBooksAuthService, http: HttpService) {
-        super(realm, "companyInfo", authService, http);
+export class QuickBooksCompanyCompanyInfoService extends BaseService<
+    QuickBooksCompanyInfoResponseModel, QuickBooksCompanyInfoQueryModel, QuickBooksCompanyInfoQueryResponseModel
+> {
+    constructor(protected readonly realm: string, authService: QuickBooksAuthService, http: HttpService) {
+        super(realm, "companyinfo", authService, http);
     }
 
-    public read(): Observable<any> {
-        return this.get();
+    public read(): Observable<QuickBooksCompanyInfoResponseModel> {
+        return this.get(this.realm);
     }
 
-    public fullUpdate(id: string, token: string, dto: FullUpdateQuickBooksCompanyInfoDto): Observable<QuickBooksCompanyInfo>;
-    public fullUpdate(company: QuickBooksCompanyInfo, dto: FullUpdateQuickBooksCompanyInfoDto): Observable<QuickBooksCompanyInfo>;
+    public fullUpdate(id: string, token: string, dto: FullUpdateQuickBooksCompanyInfoDto): Observable<QuickBooksCompanyInfoResponseModel>;
+    public fullUpdate(company: QuickBooksCompanyInfo, dto: FullUpdateQuickBooksCompanyInfoDto): Observable<QuickBooksCompanyInfoResponseModel>;
     public fullUpdate(
         ...args: [string | QuickBooksCompanyInfo, string | FullUpdateQuickBooksCompanyInfoDto, FullUpdateQuickBooksCompanyInfoDto?]
-    ): Observable<QuickBooksCompanyInfo> {
-        const [id, token, dto] = CompanyInfoService.getUpdateArguments(args);
+    ): Observable<QuickBooksCompanyInfoResponseModel> {
+        const [id, token, dto] = QuickBooksCompanyCompanyInfoService.getUpdateArguments(args);
         return this.post({
             ...dto,
             Id: id,
@@ -46,12 +54,12 @@ class CompanyInfoService extends BaseService<QuickBooksCompanyInfo, QuickBooksCo
         });
     }
 
-    public sparseUpdate(id: string, token: string, dto: SparseUpdateQuickBooksCompanyInfoDto): Observable<QuickBooksCompanyInfo>;
-    public sparseUpdate(company: QuickBooksCompanyInfo, dto: SparseUpdateQuickBooksCompanyInfoDto): Observable<QuickBooksCompanyInfo>;
+    public sparseUpdate(id: string, token: string, dto: SparseUpdateQuickBooksCompanyInfoDto): Observable<QuickBooksCompanyInfoResponseModel>;
+    public sparseUpdate(company: QuickBooksCompanyInfo, dto: SparseUpdateQuickBooksCompanyInfoDto): Observable<QuickBooksCompanyInfoResponseModel>;
     public sparseUpdate(
         ...args: [string | QuickBooksCompanyInfo, string | SparseUpdateQuickBooksCompanyInfoDto, SparseUpdateQuickBooksCompanyInfoDto?]
-    ): Observable<QuickBooksCompanyInfo> {
-        const [id, token, dto] = CompanyInfoService.getUpdateArguments(args);
+    ): Observable<QuickBooksCompanyInfoResponseModel> {
+        const [id, token, dto] = QuickBooksCompanyCompanyInfoService.getUpdateArguments(args);
         return this.post({
             ...dto,
             Id: id,

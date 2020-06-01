@@ -7,6 +7,14 @@ import {
     QuickBooksRefModel,
     QuickBooksWebsiteModel
 } from "../../common/models";
+import { TaxReportingBasesEnum } from "../../common/enums";
+
+export interface QuickBooksVendorsPaymentBankDetailModel {
+    BankAccountName: string;
+    BankBranchIdentifier: string;
+    BankAccountNumber: string;
+    StatementText: string;
+}
 
 export interface QuickBooksVendors extends QuickBooksModel {
     Title: string;
@@ -24,7 +32,7 @@ export interface QuickBooksVendors extends QuickBooksModel {
     BusinessNumber: string;
     CurrencyRef: QuickBooksRefModel;
     HasTPAR: boolean;
-    TaxReportingBasis: "Cash" | "Accrual";
+    TaxReportingBasis: TaxReportingBasesEnum;
     Mobile: QuickBooksPhoneNumberModel;
     PrimaryPhone: QuickBooksPhoneNumberModel;
     Active: boolean;
@@ -33,6 +41,7 @@ export interface QuickBooksVendors extends QuickBooksModel {
     BillRate: number;
     WebAddr: QuickBooksWebsiteModel;
     CompanyName: string;
+    VendorPaymentBankDetail: QuickBooksVendorsPaymentBankDetailModel;
     TaxIdentifier: string;
     AcctNum: string;
     GSTRegistrationType: string;

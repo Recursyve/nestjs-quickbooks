@@ -1,5 +1,5 @@
-import { QuickBooksDateTimeModel } from "../../common/models/date-time.model";
-import { QuickBooksRefDto } from "../../common/dto/ref.dto";
+import { QuickBooksDateTimeModel } from "../../common/models";
+import { QuickBooksRefDto } from "../../common/dto";
 
 export interface QuickBooksCreditCardPaymentDto {
     CreditChargeResponse?: {

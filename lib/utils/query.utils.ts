@@ -27,7 +27,7 @@ export class QueryUtils {
                 if (condition[key] instanceof Array) {
                     rules.push(this.generateGroupCondition(key, condition[key]));
                 } else {
-                    rules.push(OperatorsUtils.transform(parent, key, condition[key]))
+                    rules.push(OperatorsUtils.transform(parent, key, condition[key]));
                 }
             }
         }

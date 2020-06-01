@@ -6,5 +6,6 @@ export * from "./modules/customers";
 export * from "./modules/invoices";
 export * from "./modules/items";
 export * from "./modules/payments";
+export * from "./modules/payment-methods";
 export * from "./modules/store";
 export * from "./modules/vendors";

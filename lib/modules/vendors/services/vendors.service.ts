@@ -2,10 +2,14 @@ import { HttpService, Injectable } from "@nestjs/common";
 import { Observable } from "rxjs";
 import { QuickBooksAuthService } from "../../auth/services/auth.service";
 import { BaseService } from "../../common/base.service";
-import { QuickBooksStore } from "../../store/store.service";
-import { CreateQuickBooksVendorsDto, FullUpdateQuickBooksVendorsDto } from "../dto/vendors.dto";
-import { QuickBooksVendorsQuery, QuickBooksVendorsQueryResponse } from "../models/vendors.query";
-import { QuickBooksVendors } from "../models/vendors.model";
+import { QuickBooksStore } from "../../store";
+import {
+    CreateQuickBooksVendorsDto,
+    FullUpdateQuickBooksVendorsDto,
+    QuickBooksVendors,
+    QuickBooksVendorsQuery,
+    QuickBooksVendorsQueryResponseModel
+} from "..";
 
 @Injectable()
 export class QuickBooksVendorsService {
@@ -13,18 +17,19 @@ export class QuickBooksVendorsService {
         private readonly authService: QuickBooksAuthService,
         private readonly http: HttpService,
         private readonly store: QuickBooksStore
-    ) {}
+    ) {
+    }
 
-    public async withDefaultCompany(): Promise<CompanyVendorsService> {
+    public async withDefaultCompany(): Promise<QuickBooksCompanyVendorsService> {
         return this.forCompany(await this.store.getDefaultCompany());
     }
 
-    public forCompany(realm: string): CompanyVendorsService {
-        return new CompanyVendorsService(realm, this.authService, this.http);
+    public forCompany(realm: string): QuickBooksCompanyVendorsService {
+        return new QuickBooksCompanyVendorsService(realm, this.authService, this.http);
     }
 }
 
-class CompanyVendorsService extends BaseService<QuickBooksVendors, QuickBooksVendorsQuery, QuickBooksVendorsQueryResponse> {
+export class QuickBooksCompanyVendorsService extends BaseService<QuickBooksVendors, QuickBooksVendorsQuery, QuickBooksVendorsQueryResponseModel> {
     constructor(realm: string, authService: QuickBooksAuthService, http: HttpService) {
         super(realm, "vendor", authService, http);
     }
@@ -42,7 +47,7 @@ class CompanyVendorsService extends BaseService<QuickBooksVendors, QuickBooksVen
     public fullUpdate(
         ...args: [string | QuickBooksVendors, string | FullUpdateQuickBooksVendorsDto, FullUpdateQuickBooksVendorsDto?]
     ): Observable<QuickBooksVendors> {
-        const [id, token, dto] = CompanyVendorsService.getUpdateArguments(args);
+        const [id, token, dto] = QuickBooksCompanyVendorsService.getUpdateArguments(args);
         return this.post({
             ...dto,
             Id: id,

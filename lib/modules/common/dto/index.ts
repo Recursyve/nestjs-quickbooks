@@ -1,3 +1,4 @@
+export * from "./date.dto";
 export * from "./email.dto";
 export * from "./phone-number.dto";
 export * from "./physical-address.dto";
