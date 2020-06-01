@@ -7,63 +7,68 @@ import {
 } from "../../common/dto";
 
 export interface QuickBooksVendorWithDisplayName {
-    DisplayName: string;
-    Suffix?: string;
     Title?: string;
-    MiddleName?: string;
-    FamilyName?: string;
     GivenName?: string;
+    MiddleName?: string;
+    Suffix?: string;
+    FamilyName?: string;
+    DisplayName: string;
 }
 
 export interface QuickBooksVendorWithSuffix {
-    DisplayName?: string;
-    Suffix: string;
     Title?: string;
-    MiddleName?: string;
-    FamilyName?: string;
     GivenName?: string;
+    MiddleName?: string;
+    Suffix: string;
+    FamilyName?: string;
 }
 
 export interface QuickBooksVendorWithTitle {
-    DisplayName?: string;
-    Suffix?: string;
     Title: string;
-    MiddleName?: string;
-    FamilyName?: string;
     GivenName?: string;
+    MiddleName?: string;
+    Suffix?: string;
+    FamilyName?: string;
+    DisplayName?: string;
 }
 
 export interface QuickBooksVendorWithMiddleName {
-    DisplayName?: string;
-    Suffix?: string;
     Title?: string;
-    MiddleName: string;
-    FamilyName?: string;
     GivenName?: string;
+    MiddleName: string;
+    Suffix?: string;
+    FamilyName?: string;
+    DisplayName?: string;
 }
 
 export interface QuickBooksVendorWithFamilyName {
-    DisplayName?: string;
-    Suffix?: string;
     Title?: string;
-    MiddleName?: string;
-    FamilyName: string;
     GivenName?: string;
+    MiddleName?: string;
+    Suffix?: string;
+    FamilyName: string;
+    DisplayName?: string;
 }
 
 export interface QuickBooksVendorWithGivenName {
-    DisplayName?: string;
-    Suffix?: string;
     Title?: string;
-    MiddleName?: string;
-    FamilyName?: string;
     GivenName: string;
+    MiddleName?: string;
+    Suffix?: string;
+    FamilyName?: string;
+    DisplayName?: string;
+}
+
+export interface QuickBooksVendorPaymentBankDetailDto {
+    BankAccountName: string;
+    BankBranchIdentifier: string;
+    BankAccountNumber: string;
+    StatementText: string;
 }
 
 export interface QuickBooksVendorsDto {
     PrimaryEmailAddr?: QuickBooksEmailDto;
     OtherContactInfo?: string;
-    SecondaryTaxIdentifier?: string;
     APAccountRef?: QuickBooksRefDto;
     TermRef?: QuickBooksRefDto;
     GSTIN?: string;
@@ -79,6 +84,7 @@ export interface QuickBooksVendorsDto {
     BillRate?: number;
     WebAddr?: QuickBooksWebsiteDto;
     CompanyName?: string;
+    VendorPaymentBankDetail: QuickBooksVendorPaymentBankDetailDto;
     TaxIdentifier?: string;
     AcctNum?: string;
     GSTRegistrationType?: string;

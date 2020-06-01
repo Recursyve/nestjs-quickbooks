@@ -1,6 +1,6 @@
 {
     "name": "@recursyve/nestjs-quickbooks",
-    "version": "7.0.0-beta.3",
+    "version": "7.0.0-beta.4",
     "keywords": ["nestjs", "quickbooks"],
     "description": "An easy way to interact with the QuickBooks API in your NestJS applications.",
     "main": "index.js",
@@ -8,6 +8,7 @@
         "build": "rimraf dist && nest build",
         "build:lib": "rimraf dist && nest build -p tsconfig.lib.json",
         "copy:lib": "cp package.json .npmignore dist",
+        "lint": "tslint -p tsconfig.json -c tslint.json",
         "publish-package": "npm run build:lib && npm run copy:lib && npm publish dist --access public",
         "publish-package:beta": "npm run publish-package -- --tag beta --access public",
         "publish-package:dry-run": "npm run publish-package -- --dry-run"

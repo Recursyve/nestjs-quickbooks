@@ -1,7 +1,7 @@
-import { QuickBooksQueryModel } from "../../common/models/quickbooks.model";
+import { QuickBooksQueryModel } from "../../common/models";
 import { QuickBookItemTypes } from "./items.model";
 
-export interface QuickBooksItemsQuery extends QuickBooksQueryModel {
+export interface QuickBooksItemsQueryModel extends QuickBooksQueryModel {
     Name: string;
     Type: QuickBookItemTypes;
     Sku: string;

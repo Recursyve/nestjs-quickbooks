@@ -12,7 +12,7 @@ export class BaseService<T, Query, QueryResponse> {
     private readonly liveUrl = "https://quickbooks.api.intuit.com";
 
     constructor(
-        private readonly realm: string,
+        protected readonly realm: string,
         private readonly resource: string,
         private readonly authService: QuickBooksAuthService,
         private readonly http: HttpService

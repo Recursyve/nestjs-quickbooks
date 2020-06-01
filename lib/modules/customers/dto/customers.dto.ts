@@ -1,75 +1,104 @@
-import { QuickBooksEmailDto } from "../../common/dto/email.dto";
-import { QuickBooksPhoneNumberDto } from "../../common/dto/phone-number.dto";
-import { QuickBooksPhysicalAddressDto } from "../../common/dto";
+import {
+    QuickBooksDateDto,
+    QuickBooksEmailDto,
+    QuickBooksPhoneNumberDto,
+    QuickBooksPhysicalAddressDto,
+    QuickBooksRefDto,
+    QuickBooksWebsiteDto
+} from "../../common/dto";
+import { DeliveryMethodsEnum, TaxExemptionReasonsEnum } from "../../common/enums";
 
 export interface QuickBooksCustomerWithDisplayName {
     DisplayName: string;
-    Suffix?: string;
     Title?: string;
-    MiddleName?: string;
-    FamilyName?: string;
     GivenName?: string;
+    MiddleName?: string;
+    Suffix?: string;
+    FamilyName?: string;
 }
 
 export interface QuickBooksCustomerWithSuffix {
     DisplayName?: string;
-    Suffix: string;
     Title?: string;
-    MiddleName?: string;
-    FamilyName?: string;
     GivenName?: string;
+    MiddleName?: string;
+    Suffix: string;
+    FamilyName?: string;
 }
 
 export interface QuickBooksCustomerWithTitle {
     DisplayName?: string;
-    Suffix?: string;
     Title: string;
-    MiddleName?: string;
-    FamilyName?: string;
     GivenName?: string;
+    MiddleName?: string;
+    Suffix?: string;
+    FamilyName?: string;
 }
 
 export interface QuickBooksCustomerWithMiddleName {
     DisplayName?: string;
-    Suffix?: string;
     Title?: string;
-    MiddleName: string;
-    FamilyName?: string;
     GivenName?: string;
+    MiddleName: string;
+    Suffix?: string;
+    FamilyName?: string;
 }
 
 export interface QuickBooksCustomerWithFamilyName {
     DisplayName?: string;
-    Suffix?: string;
     Title?: string;
-    MiddleName?: string;
-    FamilyName: string;
     GivenName?: string;
+    MiddleName?: string;
+    Suffix?: string;
+    FamilyName: string;
 }
 
 export interface QuickBooksCustomerWithGivenName {
     DisplayName?: string;
-    Suffix?: string;
     Title?: string;
-    MiddleName?: string;
-    FamilyName?: string;
     GivenName: string;
+    MiddleName?: string;
+    Suffix?: string;
+    FamilyName?: string;
 }
 
 export interface QuickBooksCustomersDto {
     PrimaryEmailAddr?: QuickBooksEmailDto;
+    ResaleNum?: string;
+    SecondaryTaxIdentifier?: string;
+    ARAccountRef?: QuickBooksRefDto;
+    DefaultTaxCodeRef?: QuickBooksRefDto;
+    PreferredDeliveryMethod?: DeliveryMethodsEnum;
+    GSTIN?: string;
+    SalesTermRef?: QuickBooksRefDto;
+    CustomerTypeRef?: string;
+    Fax?: QuickBooksPhoneNumberDto;
+    BusinessNumber?: string;
     BillWithParent?: boolean;
-    FullyQualifiedName?: string;
-    CompanyName?: string;
-    PrimaryPhone?: QuickBooksPhoneNumberDto;
-    Active?: boolean;
+    CurrencyRef?: QuickBooksRefDto;
+    Mobile?: QuickBooksPhoneNumberDto;
     Job?: boolean;
     BalanceWithJobs?: number;
-    BillAddr?: QuickBooksPhysicalAddressDto;
-    PreferredDeliveryMethod?: string;
+    PrimaryPhone?: QuickBooksPhoneNumberDto;
+    OpenBalanceDate?: QuickBooksDateDto;
     Taxable?: number;
-    PrintOnCheckName?: string;
+    AlternatePhone?: QuickBooksPhoneNumberDto;
+    ParentRef?: QuickBooksRefDto;
+    Notes?: string;
+    WebAddr?: QuickBooksWebsiteDto;
+    Active?: boolean;
     Balance?: number;
+    ShipAddr?: QuickBooksPhysicalAddressDto;
+    PaymentMethodRef?: QuickBooksRefDto;
+    IsProject?: boolean;
+    CompanyName?: string;
+    PrimaryTaxIdentifier?: string;
+    GTSRegistrationType?: string;
+    PrintOnCheckName?: string;
+    BillAddr?: QuickBooksPhysicalAddressDto;
+    FullyQualifiedName?: string;
+    Level?: number;
+    TaxExemptionReasonId?: TaxExemptionReasonsEnum;
 }
 
 export type CreateQuickBooksCustomersDto = (

@@ -1,6 +1,7 @@
-import { Op } from "../modules/common/models/query.model";
+import { Op } from "../modules/common/models";
 
 export class OperatorsUtils {
+    // tslint:disable-next-line:ban-types
     public static transform(attribute: string, op: Symbol, value: any): string {
         if (value instanceof Date) {
             value = value.toISOString();

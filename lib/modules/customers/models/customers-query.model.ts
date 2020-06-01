@@ -1,11 +1,11 @@
-import { QuickBooksQueryModel } from "../../common/models/quickbooks.model";
+import { QuickBooksEmailModel, QuickBooksQueryModel } from "../../common/models";
 
 export interface QuickBooksCustomersQuery extends QuickBooksQueryModel {
     DisplayName: string;
     GivenName: string;
     MiddleName: string;
     FamilyName: string;
-    PrimaryEmailAddr: string;
+    PrimaryEmailAddr: QuickBooksEmailModel;
     Active: boolean;
     Balance: number;
     CompanyName: string;

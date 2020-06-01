@@ -10,7 +10,7 @@ describe("QueryUtils test", () => {
                 query: "select * from customer"
             })
         );
-    })
+    });
 
     it("[1] generateQuery with conditions should return a valid query", () => {
         const query = QueryUtils.generateQuery("customer", {
@@ -21,7 +21,7 @@ describe("QueryUtils test", () => {
                 query: "select * from customer where Id = '150'"
             })
         );
-    })
+    });
 
     it("[2] generateQuery with conditions should return a valid query", () => {
         const query = QueryUtils.generateQuery("customer", {
@@ -34,7 +34,7 @@ describe("QueryUtils test", () => {
                 query: "select * from customer where Metadata.LastUpdatedAt = '2015-01-01'"
             })
         );
-    })
+    });
 
     it("[3] generateQuery with conditions should return a valid query", () => {
         const query = QueryUtils.generateQuery("customer", {
@@ -49,7 +49,7 @@ describe("QueryUtils test", () => {
                 query: "select * from customer where Metadata.LastUpdatedAt >= '2015-01-01'"
             })
         );
-    })
+    });
 
     it("[4] generateQuery with conditions should return a valid query", () => {
         const query = QueryUtils.generateQuery("customer", {
@@ -67,7 +67,7 @@ describe("QueryUtils test", () => {
                 query: "select * from customer where Id = '100' or Name = '100'"
             })
         );
-    })
+    });
 
     it("[5] generateQuery with conditions should return a valid query", () => {
         const query = QueryUtils.generateQuery("customer", {
@@ -85,7 +85,7 @@ describe("QueryUtils test", () => {
                 query: "select * from customer where Id = '100' and Name = '100'"
             })
         );
-    })
+    });
 
     it("[6] generateQuery with conditions should return a valid query", () => {
         const query = QueryUtils.generateQuery("customer", {
@@ -99,7 +99,7 @@ describe("QueryUtils test", () => {
                 query: "select * from customer where Metadata.LastUpdatedAt = '2015-01-01' and Metadata.CreateAt = '2015-01-01'"
             })
         );
-    })
+    });
 
     it("[7] generateQuery with conditions should return a valid query", () => {
         const query = QueryUtils.generateQuery("customer", {
@@ -115,7 +115,7 @@ describe("QueryUtils test", () => {
                 query: "select * from customer where Id >= '0' and Metadata.LastUpdatedAt = '2015-01-01'"
             })
         );
-    })
+    });
 
     it("[8] generateQuery with conditions should return a valid query", () => {
         const query = QueryUtils.generateQuery("customer", {
@@ -131,5 +131,5 @@ describe("QueryUtils test", () => {
                 query: "select * from customer where Metadata.LastUpdatedAt = '2015-01-01' and CustomerRef.value = '5'"
             })
         );
-    })
+    });
 });

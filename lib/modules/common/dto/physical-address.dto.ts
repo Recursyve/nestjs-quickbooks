@@ -1,5 +1,5 @@
 export interface QuickBooksPhysicalAddressDto {
-    Id: string;
+    Id?: string;
     PostalCode?: string;
     City?: string;
     Country?: string;

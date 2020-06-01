@@ -2,27 +2,15 @@ import { HttpService, Injectable } from "@nestjs/common";
 import { Observable } from "rxjs";
 import { QuickBooksAuthService } from "../../auth/services/auth.service";
 import { BaseService } from "../../common/base.service";
-import { QuickBooksStore } from "../../store/store.service";
-import { QuickBooksPayments } from "../models/payments.model";
-import { QuickBooksPaymentsQuery } from "../models/payments.query";
-import { CreateQuickBooksPaymentsDto, FullUpdateQuickBooksPaymentsDto } from "../dto/payments.dto";
-import { QuickBooksResponseModel } from "../../common/models";
-
-export interface QuickBooksPaymentsQueryResponse extends QuickBooksResponseModel {
-    QueryResponse: {
-        Invoice: QuickBooksPayments[];
-        startPosition: number;
-        maxResults: number;
-    };
-}
-
-export interface QuickBooksPaymentsDeleteResponse extends QuickBooksResponseModel {
-    Payment: {
-        Id: string;
-        status: string;
-        domain: number;
-    };
-}
+import { QuickBooksStore } from "../../store";
+import {
+    CreateQuickBooksPaymentsDto,
+    FullUpdateQuickBooksPaymentsDto,
+    QuickBooksPayments, QuickBooksPaymentsDeleteResponseModel,
+    QuickBooksPaymentsQueryModel,
+    QuickBooksPaymentsQueryResponseModel,
+    QuickBooksPaymentsResponseModel
+} from "..";
 
 @Injectable()
 export class QuickBooksPaymentsService {
@@ -30,27 +18,30 @@ export class QuickBooksPaymentsService {
         private readonly authService: QuickBooksAuthService,
         private readonly http: HttpService,
         private readonly store: QuickBooksStore
-    ) {}
+    ) {
+    }
 
-    public async withDefaultCompany(): Promise<CompanyPaymentsService> {
+    public async withDefaultCompany(): Promise<QuickBooksCompanyPaymentsService> {
         return this.forCompany(await this.store.getDefaultCompany());
     }
 
-    public forCompany(realm: string): CompanyPaymentsService {
-        return new CompanyPaymentsService(realm, this.authService, this.http);
+    public forCompany(realm: string): QuickBooksCompanyPaymentsService {
+        return new QuickBooksCompanyPaymentsService(realm, this.authService, this.http);
     }
 }
 
-class CompanyPaymentsService extends BaseService<QuickBooksPayments, QuickBooksPaymentsQuery, QuickBooksPaymentsQueryResponse> {
+export class QuickBooksCompanyPaymentsService extends BaseService<
+    QuickBooksPaymentsResponseModel, QuickBooksPaymentsQueryModel, QuickBooksPaymentsQueryResponseModel
+> {
     constructor(realm: string, authService: QuickBooksAuthService, http: HttpService) {
         super(realm, "payment", authService, http);
     }
 
-    public create(dto: CreateQuickBooksPaymentsDto): Observable<QuickBooksPayments> {
+    public create(dto: CreateQuickBooksPaymentsDto): Observable<QuickBooksPaymentsResponseModel> {
         return this.post(dto);
     }
 
-    public readById(id: string): Observable<QuickBooksPayments> {
+    public readById(id: string): Observable<QuickBooksPaymentsResponseModel> {
         return this.get(id);
     }
 
@@ -60,12 +51,12 @@ class CompanyPaymentsService extends BaseService<QuickBooksPayments, QuickBooksP
         });
     }
 
-    public fullUpdate(id: string, token: string, dto: FullUpdateQuickBooksPaymentsDto): Observable<QuickBooksPayments>;
-    public fullUpdate(invoice: QuickBooksPayments, dto: FullUpdateQuickBooksPaymentsDto): Observable<QuickBooksPayments>;
+    public fullUpdate(id: string, token: string, dto: FullUpdateQuickBooksPaymentsDto): Observable<QuickBooksPaymentsResponseModel>;
+    public fullUpdate(invoice: QuickBooksPayments, dto: FullUpdateQuickBooksPaymentsDto): Observable<QuickBooksPaymentsResponseModel>;
     public fullUpdate(
         ...args: [string | QuickBooksPayments, string | FullUpdateQuickBooksPaymentsDto, FullUpdateQuickBooksPaymentsDto?]
-    ): Observable<QuickBooksPayments> {
-        const [id, token, dto] = CompanyPaymentsService.getUpdateArguments(args);
+    ): Observable<QuickBooksPaymentsResponseModel> {
+        const [id, token, dto] = QuickBooksCompanyPaymentsService.getUpdateArguments(args);
         return this.post({
             ...dto,
             Id: id,
@@ -73,10 +64,10 @@ class CompanyPaymentsService extends BaseService<QuickBooksPayments, QuickBooksP
         });
     }
 
-    public delete(id: string, token: string): Observable<QuickBooksPaymentsDeleteResponse>;
-    public delete(invoice: QuickBooksPayments): Observable<QuickBooksPaymentsDeleteResponse>;
-    public delete(...args: [string | QuickBooksPayments, string?]): Observable<QuickBooksPaymentsDeleteResponse> {
-        const [id, token] = CompanyPaymentsService.getOperationArguments(args);
+    public delete(id: string, token: string): Observable<QuickBooksPaymentsDeleteResponseModel>;
+    public delete(invoice: QuickBooksPayments): Observable<QuickBooksPaymentsDeleteResponseModel>;
+    public delete(...args: [string | QuickBooksPayments, string?]): Observable<QuickBooksPaymentsDeleteResponseModel> {
+        const [id, token] = QuickBooksCompanyPaymentsService.getOperationArguments(args);
         return this.post({
             Id: id,
             SyncToken: token
@@ -85,10 +76,10 @@ class CompanyPaymentsService extends BaseService<QuickBooksPayments, QuickBooksP
         });
     }
 
-    public void(id: string, token: string): Observable<QuickBooksPaymentsDeleteResponse>;
-    public void(invoice: QuickBooksPayments): Observable<QuickBooksPaymentsDeleteResponse>;
-    public void(...args: [string | QuickBooksPayments, string?]): Observable<QuickBooksPaymentsDeleteResponse> {
-        const [id, token] = CompanyPaymentsService.getOperationArguments(args);
+    public void(id: string, token: string): Observable<QuickBooksPaymentsResponseModel>;
+    public void(invoice: QuickBooksPayments): Observable<QuickBooksPaymentsResponseModel>;
+    public void(...args: [string | QuickBooksPayments, string?]): Observable<QuickBooksPaymentsResponseModel> {
+        const [id, token] = QuickBooksCompanyPaymentsService.getOperationArguments(args);
         return this.post({
             Id: id,
             SyncToken: token,

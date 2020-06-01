@@ -1,4 +1,5 @@
 export * from "./contact-info.model";
+export * from "./date.model";
 export * from "./date-time.model";
 export * from "./email.model";
 export * from "./phone-number.model";
