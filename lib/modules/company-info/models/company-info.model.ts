@@ -6,7 +6,7 @@ import {
     QuickBooksPhysicalAddressModel,
     QuickBooksWebsiteModel
 } from "../../common/models";
-import { MonthsEnum } from "../../common/enums";
+import { QuickBooksMonthsEnum } from "../../common/enums";
 
 export interface QuickBooksCompanyInfo extends QuickBooksModel {
     CompanyName: string;
@@ -17,7 +17,7 @@ export interface QuickBooksCompanyInfo extends QuickBooksModel {
     Email: QuickBooksEmailModel;
     WebAddr: QuickBooksWebsiteModel;
     NameValue: { name: string, value: string }[];
-    FiscalYearStartMonth: MonthsEnum;
+    FiscalYearStartMonth: QuickBooksMonthsEnum;
     CustomerCommunicationAddr: QuickBooksPhysicalAddressModel;
     PrimaryPhone: QuickBooksPhoneNumberModel;
     LegalName: string;

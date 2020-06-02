@@ -1,4 +1,8 @@
-import { QuickBooksQueryResponseModel, QuickBooksResponseModel } from "../../common/models";
+import {
+    QuickBooksDeleteResponseModel,
+    QuickBooksQueryResponseModel,
+    QuickBooksResponseModel
+} from "../../common/models";
 import { QuickBooksPayments } from "./payments.model";
 
 export interface QuickBooksPaymentsResponseModel {
@@ -6,13 +10,9 @@ export interface QuickBooksPaymentsResponseModel {
 }
 
 export interface QuickBooksPaymentsQueryResponseModel extends QuickBooksResponseModel {
-    QueryResponse: QuickBooksQueryResponseModel & { Invoice: QuickBooksPayments[]; };
+    QueryResponse: QuickBooksQueryResponseModel & { Payment: QuickBooksPayments[]; };
 }
 
 export interface QuickBooksPaymentsDeleteResponseModel extends QuickBooksResponseModel {
-    Payment: {
-        Id: string;
-        status: string;
-        domain: number;
-    };
+    Payment: QuickBooksDeleteResponseModel;
 }

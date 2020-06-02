@@ -1,4 +1,4 @@
-export enum MonthsEnum {
+export enum QuickBooksMonthsEnum {
     January = "January",
     February = "February",
     March = "March",

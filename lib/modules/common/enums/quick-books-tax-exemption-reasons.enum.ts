@@ -1,4 +1,4 @@
-export enum TaxExemptionReasonsEnum {
+export enum QuickBooksTaxExemptionReasonsEnum {
     FederalGovernment = 1,
     StateGovernment = 2,
     LocalGovernment = 3,
