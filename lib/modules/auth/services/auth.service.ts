@@ -60,7 +60,12 @@ export class QuickBooksAuthService {
     }
 
     private validateToken(token: TokensModel): boolean {
-        return token && (new Token(token)).isAccessTokenValid();
+        if (!token) {
+            return false;
+        }
+
+        this.client.setToken(token);
+        return this.client.isAccessTokenValid();
     }
 
     private refreshAccessToken(realm: string, token: TokensModel): Observable<string> {
