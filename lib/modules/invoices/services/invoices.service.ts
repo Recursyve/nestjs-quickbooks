@@ -7,7 +7,7 @@ import { QuickBooksInvoices } from "..";
 import { QuickBooksInvoicesQueryModel } from "..";
 import { CreateQuickBooksInvoicesDto, FullUpdateQuickBooksInvoicesDto, SparseUpdateQuickBooksInvoicesDto } from "..";
 import {
-    QuickBooksInvoicesDeleteResponse,
+    QuickBooksInvoicesDeleteResponseModel,
     QuickBooksInvoicesQueryResponseModel,
     QuickBooksInvoicesResponseModel
 } from "../models/invoices-response.model";
@@ -77,9 +77,9 @@ export class QuickBooksCompanyInvoicesService extends BaseService<
         });
     }
 
-    public delete(id: string, token: string): Observable<QuickBooksInvoicesDeleteResponse>;
-    public delete(invoice: QuickBooksInvoices): Observable<QuickBooksInvoicesDeleteResponse>;
-    public delete(...args: [string | QuickBooksInvoices, string?]): Observable<QuickBooksInvoicesDeleteResponse> {
+    public delete(id: string, token: string): Observable<QuickBooksInvoicesDeleteResponseModel>;
+    public delete(invoice: QuickBooksInvoices): Observable<QuickBooksInvoicesDeleteResponseModel>;
+    public delete(...args: [string | QuickBooksInvoices, string?]): Observable<QuickBooksInvoicesDeleteResponseModel> {
         const [id, token] = QuickBooksCompanyInvoicesService.getOperationArguments(args);
         return this.post({
             Id: id,

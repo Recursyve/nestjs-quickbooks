@@ -8,7 +8,7 @@ export interface QuickBooksMetadata {
 export interface QuickBooksModel {
     Id: string;
     SyncToken: string;
-    MetaData: QuickBooksMetadata;
+    MetaData?: QuickBooksMetadata;
 }
 
 export interface QuickBooksQueryModel {

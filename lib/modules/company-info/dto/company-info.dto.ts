@@ -1,4 +1,4 @@
-import { MonthsEnum } from "../../common/enums";
+import { QuickBooksMonthsEnum } from "../../common/enums";
 import {
     QuickBooksEmailDto,
     QuickBooksPhoneNumberDto,
@@ -15,7 +15,7 @@ export interface QuickBooksCompanyInfoDto {
     Email?: QuickBooksEmailDto;
     WebAddr?: QuickBooksWebsiteDto;
     NameValue?: { name: string, value: string }[];
-    FiscalYearStartMonth?: MonthsEnum;
+    FiscalYearStartMonth?: QuickBooksMonthsEnum;
     CustomerCommunicationAddr?: QuickBooksPhysicalAddressDto;
     PrimaryPhone?: QuickBooksPhoneNumberDto;
     LegalName?: string;

@@ -7,7 +7,7 @@ import {
     QuickBooksRefModel,
     QuickBooksWebsiteModel
 } from "../../common/models";
-import { TaxReportingBasesEnum } from "../../common/enums";
+import { QuickBooksTaxReportingBasesEnum } from "../../common/enums";
 
 export interface QuickBooksVendorsPaymentBankDetailModel {
     BankAccountName: string;
@@ -32,7 +32,7 @@ export interface QuickBooksVendors extends QuickBooksModel {
     BusinessNumber: string;
     CurrencyRef: QuickBooksRefModel;
     HasTPAR: boolean;
-    TaxReportingBasis: TaxReportingBasesEnum;
+    TaxReportingBasis: QuickBooksTaxReportingBasesEnum;
     Mobile: QuickBooksPhoneNumberModel;
     PrimaryPhone: QuickBooksPhoneNumberModel;
     Active: boolean;
