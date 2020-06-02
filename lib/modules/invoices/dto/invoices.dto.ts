@@ -11,7 +11,6 @@ import {
 } from "../../common/dto";
 import { QuickBooksEmailStatusesEnum, QuickBooksGlobalTaxCalculationsEnum } from "../../common/enums";
 import { QuickBooksRefModel } from "../../common/models";
-import { QuickBooksBaseInvoiceLinesModel } from "..";
 
 export interface QuickBooksInvoicesDto {
     CurrencyRef?: QuickBooksRefDto;
