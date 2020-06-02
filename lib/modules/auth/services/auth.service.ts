@@ -1,5 +1,5 @@
 import { HttpService, Injectable } from "@nestjs/common";
-import { OAuthClient, Token } from "intuit-oauth";
+import * as OAuthClient from "intuit-oauth";
 import { Observable, of } from "rxjs";
 import { fromPromise } from "rxjs/internal-compatibility";
 import { map, mergeMap } from "rxjs/operators";
