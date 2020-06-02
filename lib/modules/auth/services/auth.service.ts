@@ -4,11 +4,13 @@ import { Observable, of } from "rxjs";
 import { fromPromise } from "rxjs/internal-compatibility";
 import { map, mergeMap } from "rxjs/operators";
 import { QuickBooksConfigService } from "../../config/services/quickbooks-config.service";
-import { Tokens, QuickBooksStore } from "../../store/store.service";
-import { QuickbooksModes } from "../../config/models/quickbooks-config.model";
+import { QuickBooksStore } from "../../store";
+import { QuickbooksModes } from "../../config";
+import { DatedTokensModel } from "../models/dated-tokens.model";
 
 @Injectable()
 export class QuickBooksAuthService {
+    private readonly ACCESS_TOKEN_TTL = 60 * 1000;
     private readonly client;
 
     constructor(
@@ -38,7 +40,7 @@ export class QuickBooksAuthService {
     public async authorizeCode(url: string): Promise<void> {
         const res = await this.client.createToken(url);
         await this.tokenStore.registerCompany(res.token.realmId);
-        await this.tokenStore.setToken(res.token.realmId, res.json);
+        await this.tokenStore.setToken(res.token.realmId, { ...res.json, created_at: Date.now() });
     }
 
     public getToken(realm: string): Observable<string> {
@@ -47,6 +49,7 @@ export class QuickBooksAuthService {
                 if (!token) {
                     return of(null);
                 }
+
                 if (this.validateToken(token)) {
                     return of(token.access_token);
                 }
@@ -56,21 +59,21 @@ export class QuickBooksAuthService {
         );
     }
 
-    private validateToken(token: Tokens): boolean {
+    private validateToken(token: DatedTokensModel): boolean {
         if (!token) {
             return false;
         }
 
-        this.client.token.setToken(token);
-        return this.client.isAccessTokenValid();
+        const expiry = token.created_at + (token.expires_in * 1000);
+        return (expiry - this.ACCESS_TOKEN_TTL > Date.now());
     }
 
-    private refreshAccessToken(realm: string, token: Tokens): Observable<string> {
+    private refreshAccessToken(realm: string, token: DatedTokensModel): Observable<string> {
         return fromPromise(this.client.refreshUsingToken(token)).pipe(
             map((res: any) => {
-                const t = res.toJson() as Tokens;
-                this.tokenStore.setToken(realm, t);
-                return t.access_token;
+                const newToken = { ...res.toJson(), created_at: Date.now() } as DatedTokensModel;
+                this.tokenStore.setToken(realm, newToken);
+                return newToken.access_token;
             })
         );
     }

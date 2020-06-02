@@ -1,10 +1,11 @@
-import { Tokens, QuickBooksStore } from "./store.service";
+import { QuickBooksStore } from "./store.service";
 import { Injectable } from "@nestjs/common";
+import { DatedTokensModel } from "../auth/models/dated-tokens.model";
 
 @Injectable()
 export class LocalStore extends QuickBooksStore {
     private companies: string[] = [];
-    private tokens: { [realm: string]: Tokens } = {};
+    private tokens: { [realm: string]: DatedTokensModel } = {};
 
     public async registerCompany(realm: string): Promise<void> {
         if (this.companies.findIndex(x => x === realm) >= 0) {
@@ -18,11 +19,11 @@ export class LocalStore extends QuickBooksStore {
         return this.companies[0];
     }
 
-    public async getToken(realm: string): Promise<Tokens> {
+    public async getToken(realm: string): Promise<DatedTokensModel> {
         return this.tokens[realm];
     }
 
-    public async setToken(realm: string, token: Tokens): Promise<void> {
+    public async setToken(realm: string, token: DatedTokensModel): Promise<void> {
         this.tokens[realm] = token;
     }
 }
