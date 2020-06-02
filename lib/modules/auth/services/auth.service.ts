@@ -1,11 +1,12 @@
 import { HttpService, Injectable } from "@nestjs/common";
-import * as OAuthClient from "intuit-oauth";
+import { OAuthClient, Token } from "intuit-oauth";
 import { Observable, of } from "rxjs";
 import { fromPromise } from "rxjs/internal-compatibility";
 import { map, mergeMap } from "rxjs/operators";
 import { QuickBooksConfigService } from "../../config/services/quickbooks-config.service";
-import { Tokens, QuickBooksStore } from "../../store/store.service";
-import { QuickbooksModes } from "../../config/models/quickbooks-config.model";
+import { QuickBooksStore } from "../../store";
+import { QuickbooksModes } from "../../config";
+import { TokensModel } from "..";
 
 @Injectable()
 export class QuickBooksAuthService {
@@ -36,9 +37,10 @@ export class QuickBooksAuthService {
     }
 
     public async authorizeCode(url: string): Promise<void> {
-        const res = await this.client.createToken(url);
-        await this.tokenStore.registerCompany(res.token.realmId);
-        await this.tokenStore.setToken(res.token.realmId, res.json);
+        await this.client.createToken(url);
+        const token = this.client.getToken().getToken();
+        await this.tokenStore.registerCompany(token.realmId);
+        await this.tokenStore.setToken(token.realmId, token);
     }
 
     public getToken(realm: string): Observable<string> {
@@ -47,6 +49,7 @@ export class QuickBooksAuthService {
                 if (!token) {
                     return of(null);
                 }
+
                 if (this.validateToken(token)) {
                     return of(token.access_token);
                 }
@@ -56,21 +59,21 @@ export class QuickBooksAuthService {
         );
     }
 
-    private validateToken(token: Tokens): boolean {
+    private validateToken(token: TokensModel): boolean {
         if (!token) {
             return false;
         }
 
-        this.client.token.setToken(token);
+        this.client.setToken(token);
         return this.client.isAccessTokenValid();
     }
 
-    private refreshAccessToken(realm: string, token: Tokens): Observable<string> {
+    private refreshAccessToken(realm: string, token: TokensModel): Observable<string> {
         return fromPromise(this.client.refreshUsingToken(token)).pipe(
-            map((res: any) => {
-                const t = res.toJson() as Tokens;
-                this.tokenStore.setToken(realm, t);
-                return t.access_token;
+            map(() => {
+                const newToken = this.client.getToken().getToken();
+                this.tokenStore.setToken(realm, newToken);
+                return newToken.access_token;
             })
         );
     }

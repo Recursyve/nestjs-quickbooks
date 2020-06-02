@@ -84,7 +84,7 @@ export interface QuickBooksVendorsDto {
     BillRate?: number;
     WebAddr?: QuickBooksWebsiteDto;
     CompanyName?: string;
-    VendorPaymentBankDetail: QuickBooksVendorPaymentBankDetailDto;
+    VendorPaymentBankDetail?: QuickBooksVendorPaymentBankDetailDto;
     TaxIdentifier?: string;
     AcctNum?: string;
     GSTRegistrationType?: string;

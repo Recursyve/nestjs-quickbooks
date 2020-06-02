@@ -3,11 +3,11 @@ import { QuickBooksAuthService } from "../auth/services/auth.service";
 import * as querystring from "querystring";
 import { Observable } from "rxjs";
 import { map, mergeMap } from "rxjs/operators";
-import { WhereOptions } from "./models/query.model";
+import { WhereOptions } from "./models";
 import { QueryUtils } from "../../utils/query.utils";
 
 @Injectable()
-export class BaseService<T, Query, QueryResponse> {
+export class BaseService<Response, Query, QueryResponse> {
     private readonly sandboxUrl = "https://sandbox-quickbooks.api.intuit.com";
     private readonly liveUrl = "https://quickbooks.api.intuit.com";
 
@@ -32,7 +32,7 @@ export class BaseService<T, Query, QueryResponse> {
         );
     }
 
-    protected get<R = T>(path?: string, queryParams?: object, headers?: object): Observable<R> {
+    protected get<R = Response>(path?: string, queryParams?: object, headers?: object): Observable<R> {
         return this.getHttpHeaders().pipe(
             mergeMap((authHeaders) => this.http.get<R>(this.url(path, queryParams), {
                 headers: {
@@ -45,7 +45,7 @@ export class BaseService<T, Query, QueryResponse> {
         );
     }
 
-    protected post<R = T>(body: any, path?: string, queryParams?: object, headers?: object): Observable<R> {
+    protected post<R = Response>(body: any, path?: string, queryParams?: object, headers?: object): Observable<R> {
         return this.getHttpHeaders().pipe(
             mergeMap((authHeaders) => this.http.post<R>(this.url(path, queryParams), body, {
                 headers: {

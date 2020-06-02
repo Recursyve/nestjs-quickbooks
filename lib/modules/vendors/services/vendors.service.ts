@@ -7,8 +7,9 @@ import {
     CreateQuickBooksVendorsDto,
     FullUpdateQuickBooksVendorsDto,
     QuickBooksVendors,
-    QuickBooksVendorsQuery,
-    QuickBooksVendorsQueryResponseModel
+    QuickBooksVendorsQueryModel,
+    QuickBooksVendorsQueryResponseModel,
+    QuickBooksVendorsResponseModel
 } from "..";
 
 @Injectable()
@@ -29,24 +30,26 @@ export class QuickBooksVendorsService {
     }
 }
 
-export class QuickBooksCompanyVendorsService extends BaseService<QuickBooksVendors, QuickBooksVendorsQuery, QuickBooksVendorsQueryResponseModel> {
+export class QuickBooksCompanyVendorsService extends BaseService<
+    QuickBooksVendorsResponseModel, QuickBooksVendorsQueryModel, QuickBooksVendorsQueryResponseModel
+> {
     constructor(realm: string, authService: QuickBooksAuthService, http: HttpService) {
         super(realm, "vendor", authService, http);
     }
 
-    public create(dto: CreateQuickBooksVendorsDto): Observable<QuickBooksVendors> {
+    public create(dto: CreateQuickBooksVendorsDto): Observable<QuickBooksVendorsResponseModel> {
         return this.post(dto);
     }
 
-    public readById(id: string): Observable<QuickBooksVendors> {
+    public readById(id: string): Observable<QuickBooksVendorsResponseModel> {
         return this.get(id);
     }
 
-    public fullUpdate(id: string, token: string, dto: FullUpdateQuickBooksVendorsDto): Observable<QuickBooksVendors>;
-    public fullUpdate(vendor: QuickBooksVendors, dto: FullUpdateQuickBooksVendorsDto): Observable<QuickBooksVendors>;
+    public fullUpdate(id: string, token: string, dto: FullUpdateQuickBooksVendorsDto): Observable<QuickBooksVendorsResponseModel>;
+    public fullUpdate(vendor: QuickBooksVendors, dto: FullUpdateQuickBooksVendorsDto): Observable<QuickBooksVendorsResponseModel>;
     public fullUpdate(
         ...args: [string | QuickBooksVendors, string | FullUpdateQuickBooksVendorsDto, FullUpdateQuickBooksVendorsDto?]
-    ): Observable<QuickBooksVendors> {
+    ): Observable<QuickBooksVendorsResponseModel> {
         const [id, token, dto] = QuickBooksCompanyVendorsService.getUpdateArguments(args);
         return this.post({
             ...dto,
