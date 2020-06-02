@@ -1,4 +1,4 @@
-export enum DeliveryMethodsEnum {
+export enum QuickBooksDeliveryMethodsEnum {
     Print = "Print",
     Email = "Email",
     None = "None"

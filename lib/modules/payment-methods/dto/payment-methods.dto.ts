@@ -1,9 +1,9 @@
-import { PaymentMethodsEnum } from "../../common/enums";
+import { QuickBooksPaymentMethodsEnum } from "../../common/enums";
 
 export interface QuickBooksPaymentMethodsDto {
     Name: string;
     Active: boolean;
-    Type: PaymentMethodsEnum;
+    Type: QuickBooksPaymentMethodsEnum;
 }
 
 export type CreateQuickBooksPaymentMethodsDto = QuickBooksPaymentMethodsDto;

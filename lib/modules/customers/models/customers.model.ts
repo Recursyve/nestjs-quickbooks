@@ -7,7 +7,7 @@ import {
     QuickBooksRefModel,
     QuickBooksWebsiteModel
 } from "../../common/models";
-import { DeliveryMethodsEnum, TaxExemptionReasonsEnum } from "../../common/enums";
+import { QuickBooksDeliveryMethodsEnum, QuickBooksTaxExemptionReasonsEnum } from "../../common/enums";
 
 export interface QuickBooksCustomers extends QuickBooksModel {
     DisplayName: string;
@@ -21,7 +21,7 @@ export interface QuickBooksCustomers extends QuickBooksModel {
     SecondaryTaxIdentifier: string;
     ARAccountRef: QuickBooksRefModel;
     DefaultTaxCodeRef: QuickBooksRefModel;
-    PreferredDeliveryMethod: DeliveryMethodsEnum;
+    PreferredDeliveryMethod: QuickBooksDeliveryMethodsEnum;
     GSTIN: string;
     SalesTermRef: QuickBooksRefModel;
     CustomerTypeRef: string;
@@ -51,5 +51,5 @@ export interface QuickBooksCustomers extends QuickBooksModel {
     BillAddr: QuickBooksPhysicalAddressModel;
     FullyQualifiedName: string;
     Level: number;
-    TaxExemptionReasonId: TaxExemptionReasonsEnum;
+    TaxExemptionReasonId: QuickBooksTaxExemptionReasonsEnum;
 }

@@ -1,141 +1,128 @@
-import { QuickBooksModel } from "../../common/models/quickbooks.model";
-import { QuickBooksRefModel } from "../../common/models/ref.model";
-import { QuickBooksPhysicalAddressModel } from "../../common/models";
+import {
+    QuickBooksCustomFieldModel,
+    QuickBooksDateModel,
+    QuickBooksEmailModel,
+    QuickBooksLinkedTxnModel,
+    QuickBooksMarkupInfoModel,
+    QuickBooksMemoRefModel,
+    QuickBooksModel,
+    QuickBooksPhysicalAddressModel,
+    QuickBooksRefModel,
+    QuickBooksTxnTaxDetailModel
+} from "../../common/models";
+import { QuickBooksEmailStatusesEnum, QuickBooksGlobalTaxCalculationsEnum } from "../../common/enums";
 
-export interface QuickBooksInvoiceCustomField {
-    DefinitionId: string;
-    StringValue: string;
-    Name: string;
-    Type: "StringType";
-}
-
-export interface QuickBooksInvoiceLinkedTxn {
-    TxnId: string;
-    TxnType: string;
-    TxnLineId: string;
-}
-
-export interface QuickBooksInvoiceTxnTaxDetail {
-    TxnTaxCodeRef: QuickBooksRefModel;
-    TotalTax: number;
-    TaxLine: {
-        DetailType: string;
-        Amount: number;
-        TaxLineDetail: {
-            TaxRateRef: QuickBooksRefModel;
-            NetAmountTaxable: number;
-            PercentBased: boolean;
-            TaxInclusiveAmount: number;
-            OverrideDeltaAmount: number;
-            TaxPercent: number;
-        };
-    }[];
-}
-
-export interface QuickBooksInvoiceSalesItemLine {
+export interface QuickBooksBaseInvoiceLinesModel {
     Id: string;
+    DetailType: string;
+    Description?: string;
+    LineNum?: number;
+}
+
+export interface QuickBooksInvoiceSalesItemLineModel extends QuickBooksBaseInvoiceLinesModel {
     DetailType: "SalesItemLineDetail";
-    Amount: number;
-    Description: string;
-    LineNum: number;
     SalesItemLineDetail: {
-        TaxInclusiveAmt: number;
-        DiscountAmt: number;
-        ItemRef: QuickBooksRefModel;
-        ClassRef: QuickBooksRefModel;
-        TaxCodeRef: QuickBooksRefModel;
-        MarkupInfo: {
-            PriceLevelRef: QuickBooksRefModel;
-            Percent: number;
-            MarkUpIncomeAccountRef: QuickBooksRefModel;
-        };
-        ItemAccountRef: QuickBooksRefModel;
-        ServiceDate: string;
-        DiscountRate: number;
-        Qty: number;
-        UnitPrice: number;
-        TaxClassificationRef: QuickBooksRefModel;
+        TaxInclusiveAmt?: number;
+        DiscountAmt?: number;
+        ItemRef?: QuickBooksRefModel;
+        ClassRef?: QuickBooksRefModel;
+        TaxCodeRef?: QuickBooksRefModel;
+        MarkupInfo?: QuickBooksMarkupInfoModel;
+        ItemAccountRef?: QuickBooksRefModel;
+        ServiceDate?: string;
+        DiscountRate?: number;
+        Qty?: number;
+        UnitPrice?: number;
+        TaxClassificationRef?: QuickBooksRefModel;
     };
+    Amount: number;
 }
 
-export interface QuickBooksInvoiceGroupLine {
-    Id: string;
+export interface QuickBooksInvoiceGroupLineModel extends QuickBooksBaseInvoiceLinesModel {
     DetailType: "GroupLineDetail";
-    Description: string;
-    LineNum: number;
     GroupLineDetail: {
-        Quantity: number;
-        GroupItemRef: QuickBooksRefModel;
-        Line: QuickBooksInvoiceSalesItemLine[];
+        Quantity?: number;
+        GroupItemRef?: QuickBooksRefModel;
+        Line?: QuickBooksInvoiceSalesItemLineModel[];
     };
 }
 
-export interface QuickBooksInvoiceDescriptionOnlyLine {
-    Id: string;
+export interface QuickBooksInvoiceDescriptionOnlyLineModel extends QuickBooksBaseInvoiceLinesModel {
     DetailType: "DescriptionOnly";
     Amount: number;
-    Description: string;
-    LineNum: number;
     DescriptionLineDetail: {
-        TaxCodeRef: QuickBooksRefModel;
-        ServiceDate: {
-            date: string;
-        };
+        TaxCodeRef?: QuickBooksRefModel;
+        ServiceDate?: QuickBooksDateModel;
     };
 }
 
-export interface QuickBooksInvoiceDiscountLine {
-    Id: string;
+export interface QuickBooksInvoiceDiscountLineModel extends QuickBooksBaseInvoiceLinesModel {
     DetailType: "DiscountLine";
     Amount: number;
-    Description: string;
-    LineNum: number;
     DiscountLineDetail: {
-        ClassRef: QuickBooksRefModel;
-        TaxCodeRef: QuickBooksRefModel;
-        DiscountAccountRef: QuickBooksRefModel;
-        PercentBased: boolean;
-        DiscountPercent: number;
+        ClassRef?: QuickBooksRefModel;
+        TaxCodeRef?: QuickBooksRefModel;
+        DiscountAccountRef?: QuickBooksRefModel;
+        PercentBased?: boolean;
+        DiscountPercent?: number;
     };
 }
 
-export interface QuickBooksInvoiceSubTotalLine {
-    Id: string;
+export interface QuickBooksInvoiceSubTotalLineModel extends QuickBooksBaseInvoiceLinesModel {
     DetailType: "SubTotalLine";
     Amount: number;
-    Description: string;
-    LineNum: number;
     SubtotalLineDetail: {
         ItemRef: QuickBooksRefModel;
     };
 }
 
-export type QuickBooksInvoiceLines =
-    QuickBooksInvoiceSalesItemLine |
-    QuickBooksInvoiceGroupLine |
-    QuickBooksInvoiceDescriptionOnlyLine |
-    QuickBooksInvoiceDiscountLine |
-    QuickBooksInvoiceSubTotalLine;
+export type QuickBooksInvoiceLinesModel =
+    QuickBooksInvoiceSalesItemLineModel |
+    QuickBooksInvoiceGroupLineModel |
+    QuickBooksInvoiceDescriptionOnlyLineModel |
+    QuickBooksInvoiceDiscountLineModel |
+    QuickBooksInvoiceSubTotalLineModel;
 
 export interface QuickBooksInvoices extends QuickBooksModel {
-    AllowIPNPayment: boolean;
-    AllowOnlinePayment: boolean;
-    AllowOnlineCreditCardPayment: boolean;
-    AllowOnlineACHPayment: boolean;
-    CustomField: QuickBooksInvoiceCustomField[];
-    ShipAddr: QuickBooksPhysicalAddressModel;
-    DocNumber: string;
-    TxnDate: string;
-    CurrencyRef: QuickBooksRefModel;
-    PrivateNote: string;
-    LinkedTxn: QuickBooksInvoiceLinkedTxn[];
-    Line: QuickBooksInvoiceLines[];
-    TxnTaxDetail: QuickBooksInvoiceTxnTaxDetail;
+    Line: QuickBooksInvoiceLinesModel[];
     CustomerRef: QuickBooksRefModel;
-    DueDate: string;
+    CurrencyRef?: QuickBooksRefModel;
+    DocNumber?: string;
+    BillEmail?: QuickBooksEmailModel;
+    TxnDate?: string;
+    ShipFromAddr?: QuickBooksPhysicalAddressModel;
+    ShipDate?: QuickBooksDateModel;
+    TrackingNum?: string;
+    ClassRef?: QuickBooksRefModel;
+    PrintStatus?: "NotSet" | "NeedToPrint" | "PrintComplete";
+    SalesTermRef?: QuickBooksRefModel;
+    TxnSource?: string;
+    LinkedTxn?: QuickBooksLinkedTxnModel[];
+    GlobalTaxCalculation?: QuickBooksGlobalTaxCalculationsEnum;
+    AllowOnlineACHPayment?: boolean;
+    TransactionLocationType?: string;
+    DueDate?: string;
+    PrivateNote?: string;
+    DepositToAccountRef?: QuickBooksRefModel;
+    BillEmailCc?: QuickBooksEmailModel;
+    CustomerMemo?: QuickBooksMemoRefModel;
+    EmailStatus?: QuickBooksEmailStatusesEnum;
+    ExchangeRate?: number;
+    Deposit?: number;
+    TxnTaxDetail?: QuickBooksTxnTaxDetailModel;
+    AllowOnlineCreditCardPayment?: boolean;
+    CustomField?: QuickBooksCustomFieldModel[];
+    ShipAddr?: QuickBooksPhysicalAddressModel;
+    DepartmentRef?: QuickBooksRefModel;
+    BillEmailBcc?: QuickBooksEmailModel;
+    ShipMethodRef?: QuickBooksRefModel;
+    BillAddr?: QuickBooksPhysicalAddressModel;
+    ApplyTaxAfterDiscount?: boolean;
+    HomeBalance: number;
     TotalAmt: number;
-    ApplyTaxAfterDiscount: boolean;
-    PrintStatus: "NotSet" | "NeedToPrint" | "PrintComplete";
-    EmailStatus: "NotSet" | "NeedToSend" | "EmailSent";
+    InvoiceLink: string;
+    TaxExemptionRef: QuickBooksRefModel;
     Balance: number;
+    HomeTotalAmt: number;
+    FreeFormAddress: boolean;
 }

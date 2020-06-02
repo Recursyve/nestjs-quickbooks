@@ -6,7 +6,7 @@ import {
     QuickBooksRefDto,
     QuickBooksWebsiteDto
 } from "../../common/dto";
-import { DeliveryMethodsEnum, TaxExemptionReasonsEnum } from "../../common/enums";
+import { QuickBooksDeliveryMethodsEnum, QuickBooksTaxExemptionReasonsEnum } from "../../common/enums";
 
 export interface QuickBooksCustomerWithDisplayName {
     DisplayName: string;
@@ -68,7 +68,7 @@ export interface QuickBooksCustomersDto {
     SecondaryTaxIdentifier?: string;
     ARAccountRef?: QuickBooksRefDto;
     DefaultTaxCodeRef?: QuickBooksRefDto;
-    PreferredDeliveryMethod?: DeliveryMethodsEnum;
+    PreferredDeliveryMethod?: QuickBooksDeliveryMethodsEnum;
     GSTIN?: string;
     SalesTermRef?: QuickBooksRefDto;
     CustomerTypeRef?: string;
@@ -98,7 +98,7 @@ export interface QuickBooksCustomersDto {
     BillAddr?: QuickBooksPhysicalAddressDto;
     FullyQualifiedName?: string;
     Level?: number;
-    TaxExemptionReasonId?: TaxExemptionReasonsEnum;
+    TaxExemptionReasonId?: QuickBooksTaxExemptionReasonsEnum;
 }
 
 export type CreateQuickBooksCustomersDto = (
