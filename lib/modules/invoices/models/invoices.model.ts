@@ -57,7 +57,7 @@ export interface QuickBooksInvoiceDescriptionOnlyLineModel extends QuickBooksBas
 }
 
 export interface QuickBooksInvoiceDiscountLineModel extends QuickBooksBaseInvoiceLinesModel {
-    DetailType: "DiscountLine";
+    DetailType: "DiscountLineDetail";
     Amount: number;
     DiscountLineDetail: {
         ClassRef?: QuickBooksRefModel;

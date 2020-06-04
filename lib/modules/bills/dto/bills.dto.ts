@@ -9,18 +9,17 @@ import {
 
 export interface QuickBooksBaseBillLinesDto {
     Amount: number;
-    DetailType: string;
+    DetailType: "AccountBasedExpenseLineDetail" | "ItemBasedExpenseLineDetail";
     Description?: string;
     LineNum?: number;
 }
 
-export interface CreateQuickBooksBillsItemBasedExpenseLineDto extends QuickBooksBaseBillLinesDto {
+export interface CreateQuickBooksBillsItemBasedExpenseLineDto {
     ItemBasedExpenseLineDetail: {
         TaxInclusiveAmt?: number;
         ItemRef?: QuickBooksRefDto;
         CustomerRef?: QuickBooksRefDto;
-        PriceLevelRef?: QuickBooksRefDto;
-        ClasRef?: QuickBooksRefDto;
+        ClassRef?: QuickBooksRefDto;
         TaxCodeRef?: QuickBooksRefDto;
         MarkupInfo?: QuickBooksMarkupInfoDto;
         BillableStatus?: QuickBooksBillableStatusesEnum;
@@ -30,8 +29,7 @@ export interface CreateQuickBooksBillsItemBasedExpenseLineDto extends QuickBooks
     DetailType: "ItemBasedExpenseLineDetail";
 }
 
-export interface CreateQuickBooksBillsAccountBasedExpenseLineDto extends QuickBooksBaseBillLinesDto {
-    DetailType: "AccountBasedExpenseLineDetail";
+export interface CreateQuickBooksBillsAccountBasedExpenseLineDto {
     AccountBasedExpenseLineDetail: {
         AccountRef: QuickBooksRefDto;
         TaxAmount?: number;
@@ -42,18 +40,20 @@ export interface CreateQuickBooksBillsAccountBasedExpenseLineDto extends QuickBo
         BillableStatus?: QuickBooksBillableStatusesEnum;
         CustomerRef?: QuickBooksRefDto;
     };
+    DetailType: "AccountBasedExpenseLineDetail";
 }
 
-export type CreateQuickBooksBillLines =
+export type CreateQuickBooksBillLines = (
     CreateQuickBooksBillsItemBasedExpenseLineDto |
-    CreateQuickBooksBillsAccountBasedExpenseLineDto;
+    CreateQuickBooksBillsAccountBasedExpenseLineDto
+) & QuickBooksBaseBillLinesDto;
 
 export interface UpdateQuickBooksBillsItemBasedExpenseLineDto extends CreateQuickBooksBillsItemBasedExpenseLineDto {
-    Id: string;
+    Id?: string;
 }
 
 export interface UpdateQuickBooksBillsAccountBasedExpenseLineDto extends CreateQuickBooksBillsAccountBasedExpenseLineDto {
-    Id: string;
+    Id?: string;
 }
 
 export type UpdateQuickBooksBillLines =
@@ -68,7 +68,7 @@ export interface QuickBooksBillsDto {
     LinkedTxn?: QuickBooksLinkedTxnDto[];
     GlobalTaxCalculation?: QuickBooksGlobalTaxCalculationsEnum;
     TransactionLocationType?: string;
-    DueDate?: QuickBooksDateDto;
+    DueDate?: string;
     DocNumber?: string;
     PrivateNote?: string;
     TxnTaxDetail?: QuickBooksTxnTaxDetailDto;

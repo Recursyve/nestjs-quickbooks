@@ -90,7 +90,7 @@ export interface CreateQuickBooksInvoiceDescriptionOnlyLineDto {
 }
 
 export interface CreateQuickBooksInvoiceDiscountLineDto {
-    DetailType: "DiscountLine";
+    DetailType: "DiscountLineDetail";
     Amount: number;
     DiscountLineDetail: {
         ClassRef?: QuickBooksRefModel;
@@ -104,7 +104,7 @@ export interface CreateQuickBooksInvoiceDiscountLineDto {
 }
 
 export interface CreateQuickBooksInvoiceSubTotalLineModel {
-    DetailType: "SubTotalLine";
+    DetailType: "SubTotalLineDetail";
     Amount: number;
     SubtotalLineDetail: {
         ItemRef: QuickBooksRefModel;

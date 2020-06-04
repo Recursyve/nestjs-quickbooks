@@ -61,7 +61,7 @@ export interface QuickBooksBills extends QuickBooksModel {
     GlobalTaxCalculation?: QuickBooksGlobalTaxCalculationsEnum;
     TotalAmt?: number;
     TransactionLocationType?: string;
-    DueDate?: QuickBooksDateModel;
+    DueDate?: string;
     DocNumber?: string;
     PrivateNote?: string;
     TxnTaxDetail?: QuickBooksTxnTaxDetailModel;

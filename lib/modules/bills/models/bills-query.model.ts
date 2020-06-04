@@ -6,7 +6,7 @@ export interface QuickBooksBillsQueryModel extends QuickBooksQueryModel {
     APAccountRef: QuickBooksRefModel;
     SalesTermRef: QuickBooksRefModel;
     TotalAmt: number;
-    DueDate: QuickBooksDateModel;
+    DueDate: string;
     DocNumber: string;
     Balance: number;
 }
