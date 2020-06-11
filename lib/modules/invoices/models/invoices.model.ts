@@ -14,7 +14,7 @@ import { QuickBooksEmailStatusesEnum, QuickBooksGlobalTaxCalculationsEnum } from
 
 export interface QuickBooksBaseInvoiceLinesModel {
     Id: string;
-    DetailType: string;
+    DetailType: "SalesItemLineDetail" | "GroupLineDetail" | "DescriptionOnly" | "DiscountLineDetail" | "SubTotalLineDetail";
     Description?: string;
     LineNum?: number;
 }
@@ -69,7 +69,7 @@ export interface QuickBooksInvoiceDiscountLineModel extends QuickBooksBaseInvoic
 }
 
 export interface QuickBooksInvoiceSubTotalLineModel extends QuickBooksBaseInvoiceLinesModel {
-    DetailType: "SubTotalLine";
+    DetailType: "SubTotalLineDetail";
     Amount: number;
     SubtotalLineDetail: {
         ItemRef: QuickBooksRefModel;
