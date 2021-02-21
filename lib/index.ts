@@ -5,6 +5,7 @@ export * from "./modules/common";
 export * from "./modules/company-info";
 export * from "./modules/config";
 export * from "./modules/customers";
+export * from "./modules/employees";
 export * from "./modules/invoices";
 export * from "./modules/items";
 export * from "./modules/payments";
