@@ -14,3 +14,6 @@ export * from "./quickbooks.model";
 export * from "./ref.model";
 export * from "./txn-tax-detail.model";
 export * from "./website.model";
+export * from "./tax-rate-detail.model";
+export * from "./sales-tax-rate-list.model";
+export * from "./purchase-tax-rate-list.model";
