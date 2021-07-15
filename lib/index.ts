@@ -10,4 +10,5 @@ export * from "./modules/items";
 export * from "./modules/payments";
 export * from "./modules/payment-methods";
 export * from "./modules/store";
+export * from "./modules/tax-codes";
 export * from "./modules/vendors";
