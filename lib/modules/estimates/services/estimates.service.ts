@@ -47,7 +47,7 @@ export class QuickBooksCompanyEstimateService extends BaseService<QuickBooksEsti
     }
 
     public fullUpdate(id: string, token: string, dto: FullUpdateQuickBooksEstimateDto): Observable<QuickBooksEstimatesResponseModel>;
-    public fullUpdate(invoice: QuickBooksEstimates, dto: FullUpdateQuickBooksEstimateDto): Observable<QuickBooksEstimatesResponseModel>;
+    public fullUpdate(estimate: QuickBooksEstimates, dto: FullUpdateQuickBooksEstimateDto): Observable<QuickBooksEstimatesResponseModel>;
     public fullUpdate(
         ...args: [string | QuickBooksEstimates, string | FullUpdateQuickBooksEstimateDto, FullUpdateQuickBooksEstimateDto?]
     ): Observable<QuickBooksEstimatesResponseModel> {
@@ -74,12 +74,12 @@ export class QuickBooksCompanyEstimateService extends BaseService<QuickBooksEsti
     }
 
     private static getUpdateArguments<DTO>(args: [string | QuickBooksEstimates, string | DTO, DTO?]): [string, string, DTO] {
-        const [idOrInvoice, tokenOrDto, dto] = args;
+        const [idOrEstimate, tokenOrDto, dto] = args;
         if (dto) {
-            return [idOrInvoice as string, tokenOrDto as string, dto];
+            return [idOrEstimate as string, tokenOrDto as string, dto];
         }
 
-        const invoice = idOrInvoice as QuickBooksEstimates;
-        return [invoice.Id, invoice.SyncToken, tokenOrDto as DTO];
+        const estimate = idOrEstimate as QuickBooksEstimates;
+        return [estimate.Id, estimate.SyncToken, tokenOrDto as DTO];
     }
 }
