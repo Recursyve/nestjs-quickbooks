@@ -14,6 +14,6 @@ export interface QuickBooksBillsQueryResponseModel extends QuickBooksResponseMod
     QueryResponse: QuickBooksQueryResponseModel & { Bill: QuickBooksBills[]; };
 }
 
-export interface QuickBooksBillsDeleteResponseModel extends QuickBooksInvoicesDeleteResponseModel{
+export interface QuickBooksBillsDeleteResponseModel extends QuickBooksInvoicesDeleteResponseModel {
     Bill: QuickBooksDeleteResponseModel;
 }

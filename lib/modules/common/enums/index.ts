@@ -7,3 +7,4 @@ export * from "./payment-methods.enum";
 export * from "./quick-books-tax-exemption-reasons.enum";
 export * from "./tax-reporting-bases.enum";
 export * from "./tax-type-applicable.enum";
+export * from "./account-types.enum";
