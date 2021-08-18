@@ -59,3 +59,9 @@ export type FullUpdateQuickBooksItemsDto = (
     QuickBooksNonInventoryItem |
     QuickBooksServiceItem
 ) & QuickBooksItemsDto;
+
+export type SparseUpdateQuickBooksItemsDto = (
+    QuickBooksInventoryItem |
+    QuickBooksNonInventoryItem |
+    QuickBooksServiceItem
+) | QuickBooksItemsDto;
