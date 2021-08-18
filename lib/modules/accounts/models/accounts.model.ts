@@ -1,4 +1,4 @@
-import {AccountTypesEnum, QuickBooksModel, QuickBooksRefModel} from "../../common";
+import { QuickBooksAccountTypesEnum, QuickBooksModel, QuickBooksRefModel} from "../../common";
 
 export interface QuickBooksAccounts extends QuickBooksModel {
     Name: string;
@@ -11,7 +11,7 @@ export interface QuickBooksAccounts extends QuickBooksModel {
     Classification?: string;
     FullyQualifiedName?: string;
     TxnLocationType?: string;
-    AccountType: AccountTypesEnum;
+    AccountType: QuickBooksAccountTypesEnum;
     CurrentBalanceWithSubAccounts: number;
     AccountAlias: string;
     TaxCodeRef: QuickBooksRefModel;

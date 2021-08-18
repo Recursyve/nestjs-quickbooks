@@ -1,4 +1,4 @@
-import {QuickBooksAccountTypesEnum, QuickBooksModel, QuickBooksRefModel} from "../../common";
+import {QuickBooksAccountTypesEnum, QuickBooksRefModel} from "../../common";
 
 export interface QuickBooksAccountsDto  {
     AcctNum?: string;
@@ -9,11 +9,19 @@ export interface QuickBooksAccountsDto  {
     Classification?: string;
     FullyQualifiedName?: string;
     TxnLocationType?: string;
+    TaxCodeRef?: QuickBooksRefModel;
+    AccountType?: QuickBooksAccountTypesEnum;
+    Active?: boolean;
 }
 
 export interface CreateQuickBooksAccountsDto extends QuickBooksAccountsDto {
     Name: string;
-    AcctNum?: string;
-    TaxCodeRef?: QuickBooksRefModel;
-    AccountType?: QuickBooksAccountTypesEnum;
+}
+
+export interface FullUpdateQuickBooksAccountsDto extends QuickBooksAccountsDto {
+    Name: string;
+}
+
+export interface SparseUpdateQuickBooksAccountsDto extends QuickBooksAccountsDto {
+    Name: string;
 }

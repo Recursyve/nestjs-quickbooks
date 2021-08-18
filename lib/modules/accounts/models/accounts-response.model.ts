@@ -9,6 +9,6 @@ export interface QuickBooksAccountsQueryResponseModel extends QuickBooksResponse
     QueryResponse: QuickBooksResponseModel & { Account: QuickBooksAccounts[]; };
 }
 
-export interface QuickBooksAccountsDeletedResponseModel extends  QuickBooksResponseModel {
+export interface QuickBooksAccountsDeleteResponseModel extends  QuickBooksResponseModel {
     Account: QuickBooksDeleteResponseModel;
 }
