@@ -126,4 +126,4 @@ export type SparseUpdateQuickBooksCustomersDto = (
     QuickBooksCustomerWithMiddleName |
     QuickBooksCustomerWithFamilyName |
     QuickBooksCustomerWithGivenName
-) & QuickBooksCustomersDto;
+) | QuickBooksCustomersDto;
