@@ -1,4 +1,4 @@
-import { QuickBooksDateModel, QuickBooksQueryModel, QuickBooksRefModel } from "../../common/models";
+import { QuickBooksQueryModel, QuickBooksRefModel } from "../../common/models";
 
 export interface QuickBooksBillsQueryModel extends QuickBooksQueryModel {
     VendorRef: QuickBooksRefModel;

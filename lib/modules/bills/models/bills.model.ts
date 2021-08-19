@@ -1,5 +1,4 @@
 import {
-    QuickBooksDateModel,
     QuickBooksLinkedTxnModel,
     QuickBooksMarkupInfoModel,
     QuickBooksModel,

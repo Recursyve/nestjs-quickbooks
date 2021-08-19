@@ -9,7 +9,7 @@ import {
     QuickBooksItems,
     QuickBooksItemsQueryModel,
     QuickBooksItemsQueryResponseModel,
-    QuickBooksItemsResponseModel
+    QuickBooksItemsResponseModel, SparseUpdateQuickBooksItemsDto
 } from "..";
 
 @Injectable()
@@ -55,6 +55,20 @@ export class QuickBooksCompanyItemsService extends BaseService<
             ...dto,
             Id: id,
             SyncToken: token
+        });
+    }
+
+    public sparseUpdate(id: string, token: string, dto: SparseUpdateQuickBooksItemsDto): Observable<QuickBooksItemsResponseModel>;
+    public sparseUpdate(item: QuickBooksItems, dto: SparseUpdateQuickBooksItemsDto): Observable<QuickBooksItemsResponseModel>;
+    public sparseUpdate(
+        ...args: [string | QuickBooksItems, string | SparseUpdateQuickBooksItemsDto, SparseUpdateQuickBooksItemsDto?]
+    ): Observable<QuickBooksItemsResponseModel> {
+        const [id, token, dto] = QuickBooksCompanyItemsService.getUpdateArguments(args);
+        return this.post({
+            ...dto,
+            Id: id,
+            SyncToken: token,
+            sparse: true
         });
     }
 
