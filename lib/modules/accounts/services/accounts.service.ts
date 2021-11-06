@@ -1,4 +1,5 @@
-import { HttpService, Injectable } from "@nestjs/common";
+import { HttpService } from "@nestjs/axios";
+import { Injectable } from "@nestjs/common";
 import { QuickBooksAuthService } from "../../auth/services/auth.service";
 import { QuickBooksStore } from "../../store";
 import { BaseService } from "../../common/base.service";
