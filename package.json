@@ -1,6 +1,6 @@
 {
     "name": "@recursyve/nestjs-quickbooks",
-    "version": "8.0.0-beta.12",
+    "version": "8.0.0-beta.13",
     "keywords": [
         "nestjs",
         "quickbooks"
@@ -12,7 +12,7 @@
         "build:lib": "rimraf dist && nest build -p tsconfig.lib.json",
         "copy:lib": "cp package.json .npmignore dist",
         "lint": "tslint -p tsconfig.json -c tslint.json",
-        "publish-package": "npm run build:lib && npm run copy:lib && npm publish dist --access public",
+        "publish-package": "npm run build:lib && npm run copy:lib && npm publish ./dist --access public",
         "publish-package:beta": "npm run publish-package -- --tag beta --access public",
         "publish-package:dry-run": "npm run publish-package -- --dry-run"
     },
@@ -33,11 +33,10 @@
         "intuit-oauth": "^4.0.0"
     },
     "peerDependencies": {
-        "@nestjs/axios": "^0.0.3",
-        "@nestjs/common": "^8.0.0",
-        "@nestjs/core": "^8.0.0",
-        "reflect-metadata": "^0.1.13",
-        "rxjs": "^7.0.0"
+        "@nestjs/axios": ">=0.0.3",
+        "@nestjs/common": ">=8.0.0",
+        "@nestjs/core": ">=8.0.0",
+        "rxjs": ">=7.0.0"
     },
     "devDependencies": {
         "@nestjs/axios": "^0.0.3",
