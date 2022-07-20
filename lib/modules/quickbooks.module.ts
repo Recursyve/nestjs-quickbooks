@@ -5,10 +5,12 @@ import { QuickBooksStore } from "./store/store.service";
 import { LocalStore } from "./store/local.store";
 import { QuickBooksAuthModule } from "./auth/auth.module";
 import { GLOBAL_CONFIG } from "../constants";
+import { QuickbooksWebhooksModule, QuickbooksWebhooksOptions } from "./webhooks/webhooks.module";
 
 export interface QuickBooksOptions extends Pick<ModuleMetadata, "imports"> {
     config?: Partial<QuickBooksConfigModel>;
     store?: Provider;
+    webhooks?: QuickbooksWebhooksOptions;
 }
 
 @Global()
@@ -22,9 +24,15 @@ export class QuickBooksModule {
             };
         }
 
+        const imports = [];
+        if (options.webhooks) {
+            imports.push(QuickbooksWebhooksModule.forRoot(options.webhooks));
+        }
+
+
         return {
             module: QuickBooksModule,
-            imports: [QuickBooksAuthModule, ...(options.imports ?? [])],
+            imports: [QuickBooksAuthModule, ...imports, ...(options.imports ?? [])],
             providers: [
                 {
                     provide: GLOBAL_CONFIG,

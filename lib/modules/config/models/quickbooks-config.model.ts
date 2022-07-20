@@ -35,6 +35,7 @@ export class QuickBooksConfigModel {
     public mode: QuickbooksModes;
     public redirection: QuickbooksRedirectionModel;
     public serverUri: string;
+    public webhookVerifier: string;
 
     constructor(config: Partial<QuickBooksConfigModel>) {
         this.clientId = config.clientId ?? process.env.QUICKBOOKS_CLIENT_ID;
@@ -42,6 +43,7 @@ export class QuickBooksConfigModel {
         this.scopes = config.scopes ?? process.env.QUICKBOOKS_CLIENT_SCOPES.split(" ") as QuickBooksScopes[];
         this.mode = config.mode ?? process.env.QUICKBOOKS_MODE as QuickbooksModes;
         this.serverUri = config.serverUri ?? process.env.QUICKBOOKS_SERVER_URI;
+        this.webhookVerifier = config.webhookVerifier ?? process.env.QUICKBOOKS_WEBHOOK_VERIFIER;
         this.redirection = config.redirection ?? {
             successUrl: process.env.QUICKBOOKS_REDIRECT_SUCCESS,
             errorUrl: process.env.QUICKBOOKS_REDIRECT_ERROR

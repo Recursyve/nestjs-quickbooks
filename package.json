@@ -1,6 +1,6 @@
 {
     "name": "@recursyve/nestjs-quickbooks",
-    "version": "8.0.0-beta.13",
+    "version": "8.0.0-beta.14",
     "keywords": [
         "nestjs",
         "quickbooks"
