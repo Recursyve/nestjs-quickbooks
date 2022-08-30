@@ -25,6 +25,10 @@ export class QuickBooksAuthService {
         });
     }
 
+    public get minorVersion(): string {
+        return this.configService.global.minorversion;
+    }
+
     public get mode(): QuickbooksModes {
         return this.configService.global.mode;
     }
