@@ -53,18 +53,13 @@ describe("QueryUtils test", () => {
 
     it("[4] generateQuery with conditions should return a valid query", () => {
         const query = QueryUtils.generateQuery("customer", {
-            [Op.or]: [
-                {
-                    Id: "100"
-                },
-                {
-                    Name: "100"
-                }
-            ]
+            Id: {
+                [Op.in]: ["100", "101"]
+            }
         });
         expect(querystring.decode(query)).toEqual(
             expect.objectContaining({
-                query: "select * from customer where Id = '100' or Name = '100'"
+                query: "select * from customer where Id in ('100','101')"
             })
         );
     });

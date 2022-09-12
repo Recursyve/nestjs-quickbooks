@@ -25,7 +25,11 @@ export class QueryUtils {
         if (keys.length) {
             for (const key of keys) {
                 if (condition[key] instanceof Array) {
-                    rules.push(this.generateGroupCondition(key, condition[key]));
+                    if (key === Op.and) {
+                        rules.push(this.generateGroupCondition(condition[key]));
+                    } else if (key === Op.in) {
+                        rules.push(OperatorsUtils.transform(parent, key, condition[key]));
+                    }
                 } else {
                     rules.push(OperatorsUtils.transform(parent, key, condition[key]));
                 }
@@ -38,7 +42,11 @@ export class QueryUtils {
             }
 
             if (condition[key] instanceof Array) {
-                rules.push(this.generateGroupCondition(key as any, condition[key]));
+                if (key as any === Op.and) {
+                    rules.push(this.generateGroupCondition(condition[key]));
+                } else if (key as any === Op.in) {
+                    rules.push(OperatorsUtils.transform(this.joinName(key, parent), Op.in, condition[key]));
+                }
                 continue;
             }
 
@@ -52,7 +60,7 @@ export class QueryUtils {
         return rules.join(" and ");
     }
 
-    private static generateGroupCondition(op: symbol, conditions: WhereOptions<any>[]): string {
+    private static generateGroupCondition(conditions: WhereOptions<any>[]): string {
         if (!conditions.length) {
             return null;
         }
@@ -62,7 +70,7 @@ export class QueryUtils {
             rules.push(this.generateWhereCondition(condition));
         }
 
-        return rules.join(op === Op.and ? " and " : " or ");
+        return rules.join(" and ");
     }
 
     private static joinName(key: string, parent?: string): string {

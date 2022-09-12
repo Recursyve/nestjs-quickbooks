@@ -1,6 +1,7 @@
 export interface Op {
     readonly eq: unique symbol;
     readonly ne: unique symbol;
+    readonly in: unique symbol;
 
     readonly gt: unique symbol;
     readonly lt: unique symbol;
@@ -18,12 +19,12 @@ export interface Op {
     readonly notLike: unique symbol;
 
     readonly and: unique symbol;
-    readonly or: unique symbol;
 }
 
 export const Op: Op = {
     eq: Symbol.for("Equals") as any,
     ne: Symbol.for("NotEqual") as any,
+    in: Symbol.for("In") as any,
 
     gt: Symbol.for("GreaterThan") as any,
     lt: Symbol.for("LessThan") as any,
@@ -40,13 +41,13 @@ export const Op: Op = {
     like: Symbol.for("Like") as any,
     notLike: Symbol.for("NotLike") as any,
 
-    and: Symbol.for("And") as any,
-    or: Symbol.for("Or") as any
+    and: Symbol.for("And") as any
 };
 
 export interface WhereOperators {
     [Op.eq]?: number | string | Date;
     [Op.ne]?: number | string | Date;
+    [Op.in]?: (number | string)[];
 
     [Op.gt]?: number | string | Date;
     [Op.gte]?: number | string | Date;
@@ -59,10 +60,6 @@ export interface WhereOperators {
 
     [Op.like]?: string;
     [Op.notLike]?: string;
-}
-
-export interface OrOperator<T> {
-    [Op.or]: WhereOptions<T>[];
 }
 
 export interface AndOperator<T> {
@@ -81,4 +78,4 @@ export type WhereAttributeHash<T> = {
     [P in keyof T]?: T[P] extends object ? WhereAttributeHash<Partial<T[P]>> : WhereValue;
 };
 
-export type WhereOptions<T> = WhereAttributeHash<T> | AndOperator<T> | OrOperator<T>;
+export type WhereOptions<T> = WhereAttributeHash<T> | AndOperator<T>;

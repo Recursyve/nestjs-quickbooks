@@ -9,12 +9,17 @@ export class OperatorsUtils {
         if (typeof value === "string") {
             value = `'${value}'`;
         }
+        if (Array.isArray(value)) {
+            value = value.map(x => typeof x === "string" ? `'${x}'` : x).join(",");
+        }
 
         switch (op) {
             case Op.eq:
                 return `${attribute} = ${value}`;
             case Op.ne:
                 return `${attribute} != ${value}`;
+            case Op.in:
+                return `${attribute} in (${value})`;
             case Op.gt:
                 return `${attribute} > ${value}`;
             case Op.gte:
