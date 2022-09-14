@@ -45,5 +45,7 @@ export class OperatorsUtils {
         if (Array.isArray(value)) {
             return value.map(x => typeof x === "string" ? `'${x}'` : x).join(",");
         }
+
+        return value;
     }
 }
