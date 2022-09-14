@@ -1,4 +1,3 @@
-import * as querystring from "querystring";
 import { Op, WhereOptions } from "../modules/common/models/query.model";
 import { OperatorsUtils } from "./operators.utils";
 
@@ -10,9 +9,8 @@ export class QueryUtils {
             query += ` where ${where}`;
         }
 
-        return querystring.stringify({
-            query
-        });
+        const params = new URLSearchParams({ query });
+        return params.toString();
     }
 
     private static generateWhereCondition(condition: WhereOptions<any>, parent?: string): string {
