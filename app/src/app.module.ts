@@ -1,5 +1,11 @@
 import { Module } from "@nestjs/common";
-import { QuickBooksCustomersModule, QuickBooksInvoicesModule, QuickBooksModule, QuickBooksScopes } from "../../lib";
+import {
+    QuickBooksAttachablesModule,
+    QuickBooksCustomersModule,
+    QuickBooksInvoicesModule,
+    QuickBooksModule,
+    QuickBooksScopes
+} from "../../lib";
 import { CustomersController } from "./customers/customers.controller";
 import { InvoicesController } from "./invoices/invoices.controller";
 
@@ -8,7 +14,7 @@ import { InvoicesController } from "./invoices/invoices.controller";
         QuickBooksModule.forRoot({
             config: {
                 mode: "sandbox",
-                serverUri: "http://localhost:3000",
+                serverUri: "https://885b-72-10-138-232.ngrok.io",
                 scopes: [QuickBooksScopes.Accounting],
                 redirection: {
                     successUrl: "http://localhost:3000/customer",
@@ -16,6 +22,7 @@ import { InvoicesController } from "./invoices/invoices.controller";
                 }
             }
         }),
+        QuickBooksAttachablesModule,
         QuickBooksCustomersModule,
         QuickBooksInvoicesModule
     ],

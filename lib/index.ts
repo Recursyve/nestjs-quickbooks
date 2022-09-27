@@ -1,6 +1,7 @@
 export * from "./modules/quickbooks.module";
 export * from "./modules/auth";
 export * from "./modules/accounts";
+export * from "./modules/attachables";
 export * from "./modules/bills";
 export * from "./modules/common";
 export * from "./modules/company-info";

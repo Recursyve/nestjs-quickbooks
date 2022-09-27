@@ -11,13 +11,13 @@ export class BaseService<Response, Query, QueryResponse> {
     private readonly sandboxUrl = "https://sandbox-quickbooks.api.intuit.com";
     private readonly liveUrl = "https://quickbooks.api.intuit.com";
 
-    private minorVersion: { minorversion?: string } = {};
+    protected readonly minorVersion: { minorversion?: string } = {};
 
     constructor(
         protected readonly realm: string,
         private readonly resource: string,
         private readonly authService: QuickBooksAuthService,
-        private readonly http: HttpService
+        protected readonly http: HttpService
     ) {
         if (authService.minorVersion) {
             this.minorVersion = { minorversion: authService.minorVersion };
@@ -86,7 +86,14 @@ export class BaseService<Response, Query, QueryResponse> {
         return `${this.apiUrl}/v3/company/${this.realm}/${this.resource}/${path}`;
     }
 
-    private getHttpHeaders(): Observable<any> {
+    protected rawUrl(path: string): string {
+        if (!path) {
+            return `${this.apiUrl}/v3/company/${this.realm}`;
+        }
+        return `${this.apiUrl}/v3/company/${this.realm}/${path}`;
+    }
+
+    protected getHttpHeaders(): Observable<any> {
         return this.authService.getToken(this.realm).pipe(
             map((token) => ({
                 "Authorization": `Bearer ${token}`,

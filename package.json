@@ -30,6 +30,7 @@
         "lib": "lib"
     },
     "dependencies": {
+        "form-data": "^4.0.0",
         "intuit-oauth": "^4.0.0"
     },
     "peerDependencies": {
@@ -40,10 +41,10 @@
     },
     "devDependencies": {
         "@nestjs/axios": "^0.0.3",
-        "@nestjs/cli": "^8.1.4",
-        "@nestjs/common": "^8.1.2",
-        "@nestjs/core": "^8.1.2",
-        "@nestjs/platform-express": "^8.1.2",
+        "@nestjs/cli": "8.1.4",
+        "@nestjs/common": "8.1.2",
+        "@nestjs/core": "8.1.2",
+        "@nestjs/platform-express": "8.1.2",
         "@types/jest": "^27.0.2",
         "dotenv": "^10.0.0",
         "jest": "^27.3.1",
