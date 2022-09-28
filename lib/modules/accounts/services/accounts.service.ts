@@ -25,7 +25,6 @@ export class QuickBooksAccountsService {
     public forCompany(realm: string): QuickBooksCompanyAccountsService {
         return new QuickBooksCompanyAccountsService(realm, this.authService, this.http);
     }
-
 }
 
 export class QuickBooksCompanyAccountsService extends BaseService<QuickBooksAccountsResponseModel,
@@ -103,5 +102,3 @@ export class QuickBooksCompanyAccountsService extends BaseService<QuickBooksAcco
         return [account.Id, account.SyncToken];
     }
 }
-
-

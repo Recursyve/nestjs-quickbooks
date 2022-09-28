@@ -36,7 +36,6 @@ export class QuickBooksAttachablesService {
     public forCompany(realm: string): QuickBooksCompanyAttachablesService {
         return new QuickBooksCompanyAttachablesService(realm, this.authService, this.http);
     }
-
 }
 
 export class QuickBooksCompanyAttachablesService extends BaseService<QuickBooksAttachablesResponseModel,
@@ -114,5 +113,3 @@ export class QuickBooksCompanyAttachablesService extends BaseService<QuickBooksA
         return [attachable.Id, attachable.SyncToken, tokenOrDto as DTO];
     }
 }
-
-
