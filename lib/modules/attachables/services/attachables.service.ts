@@ -18,7 +18,7 @@ import {
     QuickBooksAttachablesResponseModel,
     QuickBooksAttachablesUploadResponseModel
 } from "../models/attachables-response.model";
-import { from, Observable } from "rxjs";
+import { catchError, from, Observable, throwError } from "rxjs";
 import { QuickBooksAttachables } from "../models/attachables.model";
 
 @Injectable()
@@ -82,7 +82,8 @@ export class QuickBooksCompanyAttachablesService extends BaseService<QuickBooksA
                 responseType: "text"
             }))
         ).pipe(
-            map(x => x.data)
+            map(x => x.data),
+            catchError((e) => throwError(() => this.catchError(e)))
         );
     }
 
@@ -102,7 +103,8 @@ export class QuickBooksCompanyAttachablesService extends BaseService<QuickBooksA
                 params: this.minorVersion
             }))
         ).pipe(
-            map(x => x.data)
+            map(x => x.data),
+            catchError((e) => throwError(() => this.catchError(e)))
         );
     }
 

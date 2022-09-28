@@ -1,9 +1,11 @@
 import { HttpService } from "@nestjs/axios";
-import { Injectable } from "@nestjs/common";
-import { Observable } from "rxjs";
+import { HttpStatus, Injectable } from "@nestjs/common";
+import { AxiosError } from "axios";
+import { catchError, Observable, of, throwError } from "rxjs";
 import { map, mergeMap } from "rxjs/operators";
 import { QueryUtils } from "../../utils/query.utils";
 import { QuickBooksAuthService } from "../auth/services/auth.service";
+import { QuickbooksUnauthorizedException, QuickbooksBadRequestException } from "./exceptions";
 import { WhereOptions } from "./models";
 
 @Injectable()
@@ -37,7 +39,8 @@ export class BaseService<Response, Query, QueryResponse> {
                 }
             }))
         ).pipe(
-            map(x => x.data)
+            map(x => x.data),
+            catchError((e) => throwError(() => this.catchError(e)))
         );
     }
 
@@ -54,7 +57,8 @@ export class BaseService<Response, Query, QueryResponse> {
                 }
             }))
         ).pipe(
-            map(x => x.data)
+            map(x => x.data),
+            catchError((e) => throwError(() => this.catchError(e)))
         );
     }
 
@@ -71,7 +75,8 @@ export class BaseService<Response, Query, QueryResponse> {
                 }
             }))
         ).pipe(
-            map(x => x.data)
+            map(x => x.data),
+            catchError((e) => throwError(() => this.catchError(e)))
         );
     }
 
@@ -100,5 +105,21 @@ export class BaseService<Response, Query, QueryResponse> {
                 "Accept": "application/json"
             }))
         );
+    }
+
+    protected catchError(e: AxiosError): Error {
+        if (!e?.response) {
+            return e;
+        }
+
+        if (e.response.status === HttpStatus.UNAUTHORIZED) {
+            return new QuickbooksUnauthorizedException(e.response.data);
+        }
+
+        if (e.response.status === HttpStatus.BAD_REQUEST) {
+            return new QuickbooksBadRequestException(e.response.data);
+        }
+
+        return e;
     }
 }
