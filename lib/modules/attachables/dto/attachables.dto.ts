@@ -22,8 +22,15 @@ export interface CreateQuickBooksAttachableNoteDto  {
 }
 
 export interface FullUpdateQuickBooksAttachableDto  {
+    FileName?: string;
+    ContentType?: string;
     Note?: string;
+    Category?: QuickbooksAttachableCategoriesEnum;
+    PlaceName?: string;
     AttachableRef?: QuickBooksAttachableRefDto[];
+    Long?: string;
+    Tag?: string;
+    Lat?: string;
 }
 
 export interface UploadQuickBooksAttachableNoteDto  {
@@ -37,9 +44,4 @@ export interface UploadQuickBooksAttachableNoteDto  {
     Long?: string;
     Tag?: string;
     Lat?: string;
-    FileAccessUri?: string;
-    Size?: number;
-    ThumbnailFileAccessUri?: string;
-    TempDownloadUri?: string;
-    ThumbnailTempDownloadUri?: string;
 }
