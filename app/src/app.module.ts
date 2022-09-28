@@ -14,7 +14,7 @@ import { InvoicesController } from "./invoices/invoices.controller";
         QuickBooksModule.forRoot({
             config: {
                 mode: "sandbox",
-                serverUri: "https://885b-72-10-138-232.ngrok.io",
+                serverUri: "http://localhost:3000",
                 scopes: [QuickBooksScopes.Accounting],
                 redirection: {
                     successUrl: "http://localhost:3000/customer",

@@ -1,7 +1,8 @@
 import { HttpService } from "@nestjs/axios";
 import { Injectable } from "@nestjs/common";
 import * as FormData from "form-data";
-import { map, mergeMap } from "rxjs/operators";
+import { promisify } from "util";
+import { combineLatestWith, map, mergeMap } from "rxjs/operators";
 import { QuickBooksAuthService } from "../../auth/services/auth.service";
 import { QuickBooksStore } from "../../store";
 import { BaseService } from "../../common/base.service";
@@ -17,7 +18,7 @@ import {
     QuickBooksAttachablesResponseModel,
     QuickBooksAttachablesUploadResponseModel
 } from "../models/attachables-response.model";
-import { Observable } from "rxjs";
+import { from, Observable } from "rxjs";
 import { QuickBooksAttachables } from "../models/attachables.model";
 
 @Injectable()
@@ -90,11 +91,13 @@ export class QuickBooksCompanyAttachablesService extends BaseService<QuickBooksA
         const { File, ...values } = dto;
         data.append("file_content_0", File, { filename: dto.FileName, contentType: dto.ContentType, knownLength: File.length });
         data.append("file_metadata_0", JSON.stringify(values), { filename: "attachment.json" });
+        const getLength = promisify(data.getLength).bind(data);
         return this.getHttpHeaders().pipe(
-            mergeMap((authHeaders) => this.http.post<QuickBooksAttachablesUploadResponseModel>(this.rawUrl(`upload`), data, {
+            combineLatestWith(from(getLength())),
+            mergeMap(([authHeaders, length]) => this.http.post<QuickBooksAttachablesUploadResponseModel>(this.rawUrl(`upload`), data, {
                 headers: data.getHeaders({
                     ...authHeaders,
-                    "Content-Length": data.getLengthSync()
+                    "Content-Length": length
                 }),
                 params: this.minorVersion
             }))
