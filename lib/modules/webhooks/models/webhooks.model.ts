@@ -45,13 +45,12 @@ export interface QuickbooksWebhookEntitiesModel {
 }
 
 export interface QuickbooksDataChangeEventModel {
-    realmId: string;
     entities: QuickbooksWebhookEntitiesModel[];
 }
 
 export interface QuickbooksEventNotificationsModel {
     realmId: string;
-    dataChangeEvent: QuickbooksDataChangeEventModel[];
+    dataChangeEvent: QuickbooksDataChangeEventModel;
 }
 
 export interface QuickbooksWebhookEventModel {

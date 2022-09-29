@@ -1,9 +1,11 @@
 import { HttpService } from "@nestjs/axios";
-import { Injectable } from "@nestjs/common";
-import { Observable } from "rxjs";
+import { HttpStatus, Injectable } from "@nestjs/common";
+import { AxiosError } from "axios";
+import { catchError, Observable, of, throwError } from "rxjs";
 import { map, mergeMap } from "rxjs/operators";
 import { QueryUtils } from "../../utils/query.utils";
 import { QuickBooksAuthService } from "../auth/services/auth.service";
+import { QuickbooksUnauthorizedException, QuickbooksBadRequestException } from "./exceptions";
 import { WhereOptions } from "./models";
 
 @Injectable()
@@ -11,13 +13,13 @@ export class BaseService<Response, Query, QueryResponse> {
     private readonly sandboxUrl = "https://sandbox-quickbooks.api.intuit.com";
     private readonly liveUrl = "https://quickbooks.api.intuit.com";
 
-    private minorVersion: { minorversion?: string } = {};
+    protected readonly minorVersion: { minorversion?: string } = {};
 
     constructor(
         protected readonly realm: string,
         private readonly resource: string,
         private readonly authService: QuickBooksAuthService,
-        private readonly http: HttpService
+        protected readonly http: HttpService
     ) {
         if (authService.minorVersion) {
             this.minorVersion = { minorversion: authService.minorVersion };
@@ -37,7 +39,8 @@ export class BaseService<Response, Query, QueryResponse> {
                 }
             }))
         ).pipe(
-            map(x => x.data)
+            map(x => x.data),
+            catchError((e) => throwError(() => this.catchError(e)))
         );
     }
 
@@ -54,7 +57,8 @@ export class BaseService<Response, Query, QueryResponse> {
                 }
             }))
         ).pipe(
-            map(x => x.data)
+            map(x => x.data),
+            catchError((e) => throwError(() => this.catchError(e)))
         );
     }
 
@@ -71,7 +75,8 @@ export class BaseService<Response, Query, QueryResponse> {
                 }
             }))
         ).pipe(
-            map(x => x.data)
+            map(x => x.data),
+            catchError((e) => throwError(() => this.catchError(e)))
         );
     }
 
@@ -86,12 +91,35 @@ export class BaseService<Response, Query, QueryResponse> {
         return `${this.apiUrl}/v3/company/${this.realm}/${this.resource}/${path}`;
     }
 
-    private getHttpHeaders(): Observable<any> {
+    protected rawUrl(path: string): string {
+        if (!path) {
+            return `${this.apiUrl}/v3/company/${this.realm}`;
+        }
+        return `${this.apiUrl}/v3/company/${this.realm}/${path}`;
+    }
+
+    protected getHttpHeaders(): Observable<any> {
         return this.authService.getToken(this.realm).pipe(
             map((token) => ({
                 "Authorization": `Bearer ${token}`,
                 "Accept": "application/json"
             }))
         );
+    }
+
+    protected catchError(e: AxiosError): Error {
+        if (!e?.response) {
+            return e;
+        }
+
+        if (e.response.status === HttpStatus.UNAUTHORIZED) {
+            return new QuickbooksUnauthorizedException(e.response.data);
+        }
+
+        if (e.response.status === HttpStatus.BAD_REQUEST) {
+            return new QuickbooksBadRequestException(e.response.data);
+        }
+
+        return e;
     }
 }

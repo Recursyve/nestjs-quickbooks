@@ -9,11 +9,11 @@ export class CustomersController {
     @Get()
     public async getAll() {
         return (await this.customersService.withDefaultCompany()).query({
-            MetaData: {
+           /* MetaData: {
                 LastUpdatedTime: {
                     [Op.gt]: "2015-03-01"
                 }
-            }
+            }*/
         }).toPromise().then(x => x.QueryResponse.Customer);
     }
 

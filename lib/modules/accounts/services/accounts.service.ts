@@ -25,7 +25,6 @@ export class QuickBooksAccountsService {
     public forCompany(realm: string): QuickBooksCompanyAccountsService {
         return new QuickBooksCompanyAccountsService(realm, this.authService, this.http);
     }
-
 }
 
 export class QuickBooksCompanyAccountsService extends BaseService<QuickBooksAccountsResponseModel,
@@ -72,7 +71,7 @@ export class QuickBooksCompanyAccountsService extends BaseService<QuickBooksAcco
     }
 
     public delete(id: string, token: string): Observable<QuickBooksAccountsDeleteResponseModel>;
-    public delete(bill: QuickBooksAccounts): Observable<QuickBooksAccountsDeleteResponseModel>;
+    public delete(account: QuickBooksAccounts): Observable<QuickBooksAccountsDeleteResponseModel>;
     public delete(...args: [string | QuickBooksAccounts, string?]): Observable<QuickBooksAccountsDeleteResponseModel> {
         const [id, token] = QuickBooksCompanyAccountsService.getOperationArguments(args);
         return this.post({
@@ -103,5 +102,3 @@ export class QuickBooksCompanyAccountsService extends BaseService<QuickBooksAcco
         return [account.Id, account.SyncToken];
     }
 }
-
-

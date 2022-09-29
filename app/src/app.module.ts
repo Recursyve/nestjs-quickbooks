@@ -1,5 +1,11 @@
 import { Module } from "@nestjs/common";
-import { QuickBooksCustomersModule, QuickBooksInvoicesModule, QuickBooksModule, QuickBooksScopes } from "../../lib";
+import {
+    QuickBooksAttachablesModule,
+    QuickBooksCustomersModule,
+    QuickBooksInvoicesModule,
+    QuickBooksModule,
+    QuickBooksScopes
+} from "../../lib";
 import { CustomersController } from "./customers/customers.controller";
 import { InvoicesController } from "./invoices/invoices.controller";
 
@@ -16,6 +22,7 @@ import { InvoicesController } from "./invoices/invoices.controller";
                 }
             }
         }),
+        QuickBooksAttachablesModule,
         QuickBooksCustomersModule,
         QuickBooksInvoicesModule
     ],
