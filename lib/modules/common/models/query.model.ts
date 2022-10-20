@@ -79,3 +79,13 @@ export type WhereAttributeHash<T> = {
 };
 
 export type WhereOptions<T> = WhereAttributeHash<T> | AndOperator<T>;
+
+export interface QueryOptions {
+    startPosition?: number;
+    maxResult?: number;
+}
+
+export enum QueryStatementType {
+    Select,
+    Count
+}
