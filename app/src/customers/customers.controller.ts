@@ -1,5 +1,6 @@
 import { Controller, Get, Post } from "@nestjs/common";
-import { Op, QuickBooksCustomersService } from "../../../lib";
+import { lastValueFrom } from "rxjs";
+import { QuickBooksCustomersService } from "../../../lib";
 
 @Controller("customer")
 export class CustomersController {
@@ -8,22 +9,24 @@ export class CustomersController {
 
     @Get()
     public async getAll() {
-        return (await this.customersService.withDefaultCompany()).query({
-           /* MetaData: {
-                LastUpdatedTime: {
-                    [Op.gt]: "2015-03-01"
-                }
-            }*/
-        }).toPromise().then(x => x.QueryResponse.Customer);
+        const service = await this.customersService.withDefaultCompany();
+        const count = await lastValueFrom(service.count({}));
+        return lastValueFrom(service.query({
+            /* MetaData: {
+                 LastUpdatedTime: {
+                     [Op.gt]: "2015-03-01"
+                 }
+             }*/
+        }, { maxResult: count?.QueryResponse?.totalCount })).then(x => x.QueryResponse.Customer);
     }
 
     @Post()
     public async create() {
-        return (await this.customersService.withDefaultCompany()).create({
+        return lastValueFrom((await this.customersService.withDefaultCompany()).create({
             DisplayName: "My new customer",
             PrimaryEmailAddr: {
                 Address: "julien@recursyve.io"
             }
-        }).toPromise();
+        }));
     }
 }

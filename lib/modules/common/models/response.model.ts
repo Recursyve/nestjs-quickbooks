@@ -11,4 +11,5 @@ export interface QuickBooksDeleteResponseModel {
 export interface QuickBooksQueryResponseModel {
     startPosition: number;
     maxResults: number;
+    totalCount: number;
 }
