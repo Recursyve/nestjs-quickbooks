@@ -1,12 +1,12 @@
 import { HttpService } from "@nestjs/axios";
 import { HttpStatus, Injectable } from "@nestjs/common";
 import { AxiosError } from "axios";
-import { catchError, Observable, of, throwError } from "rxjs";
+import { catchError, Observable, throwError } from "rxjs";
 import { map, mergeMap } from "rxjs/operators";
 import { QueryUtils } from "../../utils/query.utils";
 import { QuickBooksAuthService } from "../auth/services/auth.service";
-import { QuickbooksUnauthorizedException, QuickbooksBadRequestException } from "./exceptions";
-import { WhereOptions } from "./models";
+import { QuickbooksBadRequestException, QuickbooksUnauthorizedException } from "./exceptions";
+import { QueryOptions, QueryStatementType, WhereOptions } from "./models";
 
 @Injectable()
 export class BaseService<Response, Query, QueryResponse> {
@@ -30,9 +30,23 @@ export class BaseService<Response, Query, QueryResponse> {
         return this.authService.mode === "production" ? this.liveUrl : this.sandboxUrl;
     }
 
-    public query(condition: WhereOptions<Query>): Observable<QueryResponse> {
+    public query(condition: WhereOptions<Query>, options?: QueryOptions): Observable<QueryResponse> {
         return this.getHttpHeaders().pipe(
-            mergeMap((headers) => this.http.get<QueryResponse>(this.queryUrl(condition), {
+            mergeMap((headers) => this.http.get<QueryResponse>(this.queryUrl(QueryStatementType.Select, condition, options), {
+                headers,
+                params: {
+                    ...this.minorVersion
+                }
+            }))
+        ).pipe(
+            map(x => x.data),
+            catchError((e) => throwError(() => this.catchError(e)))
+        );
+    }
+
+    public count(condition: WhereOptions<Query>): Observable<QueryResponse> {
+        return this.getHttpHeaders().pipe(
+            mergeMap((headers) => this.http.get<QueryResponse>(this.queryUrl(QueryStatementType.Count, condition), {
                 headers,
                 params: {
                     ...this.minorVersion
@@ -80,8 +94,8 @@ export class BaseService<Response, Query, QueryResponse> {
         );
     }
 
-    protected queryUrl(condition: WhereOptions<any>): string {
-        return `${this.apiUrl}/v3/company/${this.realm}/query?${QueryUtils.generateQuery(this.resource, condition)}`;
+    protected queryUrl(statement: QueryStatementType, condition: WhereOptions<any>, options?: QueryOptions): string {
+        return `${this.apiUrl}/v3/company/${this.realm}/query?${QueryUtils.generateQuery(this.resource, statement, condition, options)}`;
     }
 
     protected url(path: string): string {

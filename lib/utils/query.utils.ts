@@ -1,12 +1,23 @@
-import { Op, WhereOptions } from "../modules/common/models/query.model";
+import { Op, QueryOptions, QueryStatementType, WhereOptions } from "../modules/common/models/query.model";
 import { OperatorsUtils } from "./operators.utils";
 
 export class QueryUtils {
-    public static generateQuery(resource: string, condition?: WhereOptions<any>): string {
+    public static generateQuery(resource: string, statement: QueryStatementType, condition: WhereOptions<any>, options?: QueryOptions): string {
         const where = this.generateWhereCondition(condition);
-        let query = `select * from ${resource}`;
+        let query: string;
+        if (statement === QueryStatementType.Select) {
+            query = `select * from ${resource}`;
+        } else {
+            query = `select count(*) from ${resource}`;
+        }
         if (where) {
             query += ` where ${where}`;
+        }
+        if (options?.startPosition >= 0) {
+            query += ` startposition ${options.startPosition}`;
+        }
+        if (options?.maxResult >= 0) {
+            query += ` maxresults ${options.maxResult}`;
         }
 
         const params = new URLSearchParams({ query });
