@@ -47,7 +47,7 @@ export class QuickBooksCompanyItemsService extends BaseService<
     }
 
     public fullUpdate(id: string, token: string, dto: FullUpdateQuickBooksItemsDto): Observable<QuickBooksItemsResponseModel>;
-    public fullUpdate(customer: QuickBooksItems, dto: FullUpdateQuickBooksItemsDto): Observable<QuickBooksItemsResponseModel>;
+    public fullUpdate(item: QuickBooksItems, dto: FullUpdateQuickBooksItemsDto): Observable<QuickBooksItemsResponseModel>;
     public fullUpdate(
         ...args: [string | QuickBooksItems, string | FullUpdateQuickBooksItemsDto, FullUpdateQuickBooksItemsDto?]
     ): Observable<QuickBooksItemsResponseModel> {
