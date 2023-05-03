@@ -1,16 +1,16 @@
 import { QueryUtils } from "./query.utils";
-import { Op } from "../modules/common/models/query.model";
+import { Op, QueryStatementType } from "../modules/common/models/query.model";
 
 describe("QueryUtils test", () => {
     it("generateQuery with no conditions should return a valid query", () => {
-        const query = QueryUtils.generateQuery("customer");
+        const query = QueryUtils.generateQuery("customer", QueryStatementType.Select, {});
         const params = new URLSearchParams(query);
         expect(params.has("query")).toBeTruthy();
         expect(params.get("query")).toBe("select * from customer");
     });
 
     it("[1] generateQuery with conditions should return a valid query", () => {
-        const query = QueryUtils.generateQuery("customer", {
+        const query = QueryUtils.generateQuery("customer",  QueryStatementType.Select,{
             Id: "150"
         });
         const params = new URLSearchParams(query);
@@ -19,7 +19,7 @@ describe("QueryUtils test", () => {
     });
 
     it("[2] generateQuery with conditions should return a valid query", () => {
-        const query = QueryUtils.generateQuery("customer", {
+        const query = QueryUtils.generateQuery("customer",  QueryStatementType.Select,{
             Metadata: {
                 LastUpdatedAt: "2015-01-01"
             }
@@ -30,7 +30,7 @@ describe("QueryUtils test", () => {
     });
 
     it("[3] generateQuery with conditions should return a valid query", () => {
-        const query = QueryUtils.generateQuery("customer", {
+        const query = QueryUtils.generateQuery("customer",  QueryStatementType.Select,{
             Metadata: {
                 LastUpdatedAt: {
                     [Op.gte]: "2015-01-01"
@@ -43,7 +43,7 @@ describe("QueryUtils test", () => {
     });
 
     it("[4] generateQuery with conditions should return a valid query", () => {
-        const query = QueryUtils.generateQuery("customer", {
+        const query = QueryUtils.generateQuery("customer",  QueryStatementType.Select,{
             Id: {
                 [Op.in]: ["100", "101"]
             }
@@ -54,7 +54,7 @@ describe("QueryUtils test", () => {
     });
 
     it("[5] generateQuery with conditions should return a valid query", () => {
-        const query = QueryUtils.generateQuery("customer", {
+        const query = QueryUtils.generateQuery("customer",  QueryStatementType.Select,{
             [Op.and]: [
                 {
                     Id: "100"
@@ -70,7 +70,7 @@ describe("QueryUtils test", () => {
     });
 
     it("[6] generateQuery with conditions should return a valid query", () => {
-        const query = QueryUtils.generateQuery("customer", {
+        const query = QueryUtils.generateQuery("customer",  QueryStatementType.Select,{
             Metadata: {
                 LastUpdatedAt: "2015-01-01",
                 CreateAt: "2015-01-01"
@@ -82,7 +82,7 @@ describe("QueryUtils test", () => {
     });
 
     it("[7] generateQuery with conditions should return a valid query", () => {
-        const query = QueryUtils.generateQuery("customer", {
+        const query = QueryUtils.generateQuery("customer",  QueryStatementType.Select,{
             Id: {
                 [Op.gte]: "0"
             },
@@ -96,7 +96,7 @@ describe("QueryUtils test", () => {
     });
 
     it("[8] generateQuery with conditions should return a valid query", () => {
-        const query = QueryUtils.generateQuery("customer", {
+        const query = QueryUtils.generateQuery("customer",  QueryStatementType.Select,{
             Metadata: {
                 LastUpdatedAt: "2015-01-01"
             },
@@ -110,7 +110,7 @@ describe("QueryUtils test", () => {
     });
 
     it("[9] generateQuery with conditions should return a valid query", () => {
-        const query = QueryUtils.generateQuery("customer", {
+        const query = QueryUtils.generateQuery("customer",  QueryStatementType.Select,{
             Name: {
                 [Op.contains]: "My Name"
             }
@@ -118,5 +118,14 @@ describe("QueryUtils test", () => {
         const params = new URLSearchParams(query);
         expect(params.has("query")).toBeTruthy();
         expect(params.get("query")).toBe("select * from customer where Name like '%My Name%'");
+    });
+
+    it("[10] generateQuery with conditions should return a valid query", () => {
+        const query = QueryUtils.generateQuery("customer",  QueryStatementType.Select,{
+            Name: "My test's name"
+        });
+        const params = new URLSearchParams(query);
+        expect(params.has("query")).toBeTruthy();
+        expect(params.get("query")).toBe("select * from customer where Name = 'My test\\'s name'");
     });
 });
