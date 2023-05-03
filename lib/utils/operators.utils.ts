@@ -27,11 +27,11 @@ export class OperatorsUtils {
             case Op.notLike:
                 return `${attribute} not like ${this.transformValue(value)}`;
             case Op.beginsWith:
-                return `${attribute} like '${value}%'`;
+                return `${attribute} like '${this.escapeString(value)}%'`;
             case Op.endsWith:
-                return `${attribute} like '%${value}'`;
+                return `${attribute} like '%${this.escapeString(value)}'`;
             case Op.contains:
-                return `${attribute} like '%${value}%'`;
+                return `${attribute} like '%${this.escapeString(value)}%'`;
         }
     }
 
@@ -40,12 +40,16 @@ export class OperatorsUtils {
             return value.toISOString();
         }
         if (typeof value === "string") {
-            return `'${value}'`;
+            return `'${this.escapeString(value)}'`;
         }
         if (Array.isArray(value)) {
-            return value.map(x => typeof x === "string" ? `'${x}'` : x).join(",");
+            return value.map(x => typeof x === "string" ? `'${this.escapeString(x)}'` : x).join(",");
         }
 
         return value;
+    }
+
+    public static escapeString(value: string): string {
+        return  value.replace(/'/g, "\\'");
     }
 }

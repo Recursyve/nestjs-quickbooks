@@ -1,19 +1,21 @@
-import { Controller, Get, Header, Param, Put, Res } from "@nestjs/common";
+import { Controller, Get, Header, Param, Patch, Put, Res } from "@nestjs/common";
 import * as fs from "fs/promises";
 import * as path from "path";
 import { lastValueFrom } from "rxjs";
 import {
     Op,
     QuickBooksAttachablesService,
-    QuickBooksAttachablesUploadResponseModel,
-    QuickBooksInvoicesService
+    QuickBooksAttachablesUploadResponseModel, QuickBooksEstimatesService,
+    QuickBooksInvoicesService, QuickBooksPaymentsService
 } from "../../../lib";
 
 @Controller("invoice")
 export class InvoicesController {
     constructor(
         private readonly attachablesService: QuickBooksAttachablesService,
+        private readonly estimatesService: QuickBooksEstimatesService,
         private readonly invoicesService: QuickBooksInvoicesService,
+        private readonly paymentsService: QuickBooksPaymentsService,
     ) {}
 
     @Get()
@@ -51,5 +53,40 @@ export class InvoicesController {
                 }
             ]
         }));
+    }
+
+    @Patch(":id/customer")
+    public async updateCustomer(@Param("id") id: string): Promise<void> {
+        const estimateService = await this.estimatesService.withDefaultCompany();
+        const estimate = await estimateService.readById("213").toPromise();
+        await estimateService.sparseUpdate(estimate.Estimate, {
+            CustomerRef: {
+                value: "70",
+            }
+        }).toPromise();
+
+        const paymentService = await this.paymentsService.withDefaultCompany();
+        const payment = await paymentService.readById("215").toPromise();
+        const p = await paymentService.fullUpdate(payment.Payment, {
+            ...payment.Payment,
+            CustomerRef: {
+                value: "70",
+            },
+            Line: []
+        }).toPromise();
+
+        const service = await this.invoicesService.withDefaultCompany();
+        const invoice = await service.readById(id).toPromise();
+        await service.sparseUpdate(invoice.Invoice, {
+            CustomerRef: {
+                value: "70"
+            },
+            LinkedTxn: [
+                {
+                    TxnType: "Payment",
+                    TxnId: p.Payment.Id
+                } as any
+            ]
+        }).toPromise();
     }
 }
