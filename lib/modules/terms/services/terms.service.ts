@@ -39,5 +39,4 @@ export class QuickBooksCompanyTermsService extends BaseService<QuickBooksTerms, 
     public readById(id: string): Observable<QuickBooksTermsResponseModel> {
         return this.get(id);
     }
-
 }
