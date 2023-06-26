@@ -17,3 +17,4 @@ export * from "./modules/store";
 export * from "./modules/tax-codes";
 export * from "./modules/vendors";
 export * from "./modules/webhooks";
+export * from "./modules/terms";
