@@ -85,7 +85,7 @@ export interface QueryOptions {
     maxResult?: number;
     orderBy?: {
         column: string;
-        direction: "ASC" | "DESC";
+        direction?: "ASC" | "DESC";
     };
 }
 
