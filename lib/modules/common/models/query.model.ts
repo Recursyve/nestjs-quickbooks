@@ -83,6 +83,10 @@ export type WhereOptions<T> = WhereAttributeHash<T> | AndOperator<T>;
 export interface QueryOptions {
     startPosition?: number;
     maxResult?: number;
+    orderBy?: {
+        column: string;
+        direction: "ASC" | "DESC";
+    };
 }
 
 export enum QueryStatementType {

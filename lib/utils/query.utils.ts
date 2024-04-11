@@ -13,6 +13,9 @@ export class QueryUtils {
         if (where) {
             query += ` where ${where}`;
         }
+        if (options?.orderBy) {
+            query += ` orderby ${options.orderBy.column} ${options.orderBy?.direction ?? "ASC"}`;
+        }
         if (options?.startPosition >= 0) {
             query += ` startposition ${options.startPosition}`;
         }
