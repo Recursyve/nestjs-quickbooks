@@ -74,6 +74,10 @@ export class QuickBooksCompanyEstimateService extends BaseService<QuickBooksEsti
         });
     }
 
+    public deleteById(estimate: QuickBooksEstimates): Observable<void> {
+        return this.post({ Id: estimate.Id, SyncToken: estimate.SyncToken }, "", { operation: "delete" });
+    }
+
     private static getUpdateArguments<DTO>(args: [string | QuickBooksEstimates, string | DTO, DTO?]): [string, string, DTO] {
         const [idOrEstimate, tokenOrDto, dto] = args;
         if (dto) {
