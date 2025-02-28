@@ -13,7 +13,6 @@ export class QuickBooksAuthService {
     private readonly client;
 
     constructor(
-        private readonly httpClient: HttpService,
         private readonly configService: QuickBooksConfigService,
         private readonly tokenStore: QuickBooksStore
     ) {

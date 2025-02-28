@@ -6,6 +6,7 @@ import { LocalStore } from "./store/local.store";
 import { QuickBooksAuthModule } from "./auth/auth.module";
 import { GLOBAL_CONFIG } from "../constants";
 import { QuickbooksWebhooksModule, QuickbooksWebhooksOptions } from "./webhooks/webhooks.module";
+import { ScheduleModule } from "@nestjs/schedule";
 
 export interface QuickBooksOptions extends Pick<ModuleMetadata, "imports"> {
     config?: Partial<QuickBooksConfigModel>;
@@ -32,7 +33,12 @@ export class QuickBooksModule {
 
         return {
             module: QuickBooksModule,
-            imports: [QuickBooksAuthModule, ...imports, ...(options.imports ?? [])],
+            imports: [
+                QuickBooksAuthModule, 
+                ScheduleModule.forRoot(), 
+                ...imports, 
+                ...(options.imports ?? [])
+            ],
             providers: [
                 {
                     provide: GLOBAL_CONFIG,
