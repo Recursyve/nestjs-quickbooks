@@ -39,21 +39,34 @@ export class QuickBooksConfigModel {
     public minorversion?: string;
     public webhookVerifier: string;
 
-    constructor(config: Partial<QuickBooksConfigModel>) {
-        this.clientId = config.clientId ?? process.env.QUICKBOOKS_CLIENT_ID;
-        this.clientSecret = config.clientSecret ?? process.env.QUICKBOOKS_CLIENT_SECRET;
-        this.scopes = config.scopes ?? process.env.QUICKBOOKS_CLIENT_SCOPES.split(" ") as QuickBooksScopes[];
-        this.mode = config.mode ?? process.env.QUICKBOOKS_MODE as QuickbooksModes;
-        this.serverUri = config.serverUri ?? process.env.QUICKBOOKS_SERVER_URI;
-        this.minorversion = config.minorversion ?? process.env.QUICKBOOKS_MINOR_VERSION;
-        this.webhookVerifier = config.webhookVerifier ?? process.env.QUICKBOOKS_WEBHOOK_VERIFIER;
-        this.redirection = config.redirection ?? {
-            successUrl: process.env.QUICKBOOKS_REDIRECT_SUCCESS,
+    constructor(config?: Partial<QuickBooksConfigModel>) {
+        this.clientId = config?.clientId
+            ?? process.env.QUICKBOOKS_CLIENT_ID
+            ?? this.missingConfiguration('client id');
+        this.clientSecret = config?.clientSecret
+            ?? process.env.QUICKBOOKS_CLIENT_SECRET
+            ?? this.missingConfiguration('client secret');
+        this.scopes = config?.scopes ?? (process.env.QUICKBOOKS_CLIENT_SCOPES
+            ?? '').split(" ") as QuickBooksScopes[];
+        this.mode = config?.mode ?? process.env.QUICKBOOKS_MODE as QuickbooksModes;
+        this.serverUri = config?.serverUri ?? process.env.QUICKBOOKS_SERVER_URI
+            ?? this.missingConfiguration('server uri');
+        this.minorversion = config?.minorversion
+            ?? process.env.QUICKBOOKS_MINOR_VERSION;
+        this.webhookVerifier = config?.webhookVerifier
+            ?? process.env.QUICKBOOKS_WEBHOOK_VERIFIER
+            ?? this.missingConfiguration('webhook verifier');
+        this.redirection = config?.redirection ?? {
+            successUrl: process.env.QUICKBOOKS_REDIRECT_SUCCESS
+                ?? this.missingConfiguration('redirect success'),
             errorUrl: process.env.QUICKBOOKS_REDIRECT_ERROR
+                ?? this.missingConfiguration('redirect error'),
         };
 
         if (this.mode !== "sandbox" && this.mode !== "production") {
             this.mode = "sandbox";
         }
     }
+
+    missingConfiguration = (name: string): string => `Missing QuickBooks ${name} configuration`;
 }

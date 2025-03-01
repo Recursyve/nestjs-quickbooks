@@ -16,11 +16,11 @@ export class QueryUtils {
         if (options?.orderBy) {
             query += ` orderby ${options.orderBy.column} ${options.orderBy?.direction ?? "ASC"}`;
         }
-        if (options?.startPosition >= 0) {
-            query += ` startposition ${options.startPosition}`;
+        if (options?.startPosition ?? 0 >= 0) {
+            query += ` startposition ${options?.startPosition}`;
         }
-        if (options?.maxResult >= 0) {
-            query += ` maxresults ${options.maxResult}`;
+        if (options?.maxResult ?? 0 >= 0) {
+            query += ` maxresults ${options?.maxResult}`;
         }
 
         const params = new URLSearchParams({ query });
@@ -29,7 +29,7 @@ export class QueryUtils {
 
     private static generateWhereCondition(condition: WhereOptions<any>, parent?: string): string {
         if (!condition) {
-            return null;
+            throw new Error("condition required.");
         }
 
         const rules: string[] = [];
@@ -39,10 +39,12 @@ export class QueryUtils {
                 if (condition[key] instanceof Array) {
                     if (key === Op.and) {
                         rules.push(this.generateGroupCondition(condition[key]));
-                    } else if (key === Op.in) {
+                    } else if (key === Op.in
+                        && parent != null
+                    ) {
                         rules.push(OperatorsUtils.transform(parent, key, condition[key]));
                     }
-                } else {
+                } else if (parent != null) {
                     rules.push(OperatorsUtils.transform(parent, key, condition[key]));
                 }
             }
@@ -74,7 +76,7 @@ export class QueryUtils {
 
     private static generateGroupCondition(conditions: WhereOptions<any>[]): string {
         if (!conditions.length) {
-            return null;
+            throw new Error("condition required.");
         }
 
         const rules: string[] = [];

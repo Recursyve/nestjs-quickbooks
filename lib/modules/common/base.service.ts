@@ -98,7 +98,7 @@ export class BaseService<Response, Query, QueryResponse> {
         return `${this.apiUrl}/v3/company/${this.realm}/query?${QueryUtils.generateQuery(this.resource, statement, condition, options)}`;
     }
 
-    protected url(path: string): string {
+    protected url(path?: string): string {
         if (!path) {
             return `${this.apiUrl}/v3/company/${this.realm}/${this.resource}`;
         }

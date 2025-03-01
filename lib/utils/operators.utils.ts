@@ -32,6 +32,8 @@ export class OperatorsUtils {
                 return `${attribute} like '%${this.escapeString(value)}'`;
             case Op.contains:
                 return `${attribute} like '%${this.escapeString(value)}%'`;
+            default:
+                return '';
         }
     }
 
@@ -50,6 +52,6 @@ export class OperatorsUtils {
     }
 
     public static escapeString(value: string): string {
-        return  value.replace(/'/g, "\\'");
+        return value.replace(/'/g, "\\'");
     }
 }

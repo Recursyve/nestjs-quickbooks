@@ -19,7 +19,7 @@ export class QuickBooksInvoicesService {
         private readonly authService: QuickBooksAuthService,
         private readonly http: HttpService,
         private readonly store: QuickBooksStore
-    ) {}
+    ) { }
 
     public async withDefaultCompany(): Promise<QuickBooksCompanyInvoicesService> {
         return this.forCompany(await this.store.getDefaultCompany());
@@ -46,7 +46,7 @@ export class QuickBooksCompanyInvoicesService extends BaseService<
     }
 
     public getPdf(id: string): Observable<Buffer> {
-        return this.get(`${id}/pdf`, null, {
+        return this.get(`${id}/pdf`, undefined, {
             Accept: "application/pdf"
         });
     }

@@ -47,7 +47,7 @@ export class QuickBooksCompanyPaymentsService extends BaseService<
     }
 
     public getPdf(id: string): Observable<Buffer> {
-        return this.get(`${id}/pdf`, null, {
+        return this.get(`${id}/pdf`, undefined, {
             Accept: "application/pdf"
         });
     }

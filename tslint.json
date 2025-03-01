@@ -11,7 +11,7 @@
         "max-classes-per-file": false,
         "quotemark": [
             true,
-            "double"
+            "single"
         ],
         "trailing-comma": false,
         "member-access": [
@@ -22,7 +22,7 @@
         ],
         "max-line-length": [
             true,
-            150
+            88
         ],
         "member-ordering": [
             false
