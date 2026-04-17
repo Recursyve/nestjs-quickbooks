@@ -3,5 +3,5 @@
     "compilerOptions": {
         "sourceMap": false
     },
-    "exclude": ["node_modules", "app", "dist", "**/*spec.ts"]
+    "exclude": ["node_modules", "app", "dist", "**/*spec.ts", "vitest.config.ts"]
 }

@@ -86,3 +86,10 @@ import { QuickBooksModule, QuickBooksStore } from "@recursyve/nestjs-quickbooks"
 })
 export class AppModule {}
 ```
+
+### Webhooks
+
+`QuickbooksWebhooksModule` registers a route-scoped JSON body parser on **`POST /quickbooks/webhook`** that:
+
+- Accepts **`application/json`**, **`application/cloudevents+json`**, and **`application/cloudevents-batch+json`** (Intuit’s CloudEvents types use the latter two).
+- Sets **`req.rawBody`** in the parser `verify` callback so `QuickBooksWebhooksGuard` can HMAC the same bytes Intuit signed.
