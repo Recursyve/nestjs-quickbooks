@@ -12,19 +12,15 @@ export class QuickBooksWebhooksGuard implements CanActivate {
 
         const signature = req.get("intuit-signature");
         if (!signature) {
-            throw new UnauthorizedException();
+           return false;
         }
 
-        const webhookPayload = JSON.stringify(req.body);
+        const webhookPayload = req.body;
         if (!webhookPayload) {
             return true;
         }
 
         const hash = crypto.createHmac("sha256", this.global.webhookVerifier).update(webhookPayload).digest("base64");
-        if (signature !== hash) {
-            throw new UnauthorizedException();
-        }
-
-        return true;
+        return signature === hash;
     }
 }

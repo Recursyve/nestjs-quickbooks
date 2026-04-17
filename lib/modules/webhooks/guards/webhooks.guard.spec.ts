@@ -56,7 +56,7 @@ describe("QuickBooksWebhooksGuard", () => {
         const signature = "invalid-signature";
         const context = buildContext(body, { "intuit-signature": signature });
 
-        await expect(underTest.canActivate(context)).rejects.toThrow(UnauthorizedException);
+        await expect(underTest.canActivate(context)).resolves.toBe(false);
     });
 
     it("should accept requests with a valid signature (single event)", async () => {
@@ -89,6 +89,6 @@ describe("QuickBooksWebhooksGuard", () => {
         const signature = sign(body, "wrong-verifier");
         const context = buildContext(body, { "intuit-signature": signature });
 
-        await expect(underTest.canActivate(context)).rejects.toThrow(UnauthorizedException);
+        await expect(underTest.canActivate(context)).resolves.toBe(false);
     });
 });
