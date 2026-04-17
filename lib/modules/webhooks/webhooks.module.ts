@@ -22,8 +22,8 @@ export class QuickbooksWebhooksModule implements NestModule {
     public configure(consumer: MiddlewareConsumer): void {
         const middleware = json({
             type: ["application/json", "application/cloudevents+json", "application/cloudevents-batch+json"],
-            verify: (req, _, buf) => {
-                (req as RawBodyRequest<unknown>).rawBody = buf;
+            verify: (request, _, buffer) => {
+                (request as RawBodyRequest<unknown>).rawBody = buffer;
             }
         });
 
