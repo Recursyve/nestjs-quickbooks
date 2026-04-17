@@ -91,9 +91,5 @@ export class AppModule {}
 
 `QuickbooksWebhooksModule` registers a route-scoped JSON body parser on **`POST /quickbooks/webhook`** that:
 
-- Accepts **`application/json`**, **`application/cloudevents+json`**, and **`application/cloudevents-batch+json`** (Intuit’s CloudEvents batch binding).
-- Captures the raw bytes on **`req.rawBody`** for HMAC verification in `QuickBooksWebhooksGuard`.
-
-You do **not** need `NestFactory.create(AppModule, { rawBody: true })` for Intuit’s CloudEvents content types. If your app already enables Nest’s global JSON parser with `rawBody: true`, that remains compatible; the webhook middleware skips when the body was already parsed.
-
-The exported constant **`WEBHOOK_CONTENT_TYPES`** lists the MIME types handled by this parser (useful for proxies or documentation).
+- Accepts **`application/json`**, **`application/cloudevents+json`**, and **`application/cloudevents-batch+json`** (Intuit’s CloudEvents types use the latter two).
+- Sets **`req.rawBody`** in the parser `verify` callback so `QuickBooksWebhooksGuard` can HMAC the same bytes Intuit signed.
