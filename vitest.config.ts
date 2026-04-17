@@ -1,7 +1,8 @@
+import swc from "unplugin-swc";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
-    plugins: [],
+    plugins: [swc.vite()],
     test: {
         globals: true,
         isolate: true,

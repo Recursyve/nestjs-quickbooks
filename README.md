@@ -89,10 +89,11 @@ export class AppModule {}
 
 ### Webhooks
 
-If you use the webhooks module (`QuickbooksWebhooksModule`), bootstrap the app with **`rawBody: true`** so the `intuit-signature` guard can read the raw request body (required for verification).
+`QuickbooksWebhooksModule` registers a route-scoped JSON body parser on **`POST /quickbooks/webhook`** that:
 
-```ts
-import { NestFactory } from "@nestjs/core";
+- Accepts **`application/json`**, **`application/cloudevents+json`**, and **`application/cloudevents-batch+json`** (Intuit’s CloudEvents batch binding).
+- Captures the raw bytes on **`req.rawBody`** for HMAC verification in `QuickBooksWebhooksGuard`.
 
-const app = await NestFactory.create(AppModule, { rawBody: true });
-```
+You do **not** need `NestFactory.create(AppModule, { rawBody: true })` for Intuit’s CloudEvents content types. If your app already enables Nest’s global JSON parser with `rawBody: true`, that remains compatible; the webhook middleware skips when the body was already parsed.
+
+The exported constant **`WEBHOOK_CONTENT_TYPES`** lists the MIME types handled by this parser (useful for proxies or documentation).

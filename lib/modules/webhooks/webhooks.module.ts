@@ -1,4 +1,6 @@
-import { DynamicModule, ForwardReference, Module, Type } from "@nestjs/common";
+import { DynamicModule, ForwardReference, Module, NestModule, RequestMethod, Type } from "@nestjs/common";
+import type { RawBodyRequest, MiddlewareConsumer } from "@nestjs/common";
+import { json } from "body-parser";
 import { QuickBooksWebhooksController } from "./controllers/webhooks.controller";
 import { QuickbooksWebhookHandlerService } from "./services/webhook-handler.service";
 
@@ -16,7 +18,21 @@ export type QuickbooksWebhooksOptions = CustomQuickbooksWebhooksOptions | Import
 @Module({
     controllers: [QuickBooksWebhooksController]
 })
-export class QuickbooksWebhooksModule {
+export class QuickbooksWebhooksModule implements NestModule {
+    public configure(consumer: MiddlewareConsumer): void {
+        const middleware = json({
+            type: ["application/json", "application/cloudevents+json", "application/cloudevents-batch+json"],
+            verify: (req, _, buf) => {
+                (req as RawBodyRequest<unknown>).rawBody = buf;
+            }
+        });
+
+        consumer.apply(middleware).forRoutes({
+            path: "quickbooks/webhook",
+            method: RequestMethod.POST
+        });
+    }
+
     public static forRoot(options: QuickbooksWebhooksOptions): DynamicModule {
         return {
             module: QuickbooksWebhooksModule,
