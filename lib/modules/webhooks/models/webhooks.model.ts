@@ -30,9 +30,15 @@ export const quickbooksCloudEventEntities = [
     "vendorcredit"
 ] as const;
 export type QuickbooksCloudEventEntity = (typeof quickbooksCloudEventEntities)[number];
+export function isQuickbooksCloudEventEntity(value: unknown): value is QuickbooksCloudEventEntity {
+    return quickbooksCloudEventEntities.includes(value as QuickbooksCloudEventEntity);
+}
 
 export const quickbooksCloudEventActions = ["created", "updated", "deleted", "merged", "voided", "emailed"] as const;
 export type QuickbooksCloudEventAction = (typeof quickbooksCloudEventActions)[number];
+export function isQuickbooksCloudEventAction(value: unknown): value is QuickbooksCloudEventAction {
+    return quickbooksCloudEventActions.includes(value as QuickbooksCloudEventAction);
+}
 
 export type QuickbooksCloudEventType =
     | `qbo.${QuickbooksCloudEventEntity}.${QuickbooksCloudEventAction}.v1`
