@@ -86,3 +86,13 @@ import { QuickBooksModule, QuickBooksStore } from "@recursyve/nestjs-quickbooks"
 })
 export class AppModule {}
 ```
+
+### Webhooks
+
+If you use the webhooks module (`QuickbooksWebhooksModule`), bootstrap the app with **`rawBody: true`** so the `intuit-signature` guard can read the raw request body (required for verification).
+
+```ts
+import { NestFactory } from "@nestjs/core";
+
+const app = await NestFactory.create(AppModule, { rawBody: true });
+```

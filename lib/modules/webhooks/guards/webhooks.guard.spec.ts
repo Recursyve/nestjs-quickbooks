@@ -1,4 +1,4 @@
-import { ExecutionContext, UnauthorizedException } from "@nestjs/common";
+import { ExecutionContext } from "@nestjs/common";
 import * as crypto from "crypto";
 import { beforeEach, describe, expect, it } from "vitest";
 import { QuickBooksConfigModel } from "../../config";
@@ -20,11 +20,34 @@ function createCloudEvent(overrides: Partial<QuickbooksCloudEvent> = {}): Quickb
     };
 }
 
-function sign(payload: unknown, secret: string): string {
-    return crypto.createHmac("sha256", secret).update(JSON.stringify(payload)).digest("base64");
+/** UTF-8 bytes of the JSON as on the wire (test fixture for rawBody). */
+function wirePayload(body: unknown): Buffer {
+    return Buffer.from(JSON.stringify(body), "utf8");
 }
 
-function buildContext(body: unknown, headers: Record<string, string> = {}): ExecutionContext {
+function signRawPayload(raw: Buffer, secret: string): string {
+    return crypto.createHmac("sha256", secret).update(new Uint8Array(raw)).digest("base64");
+}
+
+function buildContext(
+    body: unknown,
+    headers: Record<string, string> = {},
+    rawBody?: Buffer
+): ExecutionContext {
+    const raw = rawBody ?? wirePayload(body);
+    return {
+        switchToHttp: () => ({
+            getRequest: () => ({
+                body,
+                rawBody: raw,
+                get: (name: string) => headers[name.toLowerCase()]
+            })
+        })
+    } as ExecutionContext;
+}
+
+/** Request with parsed body but no rawBody (e.g. app bootstrapped without { rawBody: true }). */
+function buildContextWithoutRawBody(body: unknown, headers: Record<string, string> = {}): ExecutionContext {
     return {
         switchToHttp: () => ({
             getRequest: () => ({
@@ -44,51 +67,73 @@ describe("QuickBooksWebhooksGuard", () => {
         underTest = new QuickBooksWebhooksGuard({ webhookVerifier: verifier } as QuickBooksConfigModel);
     });
 
-    it("should reject requests without intuit-signature header", async () => {
-        const body = [createCloudEvent()];
-        const context = buildContext(body);
+    describe("rejects with false", () => {
+        it("returns false when intuit-signature header is missing", async () => {
+            const body = [createCloudEvent()];
+            const context = buildContext(body);
 
-        await expect(underTest.canActivate(context)).rejects.toThrow(UnauthorizedException);
+            await expect(underTest.canActivate(context)).resolves.toBe(false);
+        });
+
+        it("returns false when intuit-signature is present but rawBody is missing", async () => {
+            const body = [createCloudEvent()];
+            const raw = wirePayload(body);
+            const signature = signRawPayload(raw, verifier);
+            const context = buildContextWithoutRawBody(body, { "intuit-signature": signature });
+
+            await expect(underTest.canActivate(context)).resolves.toBe(false);
+        });
+
+        it("returns false when rawBody is empty", async () => {
+            const body = [createCloudEvent()];
+            const context = buildContext(body, { "intuit-signature": "dGVzdA==" }, Buffer.alloc(0));
+
+            await expect(underTest.canActivate(context)).resolves.toBe(false);
+        });
+
+        it("returns false when intuit-signature is invalid (not matching HMAC)", async () => {
+            const body = [createCloudEvent()];
+            const context = buildContext(body, { "intuit-signature": "invalid-signature" });
+
+            await expect(underTest.canActivate(context)).resolves.toBe(false);
+        });
+
+        it("returns false when signature was computed with a different verifier token", async () => {
+            const body = [createCloudEvent()];
+            const raw = wirePayload(body);
+            const signature = signRawPayload(raw, "wrong-verifier");
+            const context = buildContext(body, { "intuit-signature": signature });
+
+            await expect(underTest.canActivate(context)).resolves.toBe(false);
+        });
     });
 
-    it("should reject requests with an invalid signature", async () => {
-        const body = [createCloudEvent()];
-        const signature = "invalid-signature";
-        const context = buildContext(body, { "intuit-signature": signature });
+    describe("accepts with true", () => {
+        it("returns true for a valid intuit-signature over rawBody (single event)", async () => {
+            const body = [createCloudEvent()];
+            const raw = wirePayload(body);
+            const signature = signRawPayload(raw, verifier);
+            const context = buildContext(body, { "intuit-signature": signature });
 
-        await expect(underTest.canActivate(context)).resolves.toBe(false);
-    });
+            await expect(underTest.canActivate(context)).resolves.toBe(true);
+        });
 
-    it("should accept requests with a valid signature (single event)", async () => {
-        const body = [createCloudEvent()];
-        const signature = sign(body, verifier);
-        const context = buildContext(body, { "intuit-signature": signature });
+        it("returns true for a valid intuit-signature over rawBody (multiple events)", async () => {
+            const body = [
+                createCloudEvent({
+                    type: "qbo.invoice.created.v1",
+                    intuitentityid: "100"
+                }),
+                createCloudEvent({
+                    type: "qbo.customer.updated.v1",
+                    intuitentityid: "200"
+                })
+            ];
+            const raw = wirePayload(body);
+            const signature = signRawPayload(raw, verifier);
+            const context = buildContext(body, { "intuit-signature": signature });
 
-        await expect(underTest.canActivate(context)).resolves.toBe(true);
-    });
-
-    it("should accept requests with a valid signature (multiple events)", async () => {
-        const body = [
-            createCloudEvent({
-                type: "qbo.invoice.created.v1",
-                intuitentityid: "100"
-            }),
-            createCloudEvent({
-                type: "qbo.customer.updated.v1",
-                intuitentityid: "200"
-            })
-        ];
-        const signature = sign(body, verifier);
-        const context = buildContext(body, { "intuit-signature": signature });
-
-        await expect(underTest.canActivate(context)).resolves.toBe(true);
-    });
-
-    it("should reject when signature was computed with a different verifier", async () => {
-        const body = [createCloudEvent()];
-        const signature = sign(body, "wrong-verifier");
-        const context = buildContext(body, { "intuit-signature": signature });
-
-        await expect(underTest.canActivate(context)).resolves.toBe(false);
+            await expect(underTest.canActivate(context)).resolves.toBe(true);
+        });
     });
 });
