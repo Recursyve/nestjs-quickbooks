@@ -2,16 +2,16 @@ import { DynamicModule, ForwardReference, Module, Type } from "@nestjs/common";
 import { QuickBooksWebhooksController } from "./controllers/webhooks.controller";
 import { QuickbooksWebhookHandlerService } from "./services/webhook-handler.service";
 
-export interface CustomStripeWebhooksOptions {
+export interface CustomQuickbooksWebhooksOptions {
     imports?: (Type | DynamicModule | Promise<DynamicModule> | ForwardReference)[];
     webhookHandler: Type<QuickbooksWebhookHandlerService>;
 }
 
-export interface ImportsStripeWebhooksOptions {
-    imports: [(Type | DynamicModule | Promise<DynamicModule> | ForwardReference)];
+export interface ImportsQuickbooksWebhooksOptions {
+    imports: [Type | DynamicModule | Promise<DynamicModule> | ForwardReference];
 }
 
-export type QuickbooksWebhooksOptions = CustomStripeWebhooksOptions | ImportsStripeWebhooksOptions;
+export type QuickbooksWebhooksOptions = CustomQuickbooksWebhooksOptions | ImportsQuickbooksWebhooksOptions;
 
 @Module({
     controllers: [QuickBooksWebhooksController]
@@ -21,10 +21,10 @@ export class QuickbooksWebhooksModule {
         return {
             module: QuickbooksWebhooksModule,
             imports: options?.imports ? [...options.imports] : [],
-            providers: (options as CustomStripeWebhooksOptions).webhookHandler ? [
+            providers: "webhookHandler" in options ? [
                 {
                     provide: QuickbooksWebhookHandlerService,
-                    useClass: (options as CustomStripeWebhooksOptions).webhookHandler
+                    useClass: options.webhookHandler
                 }
             ] : []
         };
