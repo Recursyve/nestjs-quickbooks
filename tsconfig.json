@@ -9,8 +9,9 @@
         "target": "es2017",
         "sourceMap": true,
         "outDir": "./dist",
-        "baseUrl": "./",
+        "rootDir": "./",
         "incremental": true,
+        "strict": false,
         "paths": {},
         "typeRoots": ["./types", "./node_modules/@types", "./node_modules"],
         "types": ["node"]
