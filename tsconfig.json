@@ -11,7 +11,9 @@
         "outDir": "./dist",
         "baseUrl": "./",
         "incremental": true,
-        "paths": {}
+        "paths": {},
+        "typeRoots": ["./types", "./node_modules/@types", "./node_modules"],
+        "types": ["node"]
     },
     "exclude": [
         "node_modules",
