@@ -1,6 +1,6 @@
 import { Injectable, Module } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
-import * as crypto from "crypto";
+import { createHmac, randomBytes } from "node:crypto";
 import supertest from "supertest";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { GLOBAL_CONFIG } from "../../constants";
@@ -11,7 +11,7 @@ import { QuickbooksWebhooksModule } from "./webhooks.module";
 const WEBHOOK_VERIFIER = "integration-test-webhook-verifier";
 
 function signRaw(raw: Buffer): string {
-    return crypto.createHmac("sha256", WEBHOOK_VERIFIER).update(new Uint8Array(raw)).digest("base64");
+    return createHmac("sha256", WEBHOOK_VERIFIER).update(new Uint8Array(raw)).digest("base64");
 }
 
 function sampleEvent(): QuickbooksCloudEvent {
@@ -101,7 +101,7 @@ describe("QuickbooksWebhooksModule", () => {
         it("returns 403 when intuit-signature does not match raw body (cloudevents-batch+json)", async () => {
             const payload: QuickbooksWebhookPayload = [sampleEvent()];
             const body = JSON.stringify(payload);
-            const wrongSig = crypto.randomBytes(32).toString("base64");
+            const wrongSig = randomBytes(32).toString("base64");
 
             await supertest(app.getHttpServer())
                 .post("/quickbooks/webhook")

@@ -1,5 +1,5 @@
 import { CanActivate, ExecutionContext, Inject, Injectable } from "@nestjs/common";
-import * as crypto from "crypto";
+import { createHmac, timingSafeEqual } from "node:crypto";
 import { GLOBAL_CONFIG } from "../../../constants";
 import { QuickBooksConfigModel } from "../../config";
 
@@ -25,8 +25,7 @@ export class QuickBooksWebhooksGuard implements CanActivate {
             return false;
         }
 
-        const hash = crypto
-            .createHmac("sha256", this.global.webhookVerifier)
+        const hash = createHmac("sha256", this.global.webhookVerifier)
             .update(new Uint8Array(rawBody))
             .digest("base64");
 
@@ -34,7 +33,7 @@ export class QuickBooksWebhooksGuard implements CanActivate {
         const hashBuf = Buffer.from(hash, "base64");
         if (
             signatureBuf.length !== hashBuf.length ||
-            !crypto.timingSafeEqual(new Uint8Array(signatureBuf), new Uint8Array(hashBuf))
+            !timingSafeEqual(new Uint8Array(signatureBuf), new Uint8Array(hashBuf))
         ) {
             return false;
         }
