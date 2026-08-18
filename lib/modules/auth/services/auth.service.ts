@@ -1,6 +1,6 @@
 import { HttpService } from "@nestjs/axios";
 import { Injectable } from "@nestjs/common";
-import * as OAuthClient from "intuit-oauth";
+import OAuthClient from "intuit-oauth";
 import { Observable, of, from } from "rxjs";
 import { map, mergeMap } from "rxjs/operators";
 import { QuickBooksConfigService } from "../../config/services/quickbooks-config.service";

@@ -1,5 +1,5 @@
 import { ExecutionContext } from "@nestjs/common";
-import * as crypto from "crypto";
+import { createHmac } from "node:crypto";
 import { beforeEach, describe, expect, it } from "vitest";
 import { QuickBooksConfigModel } from "../../config";
 import { QuickbooksCloudEvent } from "../models/webhooks.model";
@@ -26,7 +26,7 @@ function wirePayload(body: unknown): Buffer {
 }
 
 function signRawPayload(raw: Buffer, secret: string): string {
-    return crypto.createHmac("sha256", secret).update(new Uint8Array(raw)).digest("base64");
+    return createHmac("sha256", secret).update(new Uint8Array(raw)).digest("base64");
 }
 
 function buildContext(
