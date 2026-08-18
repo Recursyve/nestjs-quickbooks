@@ -1,6 +1,6 @@
 import { HttpService } from "@nestjs/axios";
 import { Injectable } from "@nestjs/common";
-import * as FormData from "form-data";
+import FormData from "form-data";
 import { promisify } from "util";
 import { combineLatestWith, map, mergeMap } from "rxjs/operators";
 import { QuickBooksAuthService } from "../../auth/services/auth.service";
