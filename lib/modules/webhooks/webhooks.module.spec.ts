@@ -1,4 +1,4 @@
-import { Injectable, Module } from "@nestjs/common";
+import { Injectable, Module, VersioningType } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import { createHmac, randomBytes } from "node:crypto";
 import supertest from "supertest";
@@ -121,6 +121,47 @@ describe("QuickbooksWebhooksModule", () => {
             await supertest(app.getHttpServer())
                 .post("/quickbooks/webhook")
                 .set("Content-Type", "application/json")
+                .set("intuit-signature", signRaw(raw))
+                .send(body)
+                .expect(204);
+
+            expect(handler.handleEvent).toHaveBeenCalledTimes(1);
+            expect(handler.handleEvent).toHaveBeenCalledWith(payload);
+        });
+    });
+
+    describe("HTTP + body parser with URI versioning", () => {
+        let app: import("@nestjs/common").INestApplication;
+        let handler: IntegrationTestWebhookHandler;
+
+        beforeAll(async () => {
+            const testingModule = await Test.createTestingModule({
+                imports: [
+                    QuickbooksWebhooksModule.forRoot({
+                        imports: [WebhooksTestDepsModule],
+                        version: "1"
+                    })
+                ]
+            }).compile();
+
+            app = testingModule.createNestApplication({ bodyParser: false });
+            app.enableVersioning({ type: VersioningType.URI, defaultVersion: "1" });
+            handler = testingModule.get(QuickbooksWebhookHandlerService) as IntegrationTestWebhookHandler;
+            await app.init();
+        });
+
+        afterAll(async () => {
+            await app.close();
+        });
+
+        it("returns 204 for POST /v1/quickbooks/webhook with a valid signature", async () => {
+            const payload: QuickbooksWebhookPayload = [sampleEvent()];
+            const body = JSON.stringify(payload);
+            const raw = Buffer.from(body, "utf8");
+
+            await supertest(app.getHttpServer())
+                .post("/v1/quickbooks/webhook")
+                .set("Content-Type", "application/cloudevents-batch+json")
                 .set("intuit-signature", signRaw(raw))
                 .send(body)
                 .expect(204);
