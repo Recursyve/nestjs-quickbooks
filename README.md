@@ -93,3 +93,14 @@ export class AppModule {}
 
 - Accepts **`application/json`**, **`application/cloudevents+json`**, and **`application/cloudevents-batch+json`** (Intuit’s CloudEvents types use the latter two).
 - Sets **`req.rawBody`** in the parser `verify` callback so `QuickBooksWebhooksGuard` can HMAC the same bytes Intuit signed.
+
+If the app uses URI versioning (`/v1/quickbooks/webhook`), pass the same version in webhook options so the parser is registered on the versioned route:
+
+```ts
+QuickBooksModule.forRoot({
+    webhooks: {
+        version: "1",
+        webhookHandler: MyWebhookHandler
+    }
+})
+```
