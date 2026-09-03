@@ -3,6 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { Observable } from "rxjs";
 import { QuickBooksAuthService } from "../../auth/services/auth.service";
 import { BaseService } from "../../common/base.service";
+import { QuickBooksHttpQueryParams } from "../../common/models";
 import { QuickBooksStore } from "../../store";
 import { QuickBooksInvoices } from "..";
 import { QuickBooksInvoicesQueryModel } from "..";
@@ -37,12 +38,15 @@ export class QuickBooksCompanyInvoicesService extends BaseService<
         super(realm, "invoice", authService, http);
     }
 
-    public create(dto: CreateQuickBooksInvoicesDto): Observable<QuickBooksInvoicesResponseModel> {
-        return this.post(dto);
+    public create(
+        dto: CreateQuickBooksInvoicesDto,
+        queryParams?: QuickBooksHttpQueryParams
+    ): Observable<QuickBooksInvoicesResponseModel> {
+        return this.post(dto, "", queryParams);
     }
 
-    public readById(id: string): Observable<QuickBooksInvoicesResponseModel> {
-        return this.get(id);
+    public readById(id: string, queryParams?: QuickBooksHttpQueryParams): Observable<QuickBooksInvoicesResponseModel> {
+        return this.get(id, queryParams);
     }
 
     public getPdf(id: string): Observable<Buffer> {
@@ -51,31 +55,59 @@ export class QuickBooksCompanyInvoicesService extends BaseService<
         });
     }
 
-    public fullUpdate(id: string, token: string, dto: FullUpdateQuickBooksInvoicesDto): Observable<QuickBooksInvoicesResponseModel>;
-    public fullUpdate(invoice: QuickBooksInvoices, dto: FullUpdateQuickBooksInvoicesDto): Observable<QuickBooksInvoicesResponseModel>;
     public fullUpdate(
-        ...args: [string | QuickBooksInvoices, string | FullUpdateQuickBooksInvoicesDto, FullUpdateQuickBooksInvoicesDto?]
+        id: string,
+        token: string,
+        dto: FullUpdateQuickBooksInvoicesDto,
+        queryParams?: QuickBooksHttpQueryParams
+    ): Observable<QuickBooksInvoicesResponseModel>;
+    public fullUpdate(
+        invoice: QuickBooksInvoices,
+        dto: FullUpdateQuickBooksInvoicesDto,
+        queryParams?: QuickBooksHttpQueryParams
+    ): Observable<QuickBooksInvoicesResponseModel>;
+    public fullUpdate(
+        ...args: [
+            string | QuickBooksInvoices,
+            string | FullUpdateQuickBooksInvoicesDto,
+            FullUpdateQuickBooksInvoicesDto | QuickBooksHttpQueryParams | undefined,
+            QuickBooksHttpQueryParams?
+        ]
     ): Observable<QuickBooksInvoicesResponseModel> {
-        const [id, token, dto] = QuickBooksCompanyInvoicesService.getUpdateArguments(args);
+        const [id, token, dto, queryParams] = QuickBooksCompanyInvoicesService.getUpdateArguments(args);
         return this.post({
             ...dto,
             Id: id,
             SyncToken: token
-        });
+        }, "", queryParams);
     }
 
-    public sparseUpdate(id: string, token: string, dto: SparseUpdateQuickBooksInvoicesDto): Observable<QuickBooksInvoicesResponseModel>;
-    public sparseUpdate(invoice: QuickBooksInvoices, dto: SparseUpdateQuickBooksInvoicesDto): Observable<QuickBooksInvoicesResponseModel>;
     public sparseUpdate(
-        ...args: [string | QuickBooksInvoices, string | SparseUpdateQuickBooksInvoicesDto, SparseUpdateQuickBooksInvoicesDto?]
+        id: string,
+        token: string,
+        dto: SparseUpdateQuickBooksInvoicesDto,
+        queryParams?: QuickBooksHttpQueryParams
+    ): Observable<QuickBooksInvoicesResponseModel>;
+    public sparseUpdate(
+        invoice: QuickBooksInvoices,
+        dto: SparseUpdateQuickBooksInvoicesDto,
+        queryParams?: QuickBooksHttpQueryParams
+    ): Observable<QuickBooksInvoicesResponseModel>;
+    public sparseUpdate(
+        ...args: [
+            string | QuickBooksInvoices,
+            string | SparseUpdateQuickBooksInvoicesDto,
+            SparseUpdateQuickBooksInvoicesDto | QuickBooksHttpQueryParams | undefined,
+            QuickBooksHttpQueryParams?
+        ]
     ): Observable<QuickBooksInvoicesResponseModel> {
-        const [id, token, dto] = QuickBooksCompanyInvoicesService.getUpdateArguments(args);
+        const [id, token, dto, queryParams] = QuickBooksCompanyInvoicesService.getUpdateArguments(args);
         return this.post({
             ...dto,
             Id: id,
             SyncToken: token,
             sparse: true
-        });
+        }, "", queryParams);
     }
 
     public delete(id: string, token: string): Observable<QuickBooksInvoicesDeleteResponseModel>;
@@ -102,14 +134,21 @@ export class QuickBooksCompanyInvoicesService extends BaseService<
         });
     }
 
-    private static getUpdateArguments<DTO>(args: [string | QuickBooksInvoices, string | DTO, DTO?]): [string, string, DTO] {
-        const [idOrInvoice, tokenOrDto, dto] = args;
-        if (dto) {
-            return [idOrInvoice as string, tokenOrDto as string, dto];
+    private static getUpdateArguments<DTO>(
+        args: [
+            string | QuickBooksInvoices,
+            string | DTO,
+            DTO | QuickBooksHttpQueryParams | undefined,
+            QuickBooksHttpQueryParams?
+        ]
+    ): [string, string, DTO, QuickBooksHttpQueryParams | undefined] {
+        const [idOrInvoice, tokenOrDto, dtoOrQueryParams, queryParams] = args;
+        if (typeof idOrInvoice === "string") {
+            return [idOrInvoice, tokenOrDto as string, dtoOrQueryParams as DTO, queryParams];
         }
 
         const invoice = idOrInvoice as QuickBooksInvoices;
-        return [invoice.Id, invoice.SyncToken, tokenOrDto as DTO];
+        return [invoice.Id, invoice.SyncToken, tokenOrDto as DTO, dtoOrQueryParams as QuickBooksHttpQueryParams | undefined];
     }
 
     private static getOperationArguments(args: [string | QuickBooksInvoices, string?]): [string, string] {

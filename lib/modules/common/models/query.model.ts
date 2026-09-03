@@ -80,7 +80,15 @@ export type WhereAttributeHash<T> = {
 
 export type WhereOptions<T> = WhereAttributeHash<T> | AndOperator<T>;
 
-export interface QueryOptions {
+/**
+ * HTTP query params forwarded to the QuickBooks REST API (axios `params`).
+ * These are not part of the SQL `query=` statement.
+ */
+export interface QuickBooksHttpQueryParams {
+    include?: string;
+}
+
+export interface QueryOptions extends QuickBooksHttpQueryParams {
     startPosition?: number;
     maxResult?: number;
     orderBy?: {

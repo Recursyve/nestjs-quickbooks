@@ -128,4 +128,15 @@ describe("QueryUtils test", () => {
         expect(params.has("query")).toBeTruthy();
         expect(params.get("query")).toBe("select * from customer where Name = 'My test\\'s name'");
     });
+
+    it("generateQuery should keep include out of the SQL statement", () => {
+        const query = QueryUtils.generateQuery("invoice", QueryStatementType.Select, {}, {
+            include: "enhancedAllCustomFields",
+            maxResult: 10
+        });
+
+        const params = new URLSearchParams(query);
+        expect(params.has("include")).toBeFalsy();
+        expect(params.get("query")).toBe("select * from invoice maxresults 10");
+    });
 });
