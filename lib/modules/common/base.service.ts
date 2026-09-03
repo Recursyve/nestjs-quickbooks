@@ -34,9 +34,7 @@ export class BaseService<Response, Query, QueryResponse> {
         return this.getHttpHeaders().pipe(
             mergeMap((headers) => this.http.get<QueryResponse>(this.queryUrl(QueryStatementType.Select, condition, options), {
                 headers,
-                params: {
-                    ...this.minorVersion
-                }
+                params: this.getHttpQueryParams(this.getHttpOptions(options))
             }))
         ).pipe(
             map(x => x.data),
@@ -44,13 +42,11 @@ export class BaseService<Response, Query, QueryResponse> {
         );
     }
 
-    public count(condition: WhereOptions<Query>): Observable<QueryResponse> {
+    public count(condition: WhereOptions<Query>, options?: QueryOptions): Observable<QueryResponse> {
         return this.getHttpHeaders().pipe(
-            mergeMap((headers) => this.http.get<QueryResponse>(this.queryUrl(QueryStatementType.Count, condition), {
+            mergeMap((headers) => this.http.get<QueryResponse>(this.queryUrl(QueryStatementType.Count, condition, options), {
                 headers,
-                params: {
-                    ...this.minorVersion
-                }
+                params: this.getHttpQueryParams(this.getHttpOptions(options))
             }))
         ).pipe(
             map(x => x.data),
@@ -65,10 +61,7 @@ export class BaseService<Response, Query, QueryResponse> {
                     ...authHeaders,
                     ...headers
                 },
-                params: {
-                    ...this.minorVersion,
-                    ...(queryParams ?? {})
-                }
+                params: this.getHttpQueryParams(queryParams)
             }))
         ).pipe(
             map(x => x.data),
@@ -83,10 +76,7 @@ export class BaseService<Response, Query, QueryResponse> {
                     ...authHeaders,
                     ...headers
                 },
-                params: {
-                    ...this.minorVersion,
-                    ...(queryParams ?? {})
-                }
+                params: this.getHttpQueryParams(queryParams)
             }))
         ).pipe(
             map(x => x.data),
@@ -96,6 +86,18 @@ export class BaseService<Response, Query, QueryResponse> {
 
     protected queryUrl(statement: QueryStatementType, condition: WhereOptions<any>, options?: QueryOptions): string {
         return `${this.apiUrl}/v3/company/${this.realm}/query?${QueryUtils.generateQuery(this.resource, statement, condition, options)}`;
+    }
+
+    protected getHttpQueryParams(queryParams: object = {}): object {
+        return { ...this.minorVersion, ...queryParams };
+    }
+
+    private getHttpOptions(options?: QueryOptions): object | undefined {
+        if (!options?.include) {
+            return undefined;
+        }
+
+        return { include: options.include };
     }
 
     protected url(path: string): string {
