@@ -51,6 +51,12 @@ export class QuickBooksCompanyInvoicesService extends BaseService<
         });
     }
 
+    public send(id: string, sendTo?: string): Observable<QuickBooksInvoicesResponseModel> {
+        return this.post({}, `${id}/send`, sendTo ? { sendTo } : undefined, {
+            "Content-Type": "application/octet-stream"
+        });
+    }
+
     public fullUpdate(id: string, token: string, dto: FullUpdateQuickBooksInvoicesDto): Observable<QuickBooksInvoicesResponseModel>;
     public fullUpdate(invoice: QuickBooksInvoices, dto: FullUpdateQuickBooksInvoicesDto): Observable<QuickBooksInvoicesResponseModel>;
     public fullUpdate(
