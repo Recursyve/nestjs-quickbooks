@@ -32,6 +32,9 @@ describe(QuickBooksCompanyInvoicesService, () => {
                 "https://sandbox-quickbooks.api.intuit.com/v3/company/123/invoice/42/send",
                 {},
                 expect.objectContaining({
+                    headers: expect.objectContaining({
+                        "Content-Type": "application/octet-stream"
+                    }),
                     params: {}
                 })
             );
@@ -44,6 +47,9 @@ describe(QuickBooksCompanyInvoicesService, () => {
                 "https://sandbox-quickbooks.api.intuit.com/v3/company/123/invoice/42/send",
                 {},
                 expect.objectContaining({
+                    headers: expect.objectContaining({
+                        "Content-Type": "application/octet-stream"
+                    }),
                     params: { sendTo: "billing@example.com" }
                 })
             );
